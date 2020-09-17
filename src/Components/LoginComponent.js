@@ -1,0 +1,18 @@
+import React from 'react';
+import '../css/LoginComponent.css';
+import "bootstrap"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { LoginButton } from '@solid/react';
+
+function LoginComponent() {
+  return (
+    <div className="logincomponent">
+      <div className="center">
+        <LoginButton className="loginButton" popup="https://solid.community/common/popup.html">Login</LoginButton>
+      </div>
+    </div>
+  );
+}
+
+export default LoginComponent;
