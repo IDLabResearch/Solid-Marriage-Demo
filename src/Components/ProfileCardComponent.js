@@ -10,10 +10,7 @@ import styles from '../css/components/profilecard.module.css'
 const ProfileCardComponent = (props) => {
 
   const profile = useProfile(props.webId)
-  console.log('profile', profile)
-
-  if(!profile) return(<div />);
-
+  if(!profile || !profile.name) return(<div />);
   return (
     <div id="ProfileCardComponent" className={styles.container}>
       {profile && Object.keys(profileProps).map(property => {

@@ -40,8 +40,6 @@ export default NotificationsViewerComponent
 
 const NotificationCard = (props) => {
   const notification = props.notification
-  console.log('PROPS', notification)
-
   // TODO;; this will fail if you have no view access to the contract
   async function viewmarriage(marriageId) {
     const contract = await getContractData(marriageId) 

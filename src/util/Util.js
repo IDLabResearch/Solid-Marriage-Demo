@@ -49,7 +49,6 @@ export async function getContractData(contractId) {
   contract.creator = contract.creator && contract.creator.value
   contract.completed = contract.completed && contract.completed.value
   for await (const spouseId of data[contractId][ns.dbo('spouse')]){
-    console.log('spouse', spouseId.value)
     contract.spouse.push({id: spouseId.value})
   }
   for await (const witnessId of data[contractId][ns.demo('witness')]){

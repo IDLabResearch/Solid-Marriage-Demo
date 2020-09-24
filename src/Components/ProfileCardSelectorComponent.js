@@ -9,23 +9,28 @@ import ProfileCardComponent from './ProfileCardComponent';
 
 const ProfileCardSelectorComponent = (props) => {
   const [webIdInput, setWebIdInput] = useState(props.person.webId)
-  const [selectedWebId, setSelectedWebId] = useState(props.person.webId)
+  // const [selectedWebId, setSelectedWebId] = useState(props.person.webId)
 
-  const profile = useProfile(selectedWebId)
+  const profile = useProfile(webIdInput)
 
   const webIdChangeHandler = (event) => {
     setWebIdInput(event.target.value)
   }
 
   const onKeyDownHandler = (event) => {
-    if (event.key === 'Enter') setSelectedWebId(webIdInput)
+    // if (event.key === 'Enter') setSelectedWebId(webIdInput)
   }
   
   useEffect(() => {
-    props.setvalue(selectedWebId);
-  }, [selectedWebId])
+    props.setvalue(webIdInput);
+  }, [webIdInput])
+
+  // useEffect(() => {
+  //   props.setvalue(selectedWebId);
+  // }, [selectedWebId])
 
   const isComplete = (profile) => profile.name && profile.bdate && profile.location && profile.cstatus
+  const isProfile = (profile) => profile.name
   const isOfAge = (profile) => profile.bdate && new Date(profile.bdate) && getAge(new Date(profile.bdate)) >= 18
 
   function getAge(DOB) {
@@ -44,11 +49,11 @@ const ProfileCardSelectorComponent = (props) => {
   };
 
   function getWarnings(profile) {
-    if(!profile) return webIdInput ? "Please enter a valid webId" : undefined
-    if (!isComplete(profile)) 
-      return "The given WebId is invalid or the profile is not complete. Please provide a valid WebId where all profile information is filled in."
-    if (!isOfAge(profile))
-      return "The chosen profile is not 18 years or older. Please select a person that is 18 years or older."
+    if(!profile || !isProfile(profile)) return webIdInput ? "Please enter a valid webId" : undefined
+    // if (!isComplete(profile)) 
+    //   return "The given WebId is invalid or the profile is not complete. Please provide a valid WebId where all profile information is filled in."
+    if (!isOfAge(profile) || !isComplete(profile))
+      return "The chosen profile is not complete or is not 18 years or older. Please select a person that is 18 years or older."
   }
 
   const warnings = getWarnings(profile)
@@ -61,7 +66,9 @@ const ProfileCardSelectorComponent = (props) => {
       </li>
       {warnings && <b style={warningStyle}>{warnings}</b>}
       <li> Selected Profile:</li>
-      <ProfileCardComponent webId={selectedWebId} key={selectedWebId}></ProfileCardComponent>
+      <div className='profilecardindent'>
+        <ProfileCardComponent webId={webIdInput} key={webIdInput}></ProfileCardComponent>
+      </div>
     </div>
   )
 }

@@ -28,3 +28,9 @@ input {
   background-color: #0062cc;
   border-color: #005cbf;
 }
+
+.profilecardindent {
+  margin-left: 30%;
+  margin-right: 10%;
+  margin-bottom: 25px;
+}

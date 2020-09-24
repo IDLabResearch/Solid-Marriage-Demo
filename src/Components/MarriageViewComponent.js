@@ -21,7 +21,6 @@ const INVITATIONREFUSED = ns.demo('refused')
  * @param {spouse: {id: string}[], witness: {id: string}[]} props.contacts 
  */
 const MarriageViewComponent = (props) => {
-  console.log('Marriage props', props)
   let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
   allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
   const [contacts, setContacts] = useState(allcontacts.map(e => e.accepted=false))

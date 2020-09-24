@@ -64,7 +64,6 @@ const ClippedDrawer = withWebId((props) => {
 
   const [selectedView, setSelectedView] = useState(availableViews.profile)
   const notifications = useNotifications(props.webId)
-  console.log('NOTIFICATIONS', notifications)
 
   const sidebarItems = {
     profile: {

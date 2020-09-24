@@ -10,6 +10,7 @@ import { createMarriagePropsalNotification } from '../util/QueryUtil'
 import { Input } from '@material-ui/core'
 import { createMarriageProposal } from '../util/MarriageController';
 import { parseURL } from 'url-toolkit';
+import { getProfile } from '../hooks/useProfile'
 
 const MarriageRequestComponent = (props) => {
 
@@ -25,22 +26,20 @@ const MarriageRequestComponent = (props) => {
     {
       label: "Spouse",
       type: "spouse",
-      webId: "https://bob.localhost:8443/profile/card#me",
+      webId: "",
       id: 1,
     },
     {
       label: "Witness",
       type: "witness",
-      webId: "https://carol.localhost:8443/profile/card#me",
+      webId: "",
       id: 2,
     }
   ])
 
   const handleSubmit = async event => {
-    console.log('submitting', state)
     if (!validateSubmission(state)) return;
     const proposal = createMarriageProposal(state, storageLocation, props.webId)
-    console.log('proposal', await proposal)
   }
 
   const setvalue = (id, value) => {
@@ -65,10 +64,24 @@ const MarriageRequestComponent = (props) => {
   } 
 
 
-  const validateSubmission = () => {
-    // TODO::
-    console.error('IMPLEMENT VALIDATION FOR MARRIAGE SUBMISSIONS')
-    return true;
+  const validateSubmission = async () => {
+    for (let person of state){
+      if (!person.webId) {
+        window.alert(person.webId + 'is not a valid webId');
+        return false
+      }
+      const profile = await getProfile(person.webId)
+      if (!profile.name || !person.bdate || !person.location || !person.cstatus) {
+        window.alert(person.webId + 'does not have a valid profile');
+        return false
+      } 
+
+      if (person.type === 'spouse' && profile.cstatus === "Married"){
+        window.alert('spouse ' + person.webId + ' is already married.');
+        return false
+      }
+    }
+    return true
   }
 
   const updateStorageLocation = (e) => {

@@ -14,7 +14,6 @@ const { namedNode, blankNode, literal, quad } = DataFactory;
 export async function createMarriageProposal(proposalData, storageLocation, webId) {
   let proposalId = storageLocation.endsWith('/') ? storageLocation : storageLocation + '/'
   proposalId = proposalId + getProposalName()
-  console.log('creating proposal', proposalData, proposalId)
   if (proposalData.filter(e => e.type === 'spouse').length !== 2) throw new Error('A proposal requires 2 spouses to be specified.')
   if (proposalData.filter(e => e.type === 'witness').length < 1) throw new Error('A proposal requires at least one witness to be specified.')
   
@@ -29,7 +28,6 @@ export async function createMarriageProposal(proposalData, storageLocation, webI
   // Create and send notifications to all parties involved
   for (let contact of proposalData){
     const contactId = contact.webId
-    console.log('contact', contact, contact.webId)
     const notification = await createMarriageContractInvitation(webId, contactId, proposalId)
     notify(notification, [contactId])
   }

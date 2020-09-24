@@ -28,7 +28,6 @@ const useContracts = function(webId) {
       mounted = false
     }
   }, [webId])  
-  console.log('contracts', contracts)
   return {inprogress: contracts.filter(e => !e.completed), completed: contracts.filter(e => e.completed)}
 }
 

@@ -6,7 +6,6 @@ const { default: data } = require('@solid/query-ldflex');
 
 export default async function notify(notificationBody, subjects) {
   for (let subject of subjects) {
-    console.log('notifying', subject, "with", notificationBody)
     const inbox = await getInbox(subject);
     if (inbox) postFile(inbox, notificationBody)
     else console.error(subject + ' does not have an inbox')
