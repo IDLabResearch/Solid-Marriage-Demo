@@ -1,0 +1,23 @@
+.activityContainer {
+  margin-left: 10px;
+  border: 1px solid black;
+}
+
+.typelabel {
+  width: 10% !important;
+}
+
+.actorlabel {
+  width: 20% !important;
+  text-align: left;
+}
+
+.summarylabel {
+  width: 50% !important;
+  text-align: left;
+}
+
+.actionbutton {
+  margin-left: 25px;
+  width: 10%;
+}

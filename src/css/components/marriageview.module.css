@@ -1,0 +1,50 @@
+.entrycontainer {
+  margin-bottom: 30px;
+}
+
+.profilecontainer {
+  width: 75%;
+}
+
+.accepted {
+  border-color: #c0ffbf !important;
+  border-width: 2px !important;
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.refused {
+  border-color: #ff9970 !important;
+  border-width: 2px !important;
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.pending {
+  border-color: #007bff !important;
+  border-width: 2px !important;
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.accept {
+  background-color: #b1ff4a !important;
+  border-color: #b1ff4a !important;
+  color: black !important;
+}
+.accept:hover {
+  background-color: #04ff00 !important;
+  border-color: #b1ff4a !important;
+  color: black !important;
+}
+
+.refuse {
+  background-color: #ff7857 !important;
+  border-color: #ff7857 !important;
+  color: black !important;
+}
+.refuse:hover {
+  background-color: #ff0000 !important;
+  border-color: #ff7857 !important;
+  color: black !important;
+}

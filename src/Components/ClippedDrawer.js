@@ -30,6 +30,9 @@ import idlablogo from '../assets/idlab.png';
 
 import '../css/Drawer.css';
 import { availableViews } from '../util/Util';
+import useNotifications from '../hooks/useNotifications';
+
+import { withWebId } from '@inrupt/solid-react-components';
 
 const drawerWidth = 240;
 
@@ -56,11 +59,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ClippedDrawer() {
+const ClippedDrawer = withWebId((props) => {
   const classes = useStyles();
 
-  const [notificationCount, setNotificationCount] = useState(3)
   const [selectedView, setSelectedView] = useState(availableViews.profile)
+  const notifications = useNotifications(props.webId)
+  console.log('NOTIFICATIONS', notifications)
 
   const sidebarItems = {
     profile: {
@@ -73,7 +77,7 @@ export default function ClippedDrawer() {
       label: 'Running requests',
       icon: <InsertDriveFileIcon />,
       className: "active",
-      eventHandler: function(e) { setSelectedView(availableViews.documents)}
+      eventHandler: function(e) { setSelectedView(availableViews.running)}
     },
     certificates: {
       label: 'Certificates',
@@ -137,7 +141,7 @@ export default function ClippedDrawer() {
 
         <MenuItem className='topmenuitem' onClick={sidebarItems.notifications.eventHandler} >
           <IconButton aria-label={sidebarItems.notifications.label} color="inherit">
-            <Badge badgeContent={notificationCount} color="secondary">
+            <Badge badgeContent={notifications.length} color="secondary">
               {sidebarItems.notifications.icon}
             </Badge>
           </IconButton>
@@ -173,8 +177,10 @@ export default function ClippedDrawer() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <MainScreenComponent selectedView={selectedView}></MainScreenComponent>
+        <MainScreenComponent webId={props.webId} selectedView={selectedView} setSelectedView ={setSelectedView} ></MainScreenComponent>
       </main>
     </div>
   );
-}
+})
+
+export default ClippedDrawer

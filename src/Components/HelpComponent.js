@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const HelpComponent = (props) => {
   return (
-    <div id="documentsviewercomponent" className='container'>
+    <div id="InProgressViewerComponent" className='container'>
       <h4> About this Demo </h4>
       <br />
       This screen will provide information on how the steps for this demo, and how they can be performed (with images preferably)

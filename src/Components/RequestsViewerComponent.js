@@ -11,7 +11,7 @@ const RequestsViewerComponent = (props) => {
   const [state, setstate] = useState(false)
   if (!state) {
     return (
-      <div id="documentsviewercomponent" className='container'>
+      <div id="RequestsViewerComponent" className='container'>
         <h4> Requests </h4>
         <br />
         <li className='propertyview' key={"Nationality"}>
@@ -19,7 +19,7 @@ const RequestsViewerComponent = (props) => {
           <Button className='valuebuttonhalf' disabled={true}>Initiate nationality request</Button>
         </li>
   
-        <li className='propertyview' key={"Nationality"}>
+        <li className='propertyview' key={"Residence"}>
           <label className='propertylabel'>Residence</label>
           <Button className='valuebuttonhalf' disabled={true}>Declare new residence</Button>
         </li>
@@ -32,7 +32,7 @@ const RequestsViewerComponent = (props) => {
     )
   } else {
     return (
-      <MarriageRequestComponent webId={props.webId} setstate={setstate}></MarriageRequestComponent>
+      <MarriageRequestComponent {...props} setstate={setstate}></MarriageRequestComponent>
     )
   }
 }

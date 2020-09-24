@@ -1,61 +1,48 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
+import ReactLoading from 'react-loading';
 import '../css/VCardComponent.css'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { useForm, Controller } from 'react-hook-form'
-import { patchProfile } from '../util/FileUtil'
+import { patchFile } from '../util/FileUtil'
 import { createDeleteInsertProfileDataQuery } from '../util/QueryUtil'
-import { getPromiseValueOrUndefined, availableViews } from '../util/Util'
-import { NameSpaces } from '../util/NameSpaces';
 import { Select, MenuItem } from '@material-ui/core'
 import { Button } from 'react-bootstrap'
 
-const { default: data } = require('@solid/query-ldflex');
-const auth = require('solid-auth-client')
+import useProfile from '../hooks/useProfile'
+import { availableViews } from '../util/Util';
 
-const VCardEditorComponent = (props) => {
 
-  const [profile, setProfile] = useState(null);  
+const ProfileEditorComponent = (props) => {
 
-  const { register, handleSubmit, control, reset } = useForm({
-    defaultValues: {
-    },
-  })
+  const profile = useProfile(props.webId)
+
+  const { register, handleSubmit, control, reset } = useForm({ defaultValues: {} })
 
   const onSubmit = async newprofile => {
-    console.log('submitting', profile, newprofile)
-    patchProfile(props.webId, createDeleteInsertProfileDataQuery(props.webId, profile, newprofile))
-    props.setEdit(false)
+    patchFile(props.webId, await createDeleteInsertProfileDataQuery(props.webId, profile, newprofile))
+    props.setview(availableViews.profile)
   }
 
   useEffect(() => {
-    let mounted = true
-    async function fetchProfile(webId){ 
-      let profiledata = data[webId];
-      const name = await getPromiseValueOrUndefined(profiledata[NameSpaces.foaf + 'name']);
-      const bdate = await getPromiseValueOrUndefined(profiledata[NameSpaces.dbp + 'birthDate']);
-      const location = await getPromiseValueOrUndefined(profiledata[NameSpaces.dbp + 'location']);
-      const cstatus = await getPromiseValueOrUndefined(profiledata[NameSpaces.ex + 'civilstatus']);
-      return { name, bdate, location, cstatus }
-    }
-    auth.currentSession().then(session => {
-      let webId = session.webId
-      fetchProfile(webId).then(profile => {
-        if(mounted) {
-          reset(profile)
-          setProfile(profile)
-        }
-      })
-    })
-    return () => {
-      mounted = false
-    }
-  }, [])
+    reset(profile)
+  }, [profile])
 
+  if (! profile){
+    return (
+      <div id="ProfileEditorComponent" className='container'>
+        <h4> Profile </h4>
+        <br />
+        <ReactLoading type={"cubes"}/>
+      </div>
+    )
+  } 
 
   return (
-    <div id='VCardEditorComponent'>
+    <div id="ProfileEditorComponent" className='container'>
+      <h4> Profile </h4>
+      <br />
       <form onSubmit={handleSubmit(onSubmit)}>
 
         <li className='propertyview' key={"name"}>
@@ -65,7 +52,7 @@ const VCardEditorComponent = (props) => {
 
         <li className='propertyview' key={"bdate"}>
           <label className='propertylabel'>BirthDate</label>
-          <input className='valuelabel' name="bdate" ref={register({ required: true })} />
+          <input className='valuelabel' type="date" name="bdate" ref={register({ required: true })} />
         </li>
 
         <li className='propertyview' key={"location"}>
@@ -98,7 +85,7 @@ const VCardEditorComponent = (props) => {
   )
 }
 
-export default VCardEditorComponent
+export default ProfileEditorComponent
 
 // <h2>All friends</h2>
 // <List src="[https://ruben.verborgh.org/profile/#me].friends.firstName"/>

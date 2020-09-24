@@ -3,66 +3,92 @@ import '../css/VCardComponent.css'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { useForm, Controller } from 'react-hook-form'
-import { patchProfile } from '../util/FileUtil'
-import { createDeleteInsertProfileDataQuery } from '../util/QueryUtil'
-import { getPromiseValueOrUndefined, availableViews } from '../util/Util'
-import { NameSpaces } from '../util/NameSpaces';
-import { Select, MenuItem } from '@material-ui/core'
+// import { useForm, Controller } from 'react-hook-form'
 import { Button } from 'react-bootstrap'
-
-const { default: data } = require('@solid/query-ldflex');
-const auth = require('solid-auth-client')
-
+import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
+import { createMarriagePropsalNotification } from '../util/QueryUtil'
+import { Input } from '@material-ui/core'
+import { createMarriageProposal } from '../util/MarriageController';
+import { parseURL } from 'url-toolkit';
 
 const MarriageRequestComponent = (props) => {
 
-  const { register, handleSubmit, control, reset } = useForm({
-    defaultValues: {
-      userWebId: props.webId,
-      witness1: "https://inrupt.com/witness1/profile/card#me"
+  const parsedURI = parseURL(props.webId)
+  const [storageLocation, setStorageLocation] = useState(parsedURI.scheme + parsedURI.netLoc + '/public/')
+  const [state, setState] = useState([
+    {
+      label: "Spouse",
+      type: "spouse",
+      webId: props.webId,
+      id: 0,
     },
-  })
+    {
+      label: "Spouse",
+      type: "spouse",
+      webId: "https://bob.localhost:8443/profile/card#me",
+      id: 1,
+    },
+    {
+      label: "Witness",
+      type: "witness",
+      webId: "https://carol.localhost:8443/profile/card#me",
+      id: 2,
+    }
+  ])
 
-  const onSubmit = async newprofile => {
-    console.log('submitting', newprofile)
-    // patchProfile(props.webId, createDeleteInsertProfileDataQuery(props.webId, profile, newprofile))
-    props.setstate(false)
+  const handleSubmit = async event => {
+    console.log('submitting', state)
+    if (!validateSubmission(state)) return;
+    const proposal = createMarriageProposal(state, storageLocation, props.webId)
+    console.log('proposal', await proposal)
+  }
+
+  const setvalue = (id, value) => {
+    const stateCopy = state.slice()
+    for (let obj of stateCopy) {
+      if (obj.id === id) {
+        obj.webId = value
+      }
+    }
+    setState(stateCopy)
+  }
+
+  const addWitness = () => {
+    const stateCopy = state.slice()  
+    stateCopy.push({
+        label: "Witness",
+        type: "witness",
+        webId: null,
+        id: state.length + 1,
+      })
+    setState(stateCopy)
+  } 
+
+
+  const validateSubmission = () => {
+    // TODO::
+    console.error('IMPLEMENT VALIDATION FOR MARRIAGE SUBMISSIONS')
+    return true;
+  }
+
+  const updateStorageLocation = (e) => {
+    setStorageLocation(e.target.value)
   }
 
   return (
-    <div id='VCardEditorComponent'>
-      <form onSubmit={handleSubmit(onSubmit)}>
-
-        <li className='propertyview' key={"name"}>
-          <label className='propertylabel'>Name</label>
-          <input className='valuelabel' name="userWebId" ref={register({ required: true })} />
-        </li>
-        <div> This is going to load a small card with the information of person with this WebId</div>
-
-        <li className='propertyview' key={"bdate"}>
-          <label className='propertylabel'>BirthDate</label>
-          <input className='valuelabel' name="otherWebId" ref={register({ required: true })} />
-        </li>
-        <div> This is going to load a small card with the information of person with this WebId</div>
-
-        <li className='propertyview' key={"witness1"}>
-          <label className='propertylabel'>Witness</label>
-          <input className='valuelabel' name="witness1" ref={register({ required: true })} />
-        </li>
-        <div> This is going to load a small card with the information of person with this WebId</div>
-
-       
-        <li className='propertyview' key={"witness2"}>
-          <label className='propertylabel'>Withness</label>
-          <input className='valuelabel' name="witness2" ref={register({ required: true })} />
-        </li>
-        <div> This is going to load a small card with the information of person with this WebId</div>
-
-        <Button> Add Witness </Button>
+    <div id='ProfileEditorComponent'>
+      <form>
+        {state.map(person => {
+          return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(person.id, value)} person={person} key={person.id}></ProfileCardSelectorComponent> )
+        })}
+        <Button onClick={() => addWitness()}> Add Witness </Button>
         <br/>
         <br/>
-        <Button type="submit">Submit</Button>
+        <li className='propertyview'>
+          <label className='propertylabel'>{"Storage Location"}</label>
+          <Input className='storageLocation valuelabel' value={storageLocation} onChange={updateStorageLocation}/>
+        </li>
+        <Button onClick={() => handleSubmit()}>Submit</Button>
       </form>
     </div>
   )

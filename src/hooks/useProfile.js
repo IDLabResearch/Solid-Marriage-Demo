@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getPromiseValueOrUndefined } from '../util/Util'
-import { NameSpaces } from '../util/NameSpaces';
+
+import createnamespaces from "../util/NameSpaces"
+const ns = createnamespaces()
+
 const { default: data } = require('@solid/query-ldflex');
 
 const useProfile = function(webId) {
@@ -9,12 +12,14 @@ const useProfile = function(webId) {
     let mounted = true
     async function fetchProfile(webId){ 
       webId = await webId;
+      if(!webId) return null
+      data.clearCache()
       let profiledata = data[webId];
-
-      const name = await getPromiseValueOrUndefined(profiledata[NameSpaces.foaf + 'name']);
-      const bdate = await getPromiseValueOrUndefined(profiledata[NameSpaces.dbp + 'birthDate']);
-      const location = await getPromiseValueOrUndefined(profiledata[NameSpaces.dbp + 'location']);
-      const cstatus = await getPromiseValueOrUndefined(profiledata[NameSpaces.ex + 'civilstatus']);
+      
+      const name = await getPromiseValueOrUndefined(profiledata[ns.foaf('name')]);
+      const bdate = await getPromiseValueOrUndefined(profiledata[ns.dbo('birthDate')]);
+      const location = await getPromiseValueOrUndefined(profiledata[ns.dbo('location')]);
+      const cstatus = await getPromiseValueOrUndefined(profiledata[ns.demo('civilstatus')]);
       
       return { name, bdate, location, cstatus }
     }
@@ -22,11 +27,13 @@ const useProfile = function(webId) {
       if(mounted) {
         setProfile(profile)
       }
-    })
+    }).catch(
+      setProfile(null)
+    )
     return () => {
       mounted = false
     }
-  }, [])  
+  }, [webId])  
   return profile
 }
 
