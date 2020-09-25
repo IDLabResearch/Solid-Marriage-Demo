@@ -9,6 +9,7 @@ import RequestsViewerComponent from '../Components/RequestsViewerComponent'
 import HelpComponent from '../Components/HelpComponent'
 import MarriageRequestComponent from '../Components/MarriageRequestComponent'
 import MarriageViewComponent from '../Components/MarriageViewComponent'
+import OfficialComponent from '../Components/OfficialComponent'
 import { getFile } from './FileUtil'
 
 import PersonIcon from '@material-ui/icons/Person';
@@ -17,6 +18,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import ListIcon from '@material-ui/icons/List';
+import GavelIcon from '@material-ui/icons/Gavel';
 
 import createnamespaces from "../util/NameSpaces"
 const ns = createnamespaces()
@@ -39,6 +41,7 @@ export const availableViews = {
   certificates:   {id:"certificates",     label:'Certificates',     generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>, icon: <CardMembershipIcon />},
   notifications:  {id:"notifications",    label:'Notifications',    generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>, icon: <NotificationsIcon />},
   help:           {id:"help",             label:'Help',             generation:(props) => <HelpComponent {...props}></HelpComponent>, icon: <HelpIcon />},
+  official:       {id:"official",         label:'Offical',          generation:(props) => <OfficialComponent {...props}></OfficialComponent>, icon: <GavelIcon />},
 }
 
 export async function getStore(URI){

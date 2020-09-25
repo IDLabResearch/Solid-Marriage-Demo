@@ -144,4 +144,4 @@ const MarriageViewComponent = (props) => {
 }
 
 export default MarriageViewComponent
- //onClick={() => viewMarriage(contract)} 
+//onClick={() => viewMarriage(contract)} 

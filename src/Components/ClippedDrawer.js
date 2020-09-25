@@ -95,6 +95,12 @@ const ClippedDrawer = withWebId((props) => {
       icon: availableViews.help.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.help)}
+    },
+    official: {
+      label: availableViews.official.label,
+      icon: availableViews.official.icon,
+      className: "active",
+      eventHandler: function(e) { setSelectedView(availableViews.official)}
     }
   }
 
@@ -165,6 +171,16 @@ const ClippedDrawer = withWebId((props) => {
               </ListItem>
             ))}
           </List>
+          <Divider />
+          <br />
+          <br />
+          <Divider />
+          {[sidebarItems.official].map((item, index) => (
+            <ListItem button={true} className={item.classNane} button key={item.label} onClick={item.eventHandler}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          ))}
           <Divider />
         </div>
       </Drawer>
