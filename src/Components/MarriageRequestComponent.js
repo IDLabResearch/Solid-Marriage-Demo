@@ -68,7 +68,6 @@ const MarriageRequestComponent = (props) => {
 
   const validateSubmission = async () => {
     for (let person of state){
-      console.log("person", person)
       if (!person.webId) {
         window.alert(person.webId + 'is not a valid webId');
         return false

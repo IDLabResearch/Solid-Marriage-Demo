@@ -23,46 +23,60 @@ const INVITATIONREFUSED = ns.demo('refused')
 const MarriageViewComponent = (props) => {
   let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
   allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
-  const [contacts, setContacts] = useState(allcontacts.map(e => e.accepted=false))
+  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'pending' ; return e})
+  const [contacts, setContacts] = useState(allcontacts)
 
   useEffect(() => {
     let mounted = true
-    async function getContactStatus(contactWebId){
-      let accepted, refused; 
-      for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
-        if (`${await acceptedEvent}` === props.contract.id) accepted = true;
-      }
-      for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
-        if (`${await refusedEvent}` === props.contract.id) refused = true;
-      }
-      return accepted ? 'accepted' : (refused ? 'refused' : 'pending')
+    async function refreshContacts() {
+      updateContacts(allcontacts).then(updatedContacts => {
+        if(mounted) setContacts(updatedContacts)
+      })
     }
-    async function updateStatus() {
-      for (let contact of allcontacts){
-        contact['status'] = await getContactStatus(contact.id)
-      }
-      if(mounted)  setContacts(allcontacts)
-    }
-    updateStatus()
+    refreshContacts()
+    var interval = setInterval(() => { 
+      refreshContacts()
+    }, 7000);
     return () => {
       mounted = false;
+      clearInterval(interval);
     }
   }, [props.contract])
 
-  function accept() {
-    acceptProposal(props.webId, props.contract.id, props.contract.creator)
+  async function getContactStatus(contactWebId){
+    let accepted, refused; 
+    data.clearCache()
+    for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
+      if (`${await acceptedEvent}` === props.contract.id) accepted = true;
+    }
+    for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
+      if (`${await refusedEvent}` === props.contract.id) refused = true;
+    }
+    return accepted ? 'accepted' : (refused ? 'refused' : 'pending')
+  }
+
+  async function updateContacts(contactsToUpdate) {
+    const contacts = []
+    for (let contact of contactsToUpdate){
+      contact['status'] = await getContactStatus(contact.id)
+      contacts.push(contact)
+    }
+    return contacts
+  }
+
+  async function accept() {
+    await acceptProposal(props.webId, props.contract.id, props.contract.creator)
     resetView()
   }
 
-  function refuse() {
-    acceptProposal(props.webId, props.contract.id, props.contract.creator)
+  async function refuse() {
+    await acceptProposal(props.webId, props.contract.id, props.contract.creator)
     resetView()
   }
 
-  function resetView() {
-    const view = availableViews.marriageview
-    view.args = {contract: props.contract}
-    props.setview(view)
+  async function resetView() {
+    const updatedContacts = await updateContacts(contacts)
+    setContacts(updatedContacts)
   }
 
   function getContactButton(contact){
@@ -84,7 +98,6 @@ const MarriageViewComponent = (props) => {
     }
     return <Button className={`${styles.pending} valuebutton`} disabled> Pending </Button>
   }
-  
   return (
     <div id="marriageViewContainer" className='container'>
       <h4> Marriage Proposal </h4>

@@ -23,7 +23,7 @@ const NotificationsViewerComponent = (props) => {
       <h4> Notifications </h4>
       <br />
       {notifications.map(notification => {
-        return ( <NotificationCard notification={notification} {...props} /> )
+        return ( <NotificationCard notification={notification} {...props} key={notification.metadata.id}/> )
       })}
       
     </div>

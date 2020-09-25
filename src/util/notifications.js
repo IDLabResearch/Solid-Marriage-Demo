@@ -8,21 +8,28 @@ export default async function notify(notificationBody, subjects) {
   for (let subject of subjects) {
     const inbox = await getInbox(subject);
     if (inbox) postFile(inbox, notificationBody)
-    else console.error(subject + ' does not have an inbox')
   }
 }
 
 async function getInbox(subject){
   const inbox = await data[subject][ns.ldp('inbox')]
+  if(!inbox) console.error(subject + ' does not profide an inbox.')
   return inbox && inbox.value
+}
+
+export async function checkNewNotifications(webId, currentNotifications) {
+  if(!currentNotifications) return true
+  const inbox = await getInbox(webId)
+  if(!inbox) return false
+  const store = await getStore(inbox)
+  let notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
+  if (notificationsMetadata.length === currentNotifications.length) return false;
+  return true
 }
 
 export async function getNotificationMetadata(webId) {
   const inbox = await getInbox(webId)
-  if(!inbox) {
-    console.error(webId + ' does not profide an inbox.')
-    return []
-  }
+  if(!inbox) return []
   const store = await getStore(inbox)
   let notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
   notificationsMetadata = notificationsMetadata.map(quad => { return ( {id: quad.object.value})})

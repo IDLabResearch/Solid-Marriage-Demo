@@ -73,7 +73,7 @@ export function createAcceptanceNotification(webId, proposalId, authorId){
         a as:Invite ;
         as:actor <${authorId}> ;
         as:object <${webId}> ;
-        as:target <${proposalId}> .
+        as:target <${proposalId}> ;
       ] ;
       as:target <${proposalId}> ;
       as:summary "Acceptance of the offer to participate in the marriage contract" .
@@ -89,7 +89,7 @@ export function createRejectionNotification(webId, proposalId, authorId){
         a as:Invite ;
         as:actor <${authorId}>  ;
         as:object <${webId}> ;
-        as:target <${proposalId}> .
+        as:target <${proposalId}> ;
       ] ;
       as:target <${proposalId}> ;
       as:summary "Rejection of the offer to participate in the marriage contract" .
