@@ -11,6 +11,7 @@ import { Input } from '@material-ui/core'
 import { createMarriageProposal } from '../util/MarriageController';
 import { parseURL } from 'url-toolkit';
 import { getProfile } from '../hooks/useProfile'
+import { availableViews } from '../util/Util'
 
 const MarriageRequestComponent = (props) => {
 
@@ -39,7 +40,8 @@ const MarriageRequestComponent = (props) => {
 
   const handleSubmit = async event => {
     if (!validateSubmission(state)) return;
-    const proposal = createMarriageProposal(state, storageLocation, props.webId)
+    const proposal = await createMarriageProposal(state, storageLocation, props.webId)
+    props.setview(availableViews.running)
   }
 
   const setvalue = (id, value) => {
@@ -66,12 +68,13 @@ const MarriageRequestComponent = (props) => {
 
   const validateSubmission = async () => {
     for (let person of state){
+      console.log("person", person)
       if (!person.webId) {
         window.alert(person.webId + 'is not a valid webId');
         return false
       }
       const profile = await getProfile(person.webId)
-      if (!profile.name || !person.bdate || !person.location || !person.cstatus) {
+      if (!profile.name || !profile.bdate || !profile.location || !profile.cstatus) {
         window.alert(person.webId + 'does not have a valid profile');
         return false
       } 
