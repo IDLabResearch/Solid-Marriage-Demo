@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 import createnamespaces from "../util/NameSpaces"
 
 import '../css/InProgressViewerComponent.css'
 import useContracts from '../hooks/useContracts'
 import { availableViews } from '../util/Util'
-
-const ns = createnamespaces()
-const { default: data } = require('@solid/query-ldflex');
 
 const InProgressViewerComponent = (props) => {
 
@@ -23,15 +18,20 @@ const InProgressViewerComponent = (props) => {
 
   return (
     <div id="InProgressViewerComponent" className='container'>
-      <h4> Running Requests </h4>
+      <h4>In Progress</h4>
       <br />
+      <Row className='propertyview pageheader' key={'header'}>
+        <Col md={3}><label className="leftaligntext"><b>Contract type</b></label></Col>
+        <Col md={5}><label className="leftaligntext">Current status</label></Col>
+        <Col md={2}><label className="centeraligntext">Action</label></Col>
+      </Row>
       {contracts.inprogress.map(contract => {
         return (  
-          <li className='propertyview' key={contract.id}>
-            <label className='propertylabel'>Marriage</label>
-            <label className='valuelabelhalf'>Marriage requested</label>
-            <Button onClick={() => viewMarriage(contract)} className='valuebutton' > See progress </Button>
-          </li>
+          <Row className='propertyview ' key={contract.id}>
+            <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>
+            <Col md={5}><label className="leftaligntext">in progress</label></Col>
+            <Col md={2}><Button onClick={() => viewMarriage(contract)} className='centeraligntext'>see progress</Button></Col>
+          </Row>
         )
       })}
      

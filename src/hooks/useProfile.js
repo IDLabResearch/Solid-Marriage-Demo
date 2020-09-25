@@ -11,9 +11,8 @@ const useProfile = function(webId) {
   useEffect(() => {
     let mounted = true
     getProfile(webId).then(profile => {
-      if(mounted) {
-        setProfile(profile)
-      }
+      if(profile) profile.webId = webId
+      if(mounted) setProfile(profile)
     }).catch(
       setProfile(null)
     )

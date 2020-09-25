@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import ReactLoading from 'react-loading';
 
 import '../css/MainScreenComponent.css'

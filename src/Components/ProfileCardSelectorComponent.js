@@ -1,33 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Input from '@material-ui/core/Input';
 
 import useProfile from '../hooks/useProfile'
 import ProfileCardComponent from './ProfileCardComponent';
+import { Row, Col } from 'react-bootstrap';
 
 const ProfileCardSelectorComponent = (props) => {
   const [webIdInput, setWebIdInput] = useState(props.person.webId)
-  // const [selectedWebId, setSelectedWebId] = useState(props.person.webId)
 
   const profile = useProfile(webIdInput)
 
   const webIdChangeHandler = (event) => {
     setWebIdInput(event.target.value)
   }
-
-  const onKeyDownHandler = (event) => {
-    // if (event.key === 'Enter') setSelectedWebId(webIdInput)
-  }
-  
   useEffect(() => {
-    props.setvalue(webIdInput);
-  }, [webIdInput])
-
-  // useEffect(() => {
-  //   props.setvalue(selectedWebId);
-  // }, [selectedWebId])
+    if (profile && isProfile(profile)) props.setvalue(profile.webId); 
+  }, [profile])
 
   const isComplete = (profile) => profile.name && profile.bdate && profile.location && profile.cstatus
   const isProfile = (profile) => profile.name
@@ -50,8 +39,6 @@ const ProfileCardSelectorComponent = (props) => {
 
   function getWarnings(profile) {
     if(!profile || !isProfile(profile)) return webIdInput ? "Please enter a valid webId" : undefined
-    // if (!isComplete(profile)) 
-    //   return "The given WebId is invalid or the profile is not complete. Please provide a valid WebId where all profile information is filled in."
     if (!isOfAge(profile) || !isComplete(profile))
       return "The chosen profile is not complete or is not 18 years or older. Please select a person that is 18 years or older."
   }
@@ -60,24 +47,18 @@ const ProfileCardSelectorComponent = (props) => {
 
   return (
     <div id="ProfileCardSelectorComponent">
-      <li className='propertyview'>
-        <label className='propertylabel'>{props.person.label}</label>
-        <Input id='webIdInput' className='valuelabel' value={webIdInput || ""} name="location" onKeyDown={onKeyDownHandler} onChange={webIdChangeHandler}/>
-      </li>
+      <Row className='propertyview ' key={props.person.id}>
+        <Col md={3}><label className="leftaligntext"><b>{props.person.label}</b></label></Col>
+        <Col md={9}><Input className="leftaligntext" value={webIdInput || ""} name="location" onChange={webIdChangeHandler}/></Col>
+      </Row>
       {warnings && <b style={warningStyle}>{warnings}</b>}
-      <li> Selected Profile:</li>
-      <div className='profilecardindent'>
-        <ProfileCardComponent webId={webIdInput} key={webIdInput}></ProfileCardComponent>
-      </div>
+
+      <Row className='propertyview ' key={props.person.id}>
+        <Col md={3}></Col>
+        <Col md={9}><ProfileCardComponent webId={webIdInput} key={webIdInput}></ProfileCardComponent></Col>
+      </Row>
     </div>
   )
-}
-
-const profileProps = {
-  name: "Name",
-  bdate: "BirthDate",
-  location: "Country",
-  cstatus: "Civil Status",
 }
 
 export default ProfileCardSelectorComponent

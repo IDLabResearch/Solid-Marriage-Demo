@@ -8,7 +8,7 @@ const useNotifications = function(webId) {
     updateNotifications(webId, notifications)
     const interval = setInterval(() => { 
       updateNotifications(webId, notifications)
-    }, 7000);
+    }, 15000);
     return () => {
       clearInterval(interval);
     }

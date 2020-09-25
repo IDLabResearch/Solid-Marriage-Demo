@@ -14,12 +14,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 
-import PersonIcon from '@material-ui/icons/Person';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import HelpIcon from '@material-ui/icons/Help';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import CardMembershipIcon from '@material-ui/icons/CardMembership';
-
 import { Navbar } from 'react-bootstrap';
 import { AuthButton, LogoutButton } from '@solid/react';
 
@@ -67,38 +61,38 @@ const ClippedDrawer = withWebId((props) => {
 
   const sidebarItems = {
     profile: {
-      label: 'Profile',
-      icon: <PersonIcon />,
+      label: availableViews.profile.label,
+      icon: availableViews.profile.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.profile)}
     },
-    documents: {
-      label: 'Running requests',
-      icon: <InsertDriveFileIcon />,
+    running: {
+      label: availableViews.running.label,
+      icon: availableViews.running.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.running)}
     },
     certificates: {
-      label: 'Certificates',
-      icon: <CardMembershipIcon />,
+      label: availableViews.certificates.label,
+      icon: availableViews.certificates.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.certificates)}
     },
     requests: {
-      label: 'Requests',
-      icon: <CardMembershipIcon />,
+      label: availableViews.requests.label,
+      icon: availableViews.requests.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.requests)}
     },
     notifications: {
-      label: 'Notifications',
-      icon: <NotificationsIcon />,
+      label: availableViews.notifications.label,
+      icon: availableViews.notifications.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.notifications)}
     },
     help: {
-      label: 'Help',
-      icon: <HelpIcon />,
+      label: availableViews.help.label,
+      icon: availableViews.help.icon,
       className: "active",
       eventHandler: function(e) { setSelectedView(availableViews.help)}
     }
@@ -164,7 +158,7 @@ const ClippedDrawer = withWebId((props) => {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {[sidebarItems.profile, sidebarItems.requests, sidebarItems.documents, sidebarItems.certificates ].map((item, index) => (
+            {[sidebarItems.profile, sidebarItems.requests, sidebarItems.running, sidebarItems.certificates ].map((item, index) => (
               <ListItem button={true} className={item.classNane} button key={item.label} onClick={item.eventHandler}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />

@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react'
 import ReactLoading from 'react-loading';
 import '../css/VCardComponent.css'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { useForm, Controller } from 'react-hook-form'
 import { patchFile } from '../util/FileUtil'
 import { createDeleteInsertProfileDataQuery } from '../util/QueryUtil'
 import { Select, MenuItem } from '@material-ui/core'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 
 import useProfile from '../hooks/useProfile'
 import { availableViews } from '../util/Util';
@@ -39,44 +37,52 @@ const ProfileEditorComponent = (props) => {
     )
   } 
 
+  const properties = [{
+    label: 'Name',
+    name: 'name',
+    type: 'text',
+  }, {
+    label: 'BirthDate',
+    name: 'bdate',
+    type: 'date',
+  }, {
+    label: 'Country',
+    name: 'location',
+    type: 'text',
+  }, {
+    label: 'Civil Status',
+    name: 'cstatus',
+    controller: <Controller as={
+        <Select>
+          <MenuItem value={"Single"}>Single</MenuItem>
+          <MenuItem value={"Cohabiting"}>Cohabiting</MenuItem>
+          <MenuItem value={"Married"}>Married</MenuItem>
+          <MenuItem value={"Divorced"}>Divorced</MenuItem>
+          <MenuItem value={"Widowed"}>Widowed</MenuItem>
+        </Select>
+      }
+      control={control}
+      name="cstatus"
+      defaultValue={"Single"}
+    />
+  }]
+
   return (
     <div id="ProfileEditorComponent" className='container'>
       <h4> Profile </h4>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
-
-        <li className='propertyview' key={"name"}>
-          <label className='propertylabel'>Name</label>
-          <input className='valuelabel' name="name" ref={register({ required: true })} />
-        </li>
-
-        <li className='propertyview' key={"bdate"}>
-          <label className='propertylabel'>BirthDate</label>
-          <input className='valuelabel' type="date" name="bdate" ref={register({ required: true })} />
-        </li>
-
-        <li className='propertyview' key={"location"}>
-          <label className='propertylabel'>Country</label>
-          <input className='valuelabel' name="location" ref={register({ required: true })} />
-        </li>
-
-        <li className='propertyview' key={"cstatus"}>
-          <label className='propertylabel'>Civil Status</label>
-          <Controller
-            as={
-              <Select>
-                <MenuItem value={"Single"}>Single</MenuItem>
-                <MenuItem value={"Cohabiting"}>Cohabiting</MenuItem>
-                <MenuItem value={"Married"}>Married</MenuItem>
-                <MenuItem value={"Divorced"}>Divorced</MenuItem>
-                <MenuItem value={"Widowed"}>Widowed</MenuItem>
-              </Select>
-            }
-            control={control}
-            name="cstatus"
-            defaultValue={"Single"}
-          />
-        </li>
+        {properties.map(prop => {
+          return(
+            <Row className='propertyview ' key={prop.name}>
+              <Col md={3}><label className="leftaligntext"><b>{prop.label}</b></label></Col>
+              {prop.controller
+              ? <Col md={1}>{prop.controller}</Col>
+              : <Col md={9}><input type={prop.type || 'text'} className='leftaligntext inputfield' name={prop.name} ref={register({ required: true })} /></Col> 
+              }
+            </Row>  
+          )
+        })}
         <br/>
         <br/>
         <Button type="submit"> Submit</Button>

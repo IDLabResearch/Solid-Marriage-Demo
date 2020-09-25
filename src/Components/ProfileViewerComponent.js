@@ -1,10 +1,8 @@
 import React from 'react'
 import ReactLoading from 'react-loading';
 import '../css/VCardComponent.css'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 
 import useProfile from '../hooks/useProfile'
 import { availableViews } from '../util/Util';
@@ -30,10 +28,10 @@ const ProfileViewerComponent = (props) => {
       <br />
       {Object.keys(profileProps).map(property => {
         return (
-        <li className='propertyview' key={property}>
-          <label className='propertylabel'>{profileProps[property]}</label>
-          <label className='valuelabel'>{profile[property] || UNKNOWNVALUE}</label>
-        </li>
+          <Row className='propertyview ' key={property}>
+            <Col md={3}><label className="leftaligntext"><b>{profileProps[property]}</b></label></Col>
+            <Col md={9}><label className="leftaligntext">{profile[property] || UNKNOWNVALUE}</label></Col>
+          </Row>  
         )
       })}
       <br />

@@ -1,8 +1,7 @@
 import React from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import useContracts from '../hooks/useContracts'
 import { availableViews } from '../util/Util'
+import { Row, Col } from 'react-bootstrap'
 
 
 const CertificatesViewerComponent = (props) => {
@@ -19,22 +18,27 @@ const CertificatesViewerComponent = (props) => {
     <div id="certificatesviewercomponent" className='container'>
       <h4> Certificates </h4>
       <br />
-      <li className='propertyview' key={"Nationality"}>
-        <label className='propertylabel'>Nationality</label>
-        <label className='valuelabel'>No certificate available</label>
-      </li>
+      <Row className='propertyview pageheader' key={'header'}>
+        <Col md={3}><label className="leftaligntext"><b>Certificate type</b></label></Col>
+        <Col md={5}><label className="leftaligntext">Available certificates</label></Col>
+        <Col md={3}><label className="centeraligntext">Request certificate</label></Col>
+      </Row>
 
-      <li className='propertyview' key={"Residence"}>
-        <label className='propertylabel'>Residence</label>
-        <label className='valuelabel'>No certificate available</label>
-      </li>
+      <Row className='propertyview' key={'Nationality'}>
+        <Col md={3}><label className="leftaligntext"><b>Nationality</b></label></Col>
+        <Col md={5}><label className="leftaligntext">No certificate available</label></Col>
+      </Row>
+      <Row className='propertyview' key={'Residence'}>
+        <Col md={3}><label className="leftaligntext"><b>Residence</b></label></Col>
+        <Col md={5}><label className="leftaligntext">No certificate available</label></Col>
+      </Row>
 
-      {contracts.inprogress.map(contract => {
+      {contracts.completed.map(contract => {
         return (  
-          <li className='propertyview' key={contract.id}>
-            <label className='propertylabel'>Marriage</label>
-            <label className='valuelabel'>No certificate available</label>
-          </li>
+          <Row className='propertyview' key={contract.id}>
+            <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col>
+            <Col md={5}><label className="leftaligntext">certificate available</label></Col>
+          </Row>
         )
       })}
      

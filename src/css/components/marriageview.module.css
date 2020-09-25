@@ -6,45 +6,34 @@
   width: 75%;
 }
 
-.accepted {
-  border-color: #c0ffbf !important;
-  border-width: 2px !important;
-  background-color: transparent !important;
-  color: black !important;
-}
-
-.refused {
-  border-color: #ff9970 !important;
-  border-width: 2px !important;
-  background-color: transparent !important;
-  color: black !important;
-}
-
-.pending {
-  border-color: #007bff !important;
-  border-width: 2px !important;
-  background-color: transparent !important;
-  color: black !important;
-}
-
 .accept {
-  background-color: #b1ff4a !important;
-  border-color: #b1ff4a !important;
-  color: black !important;
+  background-color: green !important;
+  border-color: green !important;
 }
 .accept:hover {
-  background-color: #04ff00 !important;
-  border-color: #b1ff4a !important;
-  color: black !important;
+  background-color: darkgreen !important;
+  border-color: darkgreen !important;
 }
 
 .refuse {
-  background-color: #ff7857 !important;
-  border-color: #ff7857 !important;
-  color: black !important;
+  background-color: red !important;
+  border-color: red !important;
 }
+
 .refuse:hover {
+  background-color: darkred !important;
+  border-color: darkred !important;
+}
+
+.delete {
   background-color: #ff0000 !important;
-  border-color: #ff7857 !important;
-  color: black !important;
+  border-color: black !important;
+  color: white !important;
+  font-weight: bold;
+}
+.delete:hover {
+  background-color: orangered !important;
+  border-color: black !important;
+  color: white !important;
+  font-weight: bold;
 }

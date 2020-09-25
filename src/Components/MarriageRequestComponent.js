@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import '../css/VCardComponent.css'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 // import { useForm, Controller } from 'react-hook-form'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
 import { createMarriagePropsalNotification } from '../util/QueryUtil'
 import { Input } from '@material-ui/core'
@@ -91,7 +89,13 @@ const MarriageRequestComponent = (props) => {
   }
 
   return (
-    <div id='ProfileEditorComponent'>
+    <div id='MarriageRequestComponent' className='container'>
+      <h4>Construct Marriage Proposal</h4>
+      <br />
+      <Row className='propertyview pageheader' key={'header'}>
+        <Col md={3}><label className="leftaligntext"><b>Function</b></label></Col>
+        <Col md={9}><label className="leftaligntext">Person webId</label></Col>
+      </Row>
       <form>
         {state.map(person => {
           return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(person.id, value)} person={person} key={person.id}></ProfileCardSelectorComponent> )
@@ -99,10 +103,10 @@ const MarriageRequestComponent = (props) => {
         <Button onClick={() => addWitness()}> Add Witness </Button>
         <br/>
         <br/>
-        <li className='propertyview'>
-          <label className='propertylabel'>{"Storage Location"}</label>
-          <Input className='storageLocation valuelabel' value={storageLocation} onChange={updateStorageLocation}/>
-        </li>
+        <Row className='propertyview'>
+          <Col md={3}><label className='leftaligntext'>{"Storage Location"}</label></Col>
+          <Col md={9}><Input className='storageLocation leftaligntext' value={storageLocation} onChange={updateStorageLocation}/></Col>
+        </Row>
         <Button onClick={() => handleSubmit()}>Submit</Button>
       </form>
     </div>

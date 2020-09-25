@@ -11,6 +11,13 @@ import MarriageRequestComponent from '../Components/MarriageRequestComponent'
 import MarriageViewComponent from '../Components/MarriageViewComponent'
 import { getFile } from './FileUtil'
 
+import PersonIcon from '@material-ui/icons/Person';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import HelpIcon from '@material-ui/icons/Help';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import CardMembershipIcon from '@material-ui/icons/CardMembership';
+import ListIcon from '@material-ui/icons/List';
+
 import createnamespaces from "../util/NameSpaces"
 const ns = createnamespaces()
 const { default: data } = require('@solid/query-ldflex');
@@ -23,15 +30,15 @@ export async function getPromiseValueOrUndefined (promise){
 }
 
 export const availableViews = {
-  profile:        {id:"profile",          label:'Profile',          generation:(props) => <ProfileViewerComponent {...props} ></ProfileViewerComponent>},
-  profileeditor:  {id:"profileedit",      label:'Profile Editor',   generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>},
-  requests:       {id:"requests",         label:'Requests',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>},
-  marriagerequest: {id:"marriagerequest", label:'Marriage request', generation:(props) => <MarriageRequestComponent {...props}></MarriageRequestComponent>},
-  marriageview:   {id:"marriagerequest",  label:'Marriage view',    generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>},
-  running:        {id:"running",         label:'Running requests', generation:(props) => <InProgressViewerComponent {...props}></InProgressViewerComponent>},
-  certificates:   {id:"certificates",     label:'Certificates',     generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>},
-  notifications:  {id:"notifications",    label:'Notifications',    generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>},
-  help:           {id:"help",             label:'Help',             generation:(props) => <HelpComponent {...props}></HelpComponent>},
+  profile:        {id:"profile",          label:'Profile',          generation:(props) => <ProfileViewerComponent {...props} ></ProfileViewerComponent>, icon: <PersonIcon />},
+  profileeditor:  {id:"profileedit",      label:'Profile Editor',   generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>, icon: <HelpIcon />},
+  requests:       {id:"requests",         label:'Requests',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>, icon: <InsertDriveFileIcon />},
+  marriagerequest: {id:"marriagerequest", label:'Marriage request', generation:(props) => <MarriageRequestComponent {...props}></MarriageRequestComponent>, icon: <HelpIcon />},
+  marriageview:   {id:"marriagerequest",  label:'Marriage view',    generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>, icon: <HelpIcon />},
+  running:        {id:"running",          label:'In progress',      generation:(props) => <InProgressViewerComponent {...props}></InProgressViewerComponent>, icon: <ListIcon />},
+  certificates:   {id:"certificates",     label:'Certificates',     generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>, icon: <CardMembershipIcon />},
+  notifications:  {id:"notifications",    label:'Notifications',    generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>, icon: <NotificationsIcon />},
+  help:           {id:"help",             label:'Help',             generation:(props) => <HelpComponent {...props}></HelpComponent>, icon: <HelpIcon />},
 }
 
 export async function getStore(URI){

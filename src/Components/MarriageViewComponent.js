@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 import styles from '../css/components/marriageview.module.css'
 
 import createnamespaces from "../util/NameSpaces"
@@ -79,45 +77,64 @@ const MarriageViewComponent = (props) => {
     setContacts(updatedContacts)
   }
 
-  function getContactButton(contact){
-    switch (contact.status) {
-      case 'accepted':
-        return <Button className={`${styles.accepted} valuebutton`} disabled> Accepted </Button>
-    
-      case 'refused':
-        return <Button className={`${styles.refused} valuebutton`} disabled> Refused </Button>
+  function resend() {
+    //TODO:: include this
+    console.error('TODO')
+  }
 
+  function getContactButton(contact){
+    console.log('getContactButton', contact)
+    switch (contact.status) {
       case 'pending':
-        if (contact.id === props.webId)
-          return (
+        if (contact.id === props.webId) return (
             <div>
-              <Button className={`${styles.accept} valuebutton`} onClick={() => accept()}> Accept </Button>
-              <Button className={`${styles.refuse} valuebutton`} onClick={() => refuse()}> Refuse </Button>
+              <Button className={`${styles.accept} centeraligntext`} onClick={() => accept()}> Accept </Button>
+              <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse()}> Refuse </Button>
             </div>
           )
+        else  return (
+          <div>
+            <Button className={`${styles.pending} centeraligntext`} onClick={() => resend()}>Resend notification</Button>
+          </div>
+        )
     }
-    return <Button className={`${styles.pending} valuebutton`} disabled> Pending </Button>
+    return(<div />)
   }
+
+  function showContactStatus(contact){
+    switch (contact.status) {
+      case 'accepted':
+        return "Accepted"
+      case 'refused':
+        return "Refused"
+    }
+    return "Pending"
+  }
+
   return (
     <div id="marriageViewContainer" className='container'>
       <h4> Marriage Proposal </h4>
       <br />
+      <Row className='propertyview pageheader' key={'header'}>
+        <Col md={2}><label className="leftaligntext"><b>Function</b></label></Col>
+        <Col md={5}><label className="leftaligntext">Person webId</label></Col>
+        <Col md={2}><label className="centeraligntext">Status</label></Col>
+        <Col md={2}><label className="centeraligntext">Action</label></Col>
+      </Row>
       {contacts.map(contact => {
         return (
-        <div key={contact.id} className={`${styles.entrycontainer}`}>
-          <div className={`${'propertyview'} ${styles.entrycontainer}`} key={contact.id}>
-            <label className='propertylabel'>{contact.type}</label>
-            <div className='valuelabel'>
-              <div className={styles.profilecontainer}>
-                <ProfileCardComponent webId={contact.id} key={contact.id} />
-              </div>
-            </div>
-            { getContactButton(contact) }
-          </div>
-        </div>
+          <Row className='propertyview' key={contact.id}>
+            <Col md={2}><label className="leftaligntext"><b>{contact.type}</b></label></Col>
+            <Col md={5}><ProfileCardComponent webId={contact.id} key={contact.id} /></Col>
+            <Col md={2}>{showContactStatus(contact)}</Col>
+            <Col md={2}>{getContactButton(contact)}</Col>
+          </Row>
         )})}
+        <br />
+        <br />
+        <br />
         {props.contract.creator === props.webId
-          ? <Button className={`${styles.refuse} valuebutton`} onClick={() => deleteMarriageProposal(props.contract.id, props.webId)}> Delete Marriage Proposal </Button> 
+          ? <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contract.id, props.webId)}> Delete Marriage Proposal </Button> 
           : <br />} 
     </div>
 

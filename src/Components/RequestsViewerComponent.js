@@ -1,40 +1,47 @@
 import React, { useState } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
 
 import MarriageRequestComponent from './MarriageRequestComponent'
+import { availableViews } from '../util/Util'
 
-
+const possibleRequests = [{
+  typelabel: 'Nationality',
+  summary: 'Request nationality',
+  action: 'Initiate procedure',
+  disabled:true,
+}, {
+  typelabel: 'Residence',
+  summary: 'Declare new residence',
+  action: 'Initiate procedure',
+  disabled:true,
+}, {
+  typelabel: 'Marriage',
+  summary: 'Request marriage',
+  action: 'Initiate procedure',
+  disabled:false,
+}]
 
 const RequestsViewerComponent = (props) => {
-  const [state, setstate] = useState(false)
-  if (!state) {
-    return (
-      <div id="RequestsViewerComponent" className='container'>
-        <h4> Requests </h4>
-        <br />
-        <li className='propertyview' key={"Nationality"}>
-          <label className='propertylabel'>Nationality</label>
-          <Button className='valuebuttonhalf' disabled={true}>Initiate nationality request</Button>
-        </li>
-  
-        <li className='propertyview' key={"Residence"}>
-          <label className='propertylabel'>Residence</label>
-          <Button className='valuebuttonhalf' disabled={true}>Declare new residence</Button>
-        </li>
-  
-        <li className='propertyview' key={"Marriage"}>
-          <label className='propertylabel'>Marriage</label>
-          <Button className='valuebuttonhalf' onClick={() => setstate(true)} >Request marriage</Button>
-        </li>
-      </div>  
-    )
-  } else {
-    return (
-      <MarriageRequestComponent {...props} setstate={setstate}></MarriageRequestComponent>
-    )
-  }
+  return (
+    <div id="RequestsViewerComponent" className='container'>
+      <h4> Requests </h4>
+      <br />
+      <Row className='propertyview pageheader' key={'header'}>
+        <Col md={3}><label className="leftaligntext"><b>Certificate type</b></label></Col>
+        <Col md={5}><label className="leftaligntext">Summary</label></Col>
+        <Col md={2}><label className="centeraligntext">Create request</label></Col>
+      </Row>
+      {possibleRequests.map(request => {
+        return(
+          <Row className='propertyview' key={request.typelabel}>
+            <Col md={3}><label className="leftaligntext"><b>{request.typelabel}</b></label></Col>
+            <Col md={5}><label className="leftaligntext">{request.summary}</label></Col>
+            <Col md={2}><Button className='centeraligntext' onClick={() => props.setview(availableViews.marriagerequest)} disabled={request.disabled}>{request.action}</Button></Col>
+          </Row>
+        )
+      })}
+    </div>  
+  )
 }
 
 export default RequestsViewerComponent

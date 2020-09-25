@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 // @prefix dbo: <http://dbpedia.org/ontology/>. dbo:birthDate, dbo:birthPlace
