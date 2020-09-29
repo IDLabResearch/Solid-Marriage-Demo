@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Button, Row, Col } from 'react-bootstrap'
-import createnamespaces from "../util/NameSpaces"
 
+import ns from "../util/NameSpaces"
 import '../css/InProgressViewerComponent.css'
 import useContracts from '../hooks/useContracts'
 import { availableViews } from '../util/Util'
 
 const InProgressViewerComponent = (props) => {
 
-  const contracts = useContracts(props.webId)
+  const userContracts = useContracts(props.webId)
+  const contracts = userContracts.filter(e => !e.status || e.status === ns.demo('proposal'))
 
   const viewMarriage = function(contract){
     const view = availableViews.marriageview
@@ -25,7 +26,7 @@ const InProgressViewerComponent = (props) => {
         <Col md={5}><label className="leftaligntext">Current status</label></Col>
         <Col md={2}><label className="centeraligntext">Action</label></Col>
       </Row>
-      {contracts.inprogress.map(contract => {
+      {contracts.map(contract => {
         return (  
           <Row className='propertyview ' key={contract.id}>
             <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>

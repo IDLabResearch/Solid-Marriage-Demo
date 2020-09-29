@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getNotificationMetadata, getNotification, checkNewNotifications } from '../util/notifications';
+import { getNotificationTypes } from '../util/Util';
 
 const useNotifications = function(webId) {
   const [notifications, setNotifications] = useState([]);
@@ -16,6 +17,7 @@ const useNotifications = function(webId) {
 
   return notifications
 
+  // TODO:: dont fetch notifications that have already been fetched
 
   async function updateNotifications(webId, currentNotifications){
     if(webId && await checkNewNotifications(webId, currentNotifications)) {
@@ -30,6 +32,7 @@ const useNotifications = function(webId) {
     const notificationList = []
     for await (const metadata of notificationsMetadata){
       const notification = await getNotification(metadata.id)
+      metadata.types = await getNotificationTypes(notification)
       notification.metadata = metadata
       notificationList.push(notification)
     }

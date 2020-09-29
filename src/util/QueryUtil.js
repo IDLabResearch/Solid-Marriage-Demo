@@ -1,10 +1,9 @@
 import { DataFactory, Writer, Quad } from "n3";
-import createnamespaces from "../util/NameSpaces"
+import ns from "../util/NameSpaces"
 
 const { default: data } = require('@solid/query-ldflex');
 
-const ns = createnamespaces()
-const { namedNode, literal, quad } = DataFactory;
+const { namedNode, literal, quad, variable } = DataFactory;
 
 export async function createDeleteInsertProfileDataQuery(webId, oldprofile, newprofile) {
   const deleteClause = []
@@ -65,6 +64,12 @@ export async function confirmMarriageProposal(webId, proposalId){
   return await quadListToTTL(quadList);
 }
 
+export async function createCertifiedProposalPatch(webId, proposalId){
+  const quadList = [ quad(namedNode(webId), namedNode(ns.demo('certified')), namedNode(proposalId)) ]
+  return `INSERT { ${await quadListToTTL(quadList)} } `;
+}
+
+
 
 export async function createMarriagePropsalAcceptedNotification(webId, proposalId){
   const quadList = [
@@ -74,6 +79,30 @@ export async function createMarriagePropsalAcceptedNotification(webId, proposalI
     quad(namedNode(''), namedNode(ns.as('object')), namedNode(proposalId)),
   ]
   return await quadListToTTL(quadList);
+}
+
+
+/**
+ * Create patch for the status of the marriage contract proposal.
+ * @param {'pending' | 'sumitted' | 'accepted' | 'refused'} newStatus 
+ */
+export async function createContractStatusPatch(contractId, newStatus) {
+  const statusvar = variable("status")
+  const deleteClause = [quad(namedNode(contractId), namedNode(ns.demo('status')), statusvar)]
+  const insertClause = [quad(namedNode(contractId), namedNode(ns.demo('status')), namedNode(newStatus))]
+  return(`
+    ${`DELETE { ${await quadListToTTL(deleteClause)} }`}
+    ${`INSERT { ${await quadListToTTL(insertClause)} }`}
+    ${`WHERE { ${await quadListToTTL(deleteClause)} }`}
+  `)
+}
+
+
+export async function createCertifiedByPatch(contractId, certificateId) {
+  const insertClause = [quad(namedNode(contractId), namedNode(ns.demo('certified_by')), namedNode(certificateId))]
+  return(`
+    ${`INSERT { ${await quadListToTTL(insertClause)} }`}
+  `)
 }
 
 

@@ -16,7 +16,9 @@ const ProfileCardComponent = (props) => {
         return (
           <Row className={`propertyview ${styles.profilecardrow}`} key={property}>
             <Col sm={12} md={4}><label className="leftaligntext"><b>{profileProps[property]}</b></label></Col>
-            <Col sm={12} md={8}><label className="leftaligntext">{profile[property]}</label></Col>
+            {property === 'name'
+            ?<Col sm={12} md={8}><label className="leftaligntext"><a href={props.webId}>{profile[property]}</a></label></Col>
+            :<Col sm={12} md={8}><label className="leftaligntext">{profile[property]}</label></Col>}
           </Row>
         )
       })}

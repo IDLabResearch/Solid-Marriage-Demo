@@ -20,8 +20,9 @@ import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import ListIcon from '@material-ui/icons/List';
 import GavelIcon from '@material-ui/icons/Gavel';
 
-import createnamespaces from "../util/NameSpaces"
-const ns = createnamespaces()
+import ns from "../util/NameSpaces"
+import SubmissionViewComponent from '../Components/SubmissionViewComponent'
+import CertificateViewComponent from '../Components/CertificateViewComponent'
 const { default: data } = require('@solid/query-ldflex');
 
 
@@ -36,33 +37,85 @@ export const availableViews = {
   profileeditor:  {id:"profileedit",      label:'Profile Editor',   generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>, icon: <HelpIcon />},
   requests:       {id:"requests",         label:'Requests',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>, icon: <InsertDriveFileIcon />},
   marriagerequest: {id:"marriagerequest", label:'Marriage request', generation:(props) => <MarriageRequestComponent {...props}></MarriageRequestComponent>, icon: <HelpIcon />},
-  marriageview:   {id:"marriagerequest",  label:'Marriage view',    generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>, icon: <HelpIcon />},
+  marriageview:   {id:"marriageview",     label:'Marriage view',    generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>, icon: <HelpIcon />},
   running:        {id:"running",          label:'In progress',      generation:(props) => <InProgressViewerComponent {...props}></InProgressViewerComponent>, icon: <ListIcon />},
   certificates:   {id:"certificates",     label:'Certificates',     generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>, icon: <CardMembershipIcon />},
   notifications:  {id:"notifications",    label:'Notifications',    generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>, icon: <NotificationsIcon />},
   help:           {id:"help",             label:'Help',             generation:(props) => <HelpComponent {...props}></HelpComponent>, icon: <HelpIcon />},
   official:       {id:"official",         label:'Offical',          generation:(props) => <OfficialComponent {...props}></OfficialComponent>, icon: <GavelIcon />},
+  submissionview: {id:"submissionview",   label:'Submission view',  generation:(props) => <SubmissionViewComponent {...props}></SubmissionViewComponent>, icon: <HelpIcon />},
+  certificateview:{id:"certificateview",  label:'Certificate view', generation:(props) => <CertificateViewComponent {...props}></CertificateViewComponent>, icon: <HelpIcon />},
 }
 
 export async function getStore(URI){
   const response = await getFile(URI)
+  const code = await response
   const responseData = await response.text()
   const store = new N3.Store()
   store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))
   return store
 }
 
-export async function getContractData(contractId) {
-  const contract = {id: contractId, completed: false, spouse: [], witness: []}
-  contract.creator = await data[contractId][ns.dct('creator')]
-  contract.completed = await data[contractId][ns.demo('isValidatedBy')]
-  contract.creator = contract.creator && contract.creator.value
-  contract.completed = contract.completed && contract.completed.value
-  for await (const spouseId of data[contractId][ns.dbo('spouse')]){
-    contract.spouse.push({id: spouseId.value})
+const getQuadObjVal = quads => quads[0] && (quads[0].object.value || quads[0].object.id)
+
+const getQuadObjList = quads => quads && quads.map(quad => quad.object.value || quad.object.id)
+
+
+export async function getContractData(id) {
+  const datastore = await getStore(id);
+  return datastore && {
+    id: id,
+    creator: getQuadObjVal(await datastore.getQuads(id, ns.dct('creator'))),
+    certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
+    status: getQuadObjVal(await datastore.getQuads(id, ns.demo('status'))),
+    spouse: getQuadObjList(await datastore.getQuads(id, ns.dbo('spouse'))),
+    witness: getQuadObjList(await datastore.getQuads(id, ns.demo('witness'))),
   }
-  for await (const witnessId of data[contractId][ns.demo('witness')]){
-    contract.witness.push({id: witnessId.value})
+  // const contract = {id: id, completed: false, spouse: [], witness: []}
+  // contract.creator = `${await data[id][ns.dct('creator')]}`
+  // contract.certifiedBy = `${await data[id][ns.demo('certified_by')]}`
+  // contract.status = `${await data[id][ns.demo('status')]}`
+  // for await (const spouseId of data[id][ns.dbo('spouse')]){
+  //   contract.spouse.push({id: spouseId.value})
+  // }
+  // for await (const witnessId of data[id][ns.demo('witness')]){
+  //   contract.witness.push({id: witnessId.value})
+  // }
+  // return contract
+}
+
+export async function getCertificateData(id) {
+  const datastore = await getStore(id);
+  return datastore && {
+    id: id,
+    certifies: getQuadObjVal(await datastore.getQuads(id, ns.demo('certifies'))),
+    certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
+    certification_date: getQuadObjVal(await datastore.getQuads(id, ns.demo('certification_date'))),
+    comment: getQuadObjVal(await datastore.getQuads(id, ns.rdfs('comment'))),
   }
-  return contract
+}
+
+/**
+ * 
+ * @param 
+ * { <> a <http://semicdemo.example/Certificate> ;
+  <http://semicdemo.example/certifies> <https://alice.localhost:8443/public/marriageproposal2020-09-29T10%3A19%3A15.988Z.ttl> ;
+  <http://semicdemo.example/certified_by> <https://alice.localhost:8443/profile/card#me> ;
+  <http://semicdemo.example/certification_date> "2020-09-29T10:19:25.838Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+  <http://www.w3.org/2000/01/rdf-schema#comment> "This is a certificate for the Marriage proposal https://alice.localhost:8443/public/marriageproposal2020-09-29T10%3A19%3A15.988Z.ttl by https://alice.localhost:8443/profile/card#me" .
+} activity 
+ */
+
+export async function getNotificationTypes(activity){
+  const types = {}
+  for (const property of ['actor', 'object', 'target']){
+    if(activity[property]){
+      if (typeof(activity[property]) === 'string') {
+        types[property] = `${await data[activity[property]].type}`
+      } else if (typeof(activity[property]) === 'object') {
+        types[property] = await getNotificationTypes(activity[property])
+      }
+    }
+  }
+  return types
 }

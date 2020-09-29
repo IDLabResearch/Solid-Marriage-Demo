@@ -29,11 +29,9 @@
   background-color: #ff0000 !important;
   border-color: black !important;
   color: white !important;
-  font-weight: bold;
 }
 .delete:hover {
   background-color: orangered !important;
   border-color: black !important;
   color: white !important;
-  font-weight: bold;
 }

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import createnamespaces from "../util/NameSpaces"
+import ns from "../util/NameSpaces"
 import { getContractData } from '../util/Util';
-const ns = createnamespaces()
 
 const { default: data } = require('@solid/query-ldflex');
 
@@ -13,7 +12,7 @@ const useContracts = function(webId) {
     let mounted = true
     async function fetchInProgress(webId){ 
       webId = await webId;
-      data.clearCache()
+      data.clearCache() // data.clearCache(webId)
       let contracts = []
       for await (const contractId of data[webId][ns.demo('hasContract')]){
         const contract = await getContractData(contractId && contractId.value)
@@ -28,7 +27,7 @@ const useContracts = function(webId) {
       mounted = false
     }
   }, [webId])  
-  return {inprogress: contracts.filter(e => !e.completed), completed: contracts.filter(e => e.completed)}
+  return contracts
 }
 
 export default useContracts

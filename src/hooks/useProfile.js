@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getPromiseValueOrUndefined } from '../util/Util'
 
-import createnamespaces from "../util/NameSpaces"
-const ns = createnamespaces()
+import ns from "../util/NameSpaces"
 
 const { default: data } = require('@solid/query-ldflex');
 
@@ -26,7 +25,7 @@ const useProfile = function(webId) {
 export async function getProfile(webId) {
   webId = await webId;
   if(!webId) return null
-  data.clearCache()
+  data.clearCache() // data.clearCache(webId)
   let profiledata = data[webId];
   
   const name = await getPromiseValueOrUndefined(profiledata[ns.foaf('name')]);

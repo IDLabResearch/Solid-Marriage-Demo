@@ -76,4 +76,5 @@ const vocab = function (rdf = { namedNode: u => u }) {
   return namespaces
 };
 
-export default vocab 
+const ns = vocab()
+export default ns 

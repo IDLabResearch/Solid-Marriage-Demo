@@ -1,7 +1,6 @@
 import { postFile } from "./FileUtil";
-import createnamespaces from "../util/NameSpaces"
 import { getStore } from "../util/Util"
-const ns = createnamespaces()
+import ns from "../util/NameSpaces"
 const { default: data } = require('@solid/query-ldflex');
 
 export default async function notify(notificationBody, subjects) {
