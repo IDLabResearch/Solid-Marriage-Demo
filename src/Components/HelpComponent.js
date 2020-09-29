@@ -1,4 +1,5 @@
 import React from 'react'
+import { Col } from 'react-bootstrap'
 
 
 const HelpComponent = (props) => {
@@ -11,42 +12,35 @@ const HelpComponent = (props) => {
       But I have not yet worked with the routing options for react, but that would be a nice to have
       <br />
 
-      TODOs:
-      inmplement deleting mariage proposal
-      Complete help component
-      resend notification on pending
-      Remove notifications from bar
-      Highlight hovered notification
-      add witness encrypted accept (with private key) to marriage proposal.
-      have official sign entire proposal.
-      create a (signed) certification of the marriage stored on the pod of the official (= pod of the state)
-      return link to (signed) certificate
+      <Row className='propertyview pageheader'>
+        <Col><b>TODOS</b></Col>
+        <Col>Complete help component</Col>
+        <Col>Finish implementation delete mariage proposal</Col>
+        <Col>Button to resend notification on pending</Col>
+        <Col>Mark notifications as read</Col>
+        <Col>Delete (read) notifications</Col>
+        <Col>Highlight hovered notification</Col>
+        <Col>Highlight active component left bar</Col>
+        <Col>Encryption and signing for accepting invitation and for certificate</Col>
+        <Col>What to do with the official? Allow it to be anyone and give input field?</Col>
+        <Col>Update civil status on certification (of both spouses, possibly via a notification)</Col>
+        <Col>Make all contracts visible for all actors involved</Col>
+        <Col>Only load notifications that were not load last time</Col>
+        <Col>Is it okay to use this demo vocabulary?</Col>
+        <Col>What to do with default storage locations?</Col>
+        <Col>Use Solid file clients to recursively create folders if a specified storage location does not yet exist?</Col>
+        <Col>More error handling for missing data fields in files</Col>
+        <Col><b>If data not yet retrieved, dont show pending!</b></Col>
+        <Col>Unify internal naming scheme: proposal and certificate</Col>
+        <Col>Provide delete proposal for intermediary steps</Col>
+        <Col>JSDoc all functions</Col>
+        <Col>convert components to have logic for data retrieval somewhere else?</Col>
+      </Row>
+      
+      
+    
 
-      add link to certification in proposal
-      show certificate in viewer
-
-      Give marriage proposals a demo:MarriageProposal type that we can filter the announcements.
-
-      update civil status on accepted
-      fix this also happens for the other person?
-      make contract viewable for all actors involved
-
-      Only load notifications that were not load last time
-
-      Used vocabularies?
-      Default storage locations? solid file client to create folders?
-
-      Do the digital signatures?
-
-      Handle Errors
-
-      set status to married
-
-      fix default pending in official evaluation to not loaded or sth (and maybe also on other places, certainty through N3 use instead of ldflex)
-
-      Unify internal naming scheme: Marriage proposal - certified proposal? ...
-
-      set all created data to a specific name and provide delete button at the end to remove all demo data (except for name?) so that if people use their real data pod it wont get that messy?
+          set all created data to a specific name and provide delete button at the end to remove all demo data (except for name?) so that if people use their real data pod it wont get that messy?
 
       SET LEFT BAR SELECTED ITEM HIGHLIGHT
 
