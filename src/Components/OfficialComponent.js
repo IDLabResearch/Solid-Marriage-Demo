@@ -26,7 +26,7 @@ const OfficialComponent = (props) => {
 
     async function filterCertifiedSubmissions(submissions) {
       const certifiedProposals = []
-      for await (const certifiedProposalId of await (data[props.webId][ns.demo('certified')])) {
+      for await (const certifiedProposalId of data[props.webId][ns.demo('certified')]) {
         if (mounted && `${certifiedProposalId}`) certifiedProposals.push(`${certifiedProposalId}`)
       }
       return certifiedProposals

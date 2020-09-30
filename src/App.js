@@ -7,10 +7,10 @@ function App () {
   return (
     <div className="App">
       <LoggedIn>
-        <MiniDrawer defaultview='login'></MiniDrawer>
+        <MiniDrawer defaultview='help'></MiniDrawer>
       </LoggedIn>
       <LoggedOut>
-        <MiniDrawer defaultview='help' sideBarItems={['login', 'help']} topBarItems={['help']} hidelogout={true}></MiniDrawer>
+        <MiniDrawer defaultview='login' sideBarItems={['login', 'help']} topBarItems={['help']} hidelogout={true}></MiniDrawer>
       </LoggedOut>
     </div>
   )

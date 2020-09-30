@@ -38,19 +38,19 @@ const CertificateViewComponent = (props) => {
         <Col md={5}></Col>
         <Col md={2}><label className="leftaligntext"><a href={state.proposal.id}><b>Proposal</b></a></label></Col>
       </Row>
-      {state.proposal.spouse.map(id => {
+      {state.proposal.spouse.map(spouse => {
         return(
-          <Row className='propertyview' key={'spouse' + id}>
+          <Row className='propertyview' key={'spouse' + spouse.id}>
             <Col md={2}><label className="leftaligntext"><b>Spouse</b></label></Col>
-            <Col md={10}><ProfileCardComponent webId={id}></ProfileCardComponent></Col>
+            <Col md={10}><ProfileCardComponent webId={spouse.id}></ProfileCardComponent></Col>
           </Row>
         )
       })}
-      {state.proposal.witness.map(id => { 
+      {state.proposal.witness.map(witness => { 
         return(
-          <Row className='propertyview' key={'witness' + id}>
+          <Row className='propertyview' key={'witness' + witness.id}>
             <Col md={2}><label className="leftaligntext"><b>Witness</b></label></Col>
-            <Col md={10}><ProfileCardComponent webId={id}></ProfileCardComponent></Col>
+            <Col md={10}><ProfileCardComponent webId={witness.id}></ProfileCardComponent></Col>
           </Row>
         )
       })}

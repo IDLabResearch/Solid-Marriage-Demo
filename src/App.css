@@ -108,3 +108,7 @@ header {
 .backbutton {
   float: top right;
 }
+
+h4 {
+  margin-bottom: 20px !important;
+}

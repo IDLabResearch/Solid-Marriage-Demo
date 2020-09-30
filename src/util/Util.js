@@ -86,8 +86,8 @@ export async function getContractData(id) {
     creator: getQuadObjVal(await datastore.getQuads(id, ns.dct('creator'))),
     certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
     status: getQuadObjVal(await datastore.getQuads(id, ns.demo('status'))),
-    spouse: getQuadObjList(await datastore.getQuads(id, ns.dbo('spouse'))),
-    witness: getQuadObjList(await datastore.getQuads(id, ns.demo('witness'))),
+    spouse: getQuadObjList(await datastore.getQuads(id, ns.dbo('spouse'))).map(e => {return({id: e})}),
+    witness: getQuadObjList(await datastore.getQuads(id, ns.demo('witness'))).map(e => {return({id: e})}),
   }
   // const contract = {id: id, completed: false, spouse: [], witness: []}
   // contract.creator = `${await data[id][ns.dct('creator')]}`

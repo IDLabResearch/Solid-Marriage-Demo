@@ -11,6 +11,7 @@ export default async function notify(notificationBody, subjects) {
 }
 
 async function getInbox(subject){
+  console.log('getting inbox', subject)
   const inbox = await data[subject][ns.ldp('inbox')]
   if(!inbox) console.error(subject + ' does not profide an inbox.')
   return inbox && inbox.value

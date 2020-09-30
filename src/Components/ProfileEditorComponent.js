@@ -85,7 +85,7 @@ const ProfileEditorComponent = (props) => {
         })}
         <br/>
         <br/>
-        <Button type="submit"> Submit</Button>
+        <Button type="submit">Submit</Button>
       </form>
     </div>
   )

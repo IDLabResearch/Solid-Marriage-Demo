@@ -71,8 +71,8 @@ const NotificationCard = (props) => {
     props.setview(view)
   }
 
-  async function viewsubmission(marriageId) {
-    const contract = await getContractData(marriageId) 
+  async function viewsubmission(submissionId) {
+    const contract = await getContractData(submissionId) 
     const view = availableViews.submissionview
     view.args = {contract: contract}
     props.setview(view)
