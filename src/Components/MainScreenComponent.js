@@ -3,7 +3,8 @@ import ReactLoading from 'react-loading';
 
 import '../css/MainScreenComponent.css'
 
-// @prefix dbo: <http://dbpedia.org/ontology/>. dbo:birthDate, dbo:birthPlace
+const viewsWithoutWebId = ['help', 'login']
+
 const MainScreenComponent = (props) => {
 
   const [view, setview] = useState(props.selectedView)
@@ -17,9 +18,17 @@ const MainScreenComponent = (props) => {
     args[prop] = view.args[prop]
   }
 
+  const showLoadingOrView = (view) => {
+    if (viewsWithoutWebId.indexOf(view.id) !== -1) {
+      return view.generation(args)
+    }
+    return <ReactLoading type={"cubes"}/> 
+
+  }
+
   return (
     <div id="mainscreencontainer" className='container'>
-      { props.webId ? view.generation(args) : <ReactLoading type={"cubes"}/> }
+      { props.webId ? view.generation(args) : showLoadingOrView(view) }
     </div>
   )
 }

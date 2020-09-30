@@ -10,6 +10,7 @@ import HelpComponent from '../Components/HelpComponent'
 import MarriageRequestComponent from '../Components/MarriageRequestComponent'
 import MarriageViewComponent from '../Components/MarriageViewComponent'
 import OfficialComponent from '../Components/OfficialComponent'
+import LoginComponent from '../Components/LoginComponent'
 import { getFile } from './FileUtil'
 
 import PersonIcon from '@material-ui/icons/Person';
@@ -19,6 +20,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import ListIcon from '@material-ui/icons/List';
 import GavelIcon from '@material-ui/icons/Gavel';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import ns from "../util/NameSpaces"
 import SubmissionViewComponent from '../Components/SubmissionViewComponent'
@@ -33,6 +35,7 @@ export async function getPromiseValueOrUndefined (promise){
 }
 
 export const availableViews = {
+  login:          {id:"login",            label:'Login',            generation:(props) => <LoginComponent {...props} ></LoginComponent>, icon: <ExitToAppIcon />},
   profile:        {id:"profile",          label:'Profile',          generation:(props) => <ProfileViewerComponent {...props} ></ProfileViewerComponent>, icon: <PersonIcon />},
   profileeditor:  {id:"profileedit",      label:'Profile Editor',   generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>, icon: <HelpIcon />},
   requests:       {id:"requests",         label:'Requests',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>, icon: <InsertDriveFileIcon />},

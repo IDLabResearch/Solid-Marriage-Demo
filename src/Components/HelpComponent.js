@@ -1,20 +1,52 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
-
+import { Row, Col, Button } from 'react-bootstrap'
+import { availableViews } from '../util/Util';
 
 const HelpComponent = (props) => {
   return (
-    <div id="InProgressViewerComponent" className='container'>
-      <h4> About this Demo </h4>
+    <div id="HelpComponent" className='container textleftalign'>
+      <h4> Demonstration application for SOLID </h4>
+
+      <h4>Preliminaries</h4>
+        <p>
+          Before starting this demonstration for SOLID, you are expected to have created a SOLID pod.
+        </p>
       <br />
-      This screen will provide information on how the steps for this demo, and how they can be performed (with images preferably)
-      I also would like to make this not a single page app, so I can link people to the help page (or even make this the landing screen)
-      But I have not yet worked with the routing options for react, but that would be a nice to have
+      
+      
+      <h4>Step1: Complete user profile</h4>
+      <p>
+      </p>
       <br />
 
-      <Row>
-        
-      </Row>
+      <h4>Step2: Planning a wedding</h4>
+      <p>
+      </p>
+      <br />
+
+      <h4>Step3: Awaiting confirmations</h4>
+      <p>
+      </p>
+      <br />
+
+
+      <h4>Step4: Submitting the wedding proposal</h4>
+      <p>
+      </p>
+      <br />
+
+      {availableViews.official.icon} <h4>Step5: Accepting / rejecting a marriage proposal</h4>
+      <p>
+      </p>
+      <br />
+
+      <h4>Preliminaries</h4>
+      <p>
+      </p>
+      <br />
+      
+
+
 
       <div >
         <p><b>TODOS</b></p>
@@ -55,7 +87,14 @@ const HelpComponent = (props) => {
       code comments
 
       convert large components - save additional logic in a controller file?
+
+      <br />
+      This screen will provide information on how the steps for this demo, and how they can be performed (with images preferably)
+      I also would like to make this not a single page app, so I can link people to the help page (or even make this the landing screen)
+      But I have not yet worked with the routing options for react, but that would be a nice to have
+      <br />
     </div>
+    
   )
 }
 

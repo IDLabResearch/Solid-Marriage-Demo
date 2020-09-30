@@ -96,21 +96,49 @@ const MiniDrawer = withWebId((props) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
-  const [selectedView, setSelectedView] = useState(availableViews.profile)
+  const [selectedView, setSelectedView] = useState(availableViews[props.defaultview] || availableViews.help)
   const notifications = useNotifications(props.webId)
 
-  const getSideBarItem = (itemId) => { return({
-    id: availableViews[itemId].id,
-    label: availableViews[itemId].label,
-    icon: availableViews[itemId].icon,
-    eventHandler: function(e) { setSelectedView(availableViews[itemId])}
-  })}
 
-  const sidebarItems = {}
-  
-  for (let item of ['profile', 'running', 'requests', 'certificates', 'official', 'notifications', 'help']){
-    sidebarItems[item] = getSideBarItem(item)
+  const isActive = (item) => {
+    console.log('active', activeDrawerItemMapping.item)
+    console.log('isActive?', item, selectedView)
   }
+
+  const getSidebarComponent = (itemName) => { 
+    if (itemName === 'divider') return (<Divider />)
+    if (itemName === 'br') return (<br />)
+    const item = availableViews[itemName]
+    return (
+      <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={itemName} onClick={ () => setSelectedView(item)}>
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <ListItemText primary={item.label} />
+      </ListItem>
+    )
+  }
+
+  const getTopBarComponent = (itemName, index) => {
+    const item = availableViews[itemName]
+    const className = index === 0 ? 'topmenuitem topmenuitemleft' : 'topmenuitem'
+    return (
+      <MenuItem className={className} onClick={() => setSelectedView(item)} >
+        <IconButton aria-label={item.label} color="inherit">
+          {itemName === 'notifications' 
+            ? <Badge badgeContent={notifications.length} color="secondary">
+                {item.icon}
+              </Badge>
+            : item.icon 
+          }
+        </IconButton>
+      </MenuItem>
+    )
+  }
+
+  const sideBarItems = props.sideBarItems || ['profile', 'requests', 'running', 'certificates', 'divider', 'br', 'divider', 'official']
+  const sidebarComponents = sideBarItems.map(e => getSidebarComponent(e))
+
+  const topBarItems = props.topBarItems || ['notifications', 'help']
+  const topbarComponents = topBarItems.map((e, index) => getTopBarComponent(e, index))
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -120,11 +148,6 @@ const MiniDrawer = withWebId((props) => {
     setOpen(false);
   };
 
-  const isActive = (item) => {
-    console.log('active', activeDrawerItemMapping.item)
-    console.log('isActive?', item, selectedView)
-
-  }
 
   return (
     <div className={classes.root}>
@@ -168,20 +191,7 @@ const MiniDrawer = withWebId((props) => {
             />{' '}
           </Navbar.Brand>
 
-
-          <MenuItem className='topmenuselectedViewitem topmenuitemleft' onClick={sidebarItems.help.eventHandler} >
-            <IconButton aria-label={sidebarItems.help.label} color="inherit">
-              {sidebarItems.help.icon}
-            </IconButton>
-          </MenuItem>
-
-          <MenuItem className='topmenuitem' onClick={sidebarItems.notifications.eventHandler} >
-            <IconButton aria-label={sidebarItems.notifications.label} color="inherit">
-              <Badge badgeContent={notifications.length} color="secondary">
-                {sidebarItems.notifications.icon}
-              </Badge>
-            </IconButton>
-          </MenuItem>
+          {topbarComponents}
 
           <MenuItem className='topmenuitem'>
             <LogoutButton className="logoutButton"/>
@@ -210,22 +220,8 @@ const MiniDrawer = withWebId((props) => {
         <Divider />
         <div className='sidebarcontent'>
           <List>
-            {[getSideBarItem('profile'), getSideBarItem('requests'), getSideBarItem('running'), getSideBarItem('certificates') ].map((item, index) => (
-              <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={item.label} onClick={item.eventHandler}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItem>
-            ))}
+            {sidebarComponents}
           </List>
-          <Divider />
-          <br />
-          <Divider />
-          {[sidebarItems.official].map((item, index) => (
-            <ListItem button={true} className={item.classNane} button key={item.label} onClick={item.eventHandler}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
-            </ListItem>
-          ))}
           <Divider />
         </div>
       </Drawer>
