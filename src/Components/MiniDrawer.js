@@ -24,6 +24,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Badge from '@material-ui/core/Badge';
 import { LogoutButton } from '@solid/react';
 
+import '../css/Drawer.css'
+
+
 import solidlogo from '../assets/solid-emblem.svg';
 import idlablogo from '../assets/idlab.png';
 
@@ -192,10 +195,11 @@ const MiniDrawer = withWebId((props) => {
           </Navbar.Brand>
 
           {topbarComponents}
-
-          <MenuItem className='topmenuitem'>
-            <LogoutButton className="logoutButton"/>
-          </MenuItem>
+          {props.hidelogout 
+            ? <div />
+            : <MenuItem className='topmenuitem'>
+                <LogoutButton className="logoutButton"/>
+              </MenuItem>}
 
         </Toolbar>
       </AppBar>
