@@ -47,6 +47,21 @@ export const availableViews = {
   certificateview:{id:"certificateview",  label:'Certificate view', generation:(props) => <CertificateViewComponent {...props}></CertificateViewComponent>, icon: <HelpIcon />},
 }
 
+export const activeDrawerItemMapping = {
+  profile:          "profile",
+  profileeditor:    "profile",
+  requests:         "requests",
+  marriagerequest:  "requests",
+  running:          "running",
+  marriageview:     "running",
+  certificates:     "certificates",
+  certificateview:  "certificates",
+  official:         "official",
+  submissionview:   "official",
+  notifications:    "notifications",
+  help:             "help",
+}
+
 export async function getStore(URI){
   const response = await getFile(URI)
   const code = await response

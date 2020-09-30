@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getContractData, getCertificateData } from '../util/Util'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Button } from 'react-bootstrap'
 import ProfileCardComponent from './ProfileCardComponent'
+import { generateCertificatePDF } from '../util/generatepdf'
 
 
 // @prefix dbo: <http://dbpedia.org/ontology/>. dbo:birthDate, dbo:birthPlace
@@ -65,6 +66,10 @@ const CertificateViewComponent = (props) => {
       <Row className='propertyview' key={'certification_date'}>
         <Col md={2}><label className="leftaligntext"><b>Certified on</b></label></Col>
         <Col md={10}><label className="leftaligntext">{new Date(state.certificate.certification_date).toLocaleString()}</label></Col>
+      </Row>
+      <Row>
+        <Col md={4}></Col>
+        <Col md={4}><Button onClick={() => generateCertificatePDF(state.proposal, state.certificate)}>Get PDF</Button></Col>
       </Row>
     </div>
   )

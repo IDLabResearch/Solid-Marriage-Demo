@@ -71,9 +71,36 @@
 }
 
 #mainscreencontainer {
-  margin-left: 5%;
+  /* margin-left: 5%; */
 }
 
 /* button {
   font-weight: bold !important;
 } */
+
+.toolbarcolor {
+  background-color: #3f51b5;
+}
+
+header {
+  background-color: #3f51b5;
+}
+
+.sidebar {
+  overflow: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.sidebarcontent {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.active {
+  background-color: lightgray !important;
+}
+
+.nonactive{
+  background-color: none;
+}
