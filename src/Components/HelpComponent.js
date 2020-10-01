@@ -75,15 +75,39 @@ const HelpComponent = (props) => {
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
-          <p>On submission of a marriage proposal, all parties (spouses and witnesses) are notified of the created proposal.</p>
+          <p>On creation of a marriage proposal, all parties (spouses and witnesses) are notified of the created proposal.</p>
           <p>These notifications can be found in the inbox of your data pod (the default location is at /inbox).</p>
-          TODO :: submissions folder - check notifications and add running proposal for marriage if notification of that.
+          TODO :: proposals folder - check notifications and add running proposal for marriage if notification of that.
           TODO :: on accept / rejection - add to hasContracts !
 
 
           <p>Now, you can see the marriage proposal, and all people involved in the proposal.</p>
-          <p>In this form, you will see a .</p>
+          <p>In this form, you will see two action buttons next to your name: <button type="button" class="marriageview_accept__3V0c_ centeraligntext btn btn-primary" style={{width: '120px'}}> Accept </button> and <button type="button" class="marriageview_refuse__2lqar centeraligntext btn btn-primary" style={{width: '120px'}}> Refuse </button>.</p>
+          <p>With these, you can accept or refuse the invitation.</p>
+          <p>For the creator of a proposal, a button is available to resend an invitation. This will trigger another notification to be sent to the person.</p>
+          <p>When everybody has accepted the proposal, a button <button type="button" class="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '220px'}}> Submit Marriage Proposal </button> is available for the creator of the proposal to submit the proposal for validation.</p>
+        </Col>
+      </Row>
+    
+      <br />
 
+
+      <Row>
+        <Col md={1}>{availableViews.official.icon}</Col>
+        <Col md={11}><h4>Step 4 - Validation by an official</h4></Col>
+      </Row>
+
+      <Row>
+        <Col md={1}></Col>
+        <Col md={11}>
+          <p>With the proposal submitted, it is now ready to be validated by a state official.</p>
+          <p>In this demo, you are yourself promoted to state official, congratulations!</p>
+          <p>Now that you are a state official, you can see the proposals submitted to the state pod inbox (which in this case is the inbox of your personal pod) in the official tab</p>
+          <p>In this tab, all proposal submissions that are made to the state pod (your pod in this case) are listed.</p>
+          <p>A proposal can be evaluated by clicking <Button className='centeraligntext' style={{width: '100px'}}>Evaluate</Button></p>
+          <p>In the evaluation screen, the people involved in the proposal are listed with their information and their status if they confirmed or rejected the wedding proposal.</p>
+          <p>In case all information can be retrieved, and all people have confirmed their part in the marriage, the official (you) can approve the marriage proposal with <button type="button" class="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '160px'}}> Approve Proposal </button>, or choose to reject it with <button type="button" class="marriageview_delete__1FaK6 valuebutton btn btn-primary" style={{width: '160px'}}> Reject Proposal </button>.</p>
+          <p>Depending on your choice, a notification will be sent to the people involved that the marriage proposal has been approved or rejected</p>
         </Col>
       </Row>
     
@@ -91,28 +115,23 @@ const HelpComponent = (props) => {
 
 
 
+      <Row>
+        <Col md={1}>{availableViews.certificates.icon}</Col>
+        <Col md={11}><h4>Step 5 - Retrieving the certificate</h4></Col>
+      </Row>
 
-      <h4>Step3: Awaiting confirmations</h4>
-      <p>
-      </p>
+      <Row>
+        <Col md={1}></Col>
+        <Col md={11}>
+          <p>In the case that your marriage proposal is accepted, you are now officially married, and you can now retrieve your marriage certificate.</p>
+          <p>This can be found in the Certificates tab.</p>
+          <p>You can view the ceritificate using  <button type="button" class="btn btn-primary" style={{width: '150px'}}>View certificate</button>.</p>
+          <p>In this view, all the information about the marriage and the certificate is listed.</p>
+          <p>A pdf version of the certificate can be retrieved using <button type="button" class="btn btn-primary" style={{width: '60px'}}>Get PDF</button>.</p>
+        </Col>
+      </Row>
+    
       <br />
-
-
-      <h4>Step4: Submitting the wedding proposal</h4>
-      <p>
-      </p>
-      <br />
-
-      {availableViews.official.icon} <h4>Step5: Accepting / rejecting a marriage proposal</h4>
-      <p>
-      </p>
-      <br />
-
-      <h4>Preliminaries</h4>
-      <p>
-      </p>
-      <br />
-      
 
 
 

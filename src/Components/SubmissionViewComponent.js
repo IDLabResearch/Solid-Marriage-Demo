@@ -116,7 +116,7 @@ const SubmissionViewComponent = (props) => {
             ? <Row>
                 <Col md={2} />
                 <Col md={3}>
-                  <Button className={`${styles.accept} valuebutton`} onClick={() => accept()}> Certify Marriage </Button> 
+                  <Button className={`${styles.accept} valuebutton`} onClick={() => accept()}> Approve Proposal </Button> 
                 </Col>
                 <Col md={4}>
                   <Button className={`${styles.delete} valuebutton`} onClick={() => reject()}> Reject Proposal </Button>
