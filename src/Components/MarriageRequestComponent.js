@@ -34,7 +34,7 @@ const MarriageRequestComponent = (props) => {
   ])
 
   const handleSubmit = async event => {
-    if (!validateSubmission(state)) return;
+    if (!await validateSubmission(state)) return;
     const proposal = await createMarriageProposal(state, storageLocation, props.webId)
     props.setview(availableViews.running)
   }

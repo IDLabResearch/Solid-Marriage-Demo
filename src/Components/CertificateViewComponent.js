@@ -69,7 +69,7 @@ const CertificateViewComponent = (props) => {
       </Row>
       <Row>
         <Col md={4}></Col>
-        <Col md={4}><Button onClick={() => generateCertificatePDF(state.proposal, state.certificate)} disabled>Get PDF</Button></Col>
+        <Col md={4}><Button onClick={() => generateCertificatePDF(state.proposal, state.certificate)}>Get PDF</Button></Col>
       </Row>
     </div>
   )

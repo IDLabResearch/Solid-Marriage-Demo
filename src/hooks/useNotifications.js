@@ -31,7 +31,7 @@ const useNotifications = function(webId) {
     if(!notificationsMetadata) return []
     return await Promise.all(notificationsMetadata.map(async function(metadata){
       const notification = await getNotification(metadata.id);
-      metadata.type = await getNotificationTypes(notification) 
+      metadata.types = await getNotificationTypes(notification) 
       metadata.modified = metadata.modified && new Date(metadata.modified)
       notification.metadata = metadata;
       return notification

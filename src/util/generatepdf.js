@@ -1,15 +1,17 @@
-
-// const PDFDocument = require('@react-pdf/pdfkit');
-import PDFDocument from '@react-pdf/pdfkit'
+import { jsPDF } from "jspdf";
+import background from "../assets/background2.png"
+import "../assets/PalatinoBold-bold"
 
 const blobStream = require('blob-stream');
-
 const { default: data } = require('@solid/query-ldflex');
- 
+
+const nameIndent = 60;
+const leftIndent = 30;
+let currentY = 0
 
 export async function generateCertificatePDF (proposal, certificate) {
 
-  const getPersonData = async (id) => { return ( {id: id, name: await data[id].name} ) }
+  const getPersonData = async (id) => { return({ id, name: `${await data[id].name}` }) }
 
   console.log('proposal', proposal)
   console.log(proposal.spouse)
@@ -17,119 +19,76 @@ export async function generateCertificatePDF (proposal, certificate) {
   console.log('certificate', certificate)
   console.log(certificate.certified_by)
 
-  const spouses = await Promise.all(proposal.spouse.map(async (e) => await getPersonData(e)))
-  const witnesses = await Promise.all(proposal.witness.map(async (e) => await getPersonData(e)))
+  let spouses = await Promise.all(proposal.spouse.map(async (e) => await getPersonData(e.id)))
+  if(spouses.length === 1) spouses = [spouses[0], spouses[0]]
+  console.log(spouses)
+  const witnesses = await Promise.all(proposal.witness.map(async (e) => await getPersonData(e.id)))
+  console.log(witnesses)
   if(spouses.length !== 2 && spouses.length !== 1) throw new Error('incorrect number of spouses')
+  console.log("test")
   const official = await getPersonData(certificate.certified_by)
-  const weddingDate = certificate.certification_date
-
-  // Create a document
-  const doc = new PDFDocument();
-  // pipe the document to a blob
-  const stream = doc.pipe(blobStream());
-
-  // doc.image('../assets/background2.png', 0,0, {width: doc.page.width, height: doc.page.height})
+  console.log(official)
+  const weddingDate = new Date(certificate.certification_date)
+  console.log(weddingDate)
 
   
-  // doc.font('../assets/PalatinoBold.ttf')
 
-  console.log('DOC', doc)
+  // Default export is a4 paper, portrait, using millimeters for units
+  const doc = new jsPDF();
 
-  doc.fontSize(40);
-  doc
-    .text(`Marriage Certificate`, {
-      align: 'center',
-    });
-
-
-  doc.moveDown(1.5)
-
-
-  doc.fontSize(20);
-  doc
-  .text(`This document certifies the marriage between`, { });
-
-  doc.moveDown(2)
-
-  doc.fontSize(20);
-  doc.text(`both`, {
-    indent: 0,
-  });
-  doc.moveUp()
-  doc.text(`${spouses[0].name}`, {
-    indent: 75,
-    link: spouses[0].id,
-  });
-
-
-  doc.text(`and`, {
-    indent: 0,
-  });
-  doc.moveUp()
-  doc.text(`${spouses[1] ? spouses[1].name : spouses[0].name}`, {
-    indent: 75,
-    link: spouses[1] ? spouses[1].id : spouses[0].id,
-  });
-
-
-  doc.moveDown(1.3)
-
-
-  doc.text(`on ${weddingDate.toDateString()} at ${weddingDate.toLocaleTimeString()}`, { });
-
-  doc.moveDown(1)
-
-  doc.text(`by ${official.name}`, {
-    link: official.id
-  });
-
-  // doc.text(`with the function of ${certifiedPerson.fct}`, {
-  //   link: certifiedPerson.webid
-  // });
-  // doc.moveDown(1)
-
-  // doc.text(`at ${weddingLocation}`, { });
-
-  doc.moveDown(2)
-  doc.text(`Witnessed by`, {});
-
-  doc.moveDown(1)
+  var width = doc.internal.pageSize.getWidth();
+  var height = doc.internal.pageSize.getHeight();
   
-  for (const witness of witnesses) {
-    doc.text(`${witness.name}`, {
-      indent: 75,
-      link: witness.id,
-    });
-    doc.moveDown(0.5)
+  doc.setFont('PalatinoBold', 'bold');
+  
+  doc.addImage(background, 'png', 0,0, width, height);
+
+
+  doc.setFontSize(40)
+  // Bug in jspdf, url link is not transformed correctly with align: 'center'
+  // doc.textWithLink('Marriage Certificate', (width / 2) , currentY+=40, {align: 'center', url: certificate.id});
+  doc.textWithLink('Marriage Certificate', 40, currentY+=40, {url: certificate.id});
+
+
+  doc.setFontSize(20)
+
+  doc.text("This document certifies the marriage between", leftIndent , currentY+=20, "left");
+  doc.text("both", leftIndent , currentY+=20, "left");
+  doc.textWithLink(`${spouses[0].name}`, nameIndent , currentY+=0, {url: spouses[0].id});
+  doc.text("and", leftIndent , currentY+=15, "left");
+  doc.textWithLink(`${spouses[1].name}`, nameIndent , currentY+=0, {url: spouses[1].id});
+
+
+  doc.text(`on ${weddingDate.toDateString()} at ${weddingDate.toLocaleTimeString()}`, leftIndent , currentY+=25, "left");
+  
+  doc.text('by', leftIndent , currentY+=15, "left");
+  doc.textWithLink(`${official.name}`, nameIndent , currentY+=0, {url: official.id});
+
+  doc.text('Witnessed by', leftIndent , currentY+=25, "left");
+  
+  for (const [index, witness] of witnesses.entries()) {
+    const increase = index === 0 ? 15 : 10
+    doc.textWithLink(`${witness.name}`, nameIndent , currentY+=increase, {url: witness.id});
   }
 
-  doc.end();
 
-
-  stream.on('finish', function() {
-    // get a blob you can do whatever you like with
-    const blob = stream.toBlob('application/pdf');
-  
-    // or get a blob URL for display in the browser
-    const url = stream.toBlobURL('application/pdf');
-    // iframe.src = url
-    console.log(url)
-    window.open(url)
-  });
+  const blobPDF = new Blob([doc.output('blob')], { type: 'application/pdf' } )
+  const url = URL.createObjectURL(blobPDF)
+  window.open(url)
 
 }
 
 
-// // require dependencies
-// const PDFDocument = require('pdfkit');
+// // // require dependencies
+// // const PDFDocument = require('pdfkit');
  
-// // create a document the same way as above
-// const doc = new PDFDocument();
+// // // create a document the same way as above
+// // const doc = new PDFDocument();
  
-// // pipe the document to a blob
-// const stream = doc.pipe(blobStream());
+// // // pipe the document to a blob
+// // const stream = doc.pipe(blobStream());
  
-// // add your content to the document here, as usual
+// // // add your content to the document here, as usual
  
 // // get a blob when you're done
 // doc.end();

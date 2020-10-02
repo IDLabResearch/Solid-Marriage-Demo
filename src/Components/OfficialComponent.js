@@ -14,6 +14,7 @@ const OfficialComponent = (props) => {
   useEffect(() => {
     let mounted = true;
     async function filterSubmissions() {
+      console.log("Notifications", notifications)
       const submissions = notifications.filter(notification => 
         notification.type === ns.as('Announce')
         && notification.object 

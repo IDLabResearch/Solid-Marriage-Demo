@@ -105,12 +105,12 @@ const MiniDrawer = withWebId((props) => {
 
   const isActive = (item) => item.id === activeDrawerItemMapping[selectedView.id]
 
-  const getSidebarComponent = (itemName) => { 
-    if (itemName === 'divider') return (<Divider />)
-    if (itemName === 'br') return (<br />)
+  const getSidebarComponent = (itemName, index) => { 
+    if (itemName === 'divider') return (<Divider key={index}/>)
+    if (itemName === 'br') return (<br key={index}/>)
     const item = availableViews[itemName]
     return (
-      <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={itemName} onClick={ () => setSelectedView(item)}>
+      <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={index} onClick={ () => setSelectedView(item)}>
         <ListItemIcon>{item.icon}</ListItemIcon>
         <ListItemText primary={item.label} />
       </ListItem>
@@ -121,7 +121,7 @@ const MiniDrawer = withWebId((props) => {
     const item = availableViews[itemName]
     const className = index === 0 ? 'topmenuitem topmenuitemleft' : 'topmenuitem'
     return (
-      <MenuItem className={className} onClick={() => setSelectedView(item)} >
+      <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
         <IconButton aria-label={item.label} color="inherit">
           {itemName === 'notifications' 
             ? <Badge badgeContent={notifications.length} color="secondary">
@@ -135,7 +135,7 @@ const MiniDrawer = withWebId((props) => {
   }
 
   const sideBarItems = props.sideBarItems || ['profile', 'requests', 'running', 'certificates', 'divider', 'br', 'divider', 'official', 'divider']
-  const sidebarComponents = sideBarItems.map(e => getSidebarComponent(e))
+  const sidebarComponents = sideBarItems.map((e, index) => getSidebarComponent(e, index))
 
   const topBarItems = props.topBarItems || ['notifications', 'help']
   const topbarComponents = topBarItems.map((e, index) => getTopBarComponent(e, index))
