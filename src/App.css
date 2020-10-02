@@ -80,6 +80,8 @@
 
 .toolbarcolor {
   background-color: #3f51b5;
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
 }
 
 header {

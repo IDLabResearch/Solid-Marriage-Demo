@@ -9,16 +9,16 @@ const { namedNode, blankNode, literal, quad, variable} = DataFactory;
 
 /**
  * 
- * @param {*} proposalData : [{ label: "Spouse" | "Witness", type: "spouse" | "witness", webID: string, id: number}]
+ * @param {*} proposalContacts : [{ label: "Spouse" | "Witness", type: "spouse" | "witness", webID: string, id: number}]
  */
-export async function createMarriageProposal(proposalData, storageLocation, webId) {
+export async function createMarriageProposal(proposalContacts, storageLocation, webId) {
   let proposalId = storageLocation.endsWith('/') ? storageLocation : storageLocation + '/'
   proposalId = proposalId + getProposalName()
-  if (proposalData.filter(e => e.type === 'spouse').length !== 2) throw new Error('A proposal requires 2 spouses to be specified.')
-  if (proposalData.filter(e => e.type === 'witness').length < 1) throw new Error('A proposal requires at least one witness to be specified.')
+  if (proposalContacts.filter(e => e.type === 'spouse').length !== 2) throw new Error('A proposal requires 2 spouses to be specified.')
+  if (proposalContacts.filter(e => e.type === 'witness').length < 1) throw new Error('A proposal requires at least one witness to be specified.')
   
   // Create file with proposal on proposalId
-  const postbody = await createMarriagePropsalBody(proposalData, webId)
+  const postbody = await createMarriagePropsalBody(proposalContacts, webId)
   const post = await putFile(proposalId, postbody)
 
   // Patch profile with information on created proposal
@@ -26,14 +26,20 @@ export async function createMarriageProposal(proposalData, storageLocation, webI
   const patch = await patchFile(webId, patchbody)
 
   // Create and send notifications to all parties involved
-  for (let contact of proposalData){
-    const contactId = contact.webId
-    const notification = await createMarriageContractInvitation(webId, contactId, proposalId)
-    notify(notification, [contactId])
+  const sentContacts = [];
+  for (let contact of proposalContacts){
+    if (sentContacts.indexOf(contact.webId) === -1){
+      sendContactInvitation(webId, contact.webId, proposalId)
+      sentContacts.push(contact.webId)
+    }
   }
 }
 
-export async function deleteMarriageProposal(proposalId, webId) {
+export async function sendContactInvitation(webId, contactId, proposalId){
+  return notify(await createMarriageContractInvitation(webId, contactId, proposalId), [contactId])
+}
+
+export async function deleteProposal(proposalId, webId) {
   // Remove proposal and patch profile to remove reference.
   const patchbody = await deleteMarriageProfilePatch(webId, proposalId)
   const result = await deleteFile(proposalId)
@@ -117,7 +123,7 @@ export async function rejectProposal(webId, proposalId, storageLocation){
  * Update the status of the marriage contract proposal.
  * @param {'pending' | 'sumitted' | 'accepted' | 'refused'} newStatus 
  */
-export async function updateMarriageContractStatus(contractId, newStatus) {
+async function updateMarriageContractStatus(contractId, newStatus) {
   const status = ns.demo(newStatus)
   const patchbody = await createContractStatusPatch(contractId, status);
   const patch = await patchFile(contractId, patchbody)
@@ -183,7 +189,6 @@ export function createMarriageContractInvitation(webId, contactId, marriageContr
   `
 }
 
-
 export function createMarriageContractSubmissionNotification(webId, marriageContractId, officialId){
   return `
     @prefix as: <https://www.w3.org/ns/activitystreams#> .
@@ -198,7 +203,6 @@ export function createMarriageContractSubmissionNotification(webId, marriageCont
       as:summary "Announcement that Marriage Contract Proposal is ready to be evaluated" .
   `
 }
-
 
 export function createCertificateProposalConfirmationNotification(webId, certificateId, marriageContractId, targets){
   // webId == id of the official
@@ -226,7 +230,6 @@ async function createMarriageCertificateBody(webId, proposalId){
     <${ns.rdfs('comment')}> "This is a certificate for the Marriage proposal ${proposalId} by ${webId}" .
   `
 }
-
 
 export function createCertificateProposalRejectionNotification(webId, marriageContractId, targets){
   // webId == id of the official
@@ -294,22 +297,8 @@ export async function createMarriagePropsalNotification(creatorWebId, proposalId
   return await quadListToTTL(quadList);
 }
 
-export async function addCertificationToProposal(proposalId, certificationId){
-  await updateMarriageContractStatus(proposalId, "certified")
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// export async function addCertificationToProposal(proposalId, certificationId){
+//   await updateMarriageContractStatus(proposalId, "certified")
+// }
 
 

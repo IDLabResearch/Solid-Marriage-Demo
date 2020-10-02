@@ -29,14 +29,13 @@ const useNotifications = function(webId) {
   async function fetchNotifications(webId){ 
     const notificationsMetadata = await getNotificationMetadata(webId)
     if(!notificationsMetadata) return []
-    const notificationList = []
-    for await (const metadata of notificationsMetadata){
-      const notification = await getNotification(metadata.id)
-      metadata.types = await getNotificationTypes(notification)
-      notification.metadata = metadata
-      notificationList.push(notification)
-    }
-    return notificationList
+    return await Promise.all(notificationsMetadata.map(async function(metadata){
+      const notification = await getNotification(metadata.id);
+      metadata.type = await getNotificationTypes(notification) 
+      metadata.modified = metadata.modified && new Date(metadata.modified)
+      notification.metadata = metadata;
+      return notification
+    }))
   }  
 }
 

@@ -4,14 +4,15 @@ import ns from "../util/NameSpaces"
 const { default: data } = require('@solid/query-ldflex');
 
 export default async function notify(notificationBody, subjects) {
-  for (let subject of subjects) {
+  const distinct = (value, index, self) => self.indexOf(value) === index;
+  console.log('subjects', subjects, subjects.filter(distinct))
+  for (let subject of subjects.filter(distinct)) {
     const inbox = await getInbox(subject);
     if (inbox) postFile(inbox, notificationBody)
   }
 }
 
 async function getInbox(subject){
-  console.log('getting inbox', subject)
   const inbox = await data[subject][ns.ldp('inbox')]
   if(!inbox) console.error(subject + ' does not profide an inbox.')
   return inbox && inbox.value

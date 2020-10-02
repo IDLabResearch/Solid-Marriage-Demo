@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input';
 import useProfile from '../hooks/useProfile'
 import ProfileCardComponent from './ProfileCardComponent';
 import { Row, Col } from 'react-bootstrap';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const ProfileCardSelectorComponent = (props) => {
   const [webIdInput, setWebIdInput] = useState(props.person.webId)
@@ -47,15 +48,21 @@ const ProfileCardSelectorComponent = (props) => {
 
   return (
     <div id="ProfileCardSelectorComponent">
-      <Row className='propertyview ' key={props.person.id}>
-        <Col md={3}><label className="leftaligntext"><b>{props.person.label}</b></label></Col>
-        <Col md={9}><Input className="leftaligntext" value={webIdInput || ""} name="location" onChange={webIdChangeHandler}/></Col>
-      </Row>
+    {props.index < 2
+      ? <Row className='propertyview ' key={"profileselect" + props.index}>
+          <Col md={3}><label className="leftaligntext"><b>{props.person.label}</b></label></Col>
+          <Col md={9}><Input className="leftaligntext" value={webIdInput || ""} name="location" onChange={webIdChangeHandler}/></Col>
+        </Row>
+      : <Row className='propertyview ' key={"profileselect" + props.index}>
+          <Col md={3}><label className="leftaligntext"><b>{props.person.label}</b></label></Col>
+          <Col md={8}><Input className="leftaligntext" value={webIdInput || ""} name="location" onChange={webIdChangeHandler}/></Col>
+          <Col md={1}><ClearIcon onClick={() => props.delete(props.index)} /></Col>
+        </Row>
+      }
       {warnings && <b style={warningStyle}>{warnings}</b>}
-
-      <Row className='propertyview ' key={props.person.id}>
+      <Row className='propertyview ' key={"profileview" + props.index}>
         <Col md={3}></Col>
-        <Col md={9}><ProfileCardComponent webId={webIdInput} key={webIdInput}></ProfileCardComponent></Col>
+        <Col md={8}><ProfileCardComponent webId={webIdInput} key={webIdInput}></ProfileCardComponent></Col>
       </Row>
     </div>
   )

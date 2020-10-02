@@ -137,3 +137,7 @@ export async function getNotificationTypes(activity){
   }
   return types
 }
+
+export async function getProposalActors(proposalId){
+  // return creator, spouse, witness.
+}

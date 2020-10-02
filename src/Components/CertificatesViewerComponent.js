@@ -84,17 +84,17 @@ const CertificatesViewerComponent = (props) => {
       </Row>
       { certifiedContacts.length
         ? 
-          certifiedContacts.map(contract => {
+          certifiedContacts.map((contract, index) => {
             return (
               <Row className='propertyview' key={contract.id}>
-                <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col>
+                {index === 0 ? <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col> : <Col md={3} /> }
                 <Col md={5}><label className="leftaligntext">Certificate availablee</label></Col>
                 <Col md={3}><Button onClick={(() => showCertificateViewer(contract.id))}>View certificate</Button></Col>
               </Row>
             )
           })
         :
-          <Row className='propertyview' key={'Residence'}>
+          <Row className='propertyview' key={'Marriage'}>
             <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col>
             <Col md={5}><label className="leftaligntext">No certificate available</label></Col>
           </Row>

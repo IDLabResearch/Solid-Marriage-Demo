@@ -4,7 +4,7 @@ import styles from '../css/components/marriageview.module.css'
 
 import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
-import { acceptProposal, refuseProposal, deleteMarriageProposal, createMarriageContractSubmissionNotification, submitProposal } from '../util/MarriageController'
+import { acceptProposal, refuseProposal, deleteProposal, createMarriageContractSubmissionNotification, submitProposal, sendContactInvitation } from '../util/MarriageController'
 import { availableViews } from '../util/Util'
 const { default: data } = require('@solid/query-ldflex');
 
@@ -21,8 +21,11 @@ const INVITATIONREFUSED = ns.demo('refused')
 const MarriageViewComponent = (props) => {
   let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
   allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
-  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'pending' ; return e})
+  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
   const [contacts, setContacts] = useState(allcontacts)
+
+
+  const [resentContacts, setResentContacts] = useState([])
 
   useEffect(() => {
     let mounted = true
@@ -69,6 +72,11 @@ const MarriageViewComponent = (props) => {
     props.setview(availableViews.official)
   }
 
+  async function deleteMarriageProposal() {
+    const deletion = await deleteProposal(props.contract.id, props.webId)
+    props.setview(availableViews.running)
+  }
+
   function isComplete() {
     for (let contact of contacts) {
       if (contact.status !== "accepted") return false
@@ -82,7 +90,7 @@ const MarriageViewComponent = (props) => {
   }
 
   async function refuse() {
-    await acceptProposal(props.webId, props.contract.id, props.contract.creator)
+    await refuseProposal(props.webId, props.contract.id, props.contract.creator)
     resetView()
   }
 
@@ -91,26 +99,26 @@ const MarriageViewComponent = (props) => {
     setContacts(updatedContacts)
   }
 
-  function resend() {
-    //TODO:: include this
-    console.error('TODO')
+  async function resend(contactId, proposalId) {
+    const response = await sendContactInvitation(props.webId, contactId, proposalId)
+    setResentContacts(resentContacts.concat(contactId))
   }
 
-
   function getContactButton(contact){
-    switch (contact.status) {
-      case 'pending':
-        if (contact.id === props.webId) return (
-            <div>
-              <Button className={`${styles.accept} centeraligntext`} onClick={() => accept()}> Accept </Button>
-              <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse()}> Refuse </Button>
-            </div>
-          )
-        else  return (
+    if(contact.status === 'pending') {
+      if (contact.id === props.webId) return (
           <div>
-            <Button className={`${styles.pending} centeraligntext`} onClick={() => resend()}>Resend notification</Button>
+            <Button className={`${styles.accept} centeraligntext`} onClick={() => accept(contact.id, props.contract.id)}> Accept </Button>
+            <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse(contact.id, props.contract.id)}> Refuse </Button>
           </div>
         )
+      else  return (
+        <div>
+          {resentContacts.indexOf(contact.id) === -1
+          ? <Button className={`${styles.pending} centeraligntext`} onClick={() => resend(contact.id, props.contract.id)}>Resend notification</Button>
+          : <Button className={`${styles.pending} centeraligntext`} onClick={() => resend(contact.id, props.contract.id)} disabled>Resend notification</Button>}
+        </div>
+      )
     }
     return(<div />)
   }
@@ -121,8 +129,12 @@ const MarriageViewComponent = (props) => {
         return "Accepted"
       case 'refused':
         return "Refused"
+      case 'loading':
+        return "Loading"
+      case 'pending':
+        return "Pending"
     }
-    return "Pending"
+    return "Loading"
   }
 
   return (
@@ -135,9 +147,9 @@ const MarriageViewComponent = (props) => {
         <Col md={2}><label className="centeraligntext">Status</label></Col>
         <Col md={2}><label className="centeraligntext">Action</label></Col>
       </Row>
-      {contacts.map(contact => {
+      {contacts.map((contact, index) => {
         return (
-          <Row className='propertyview' key={contact.id}>
+          <Row className='propertyview' key={contact.id + '-' + index}>
             <Col md={2}><label className="leftaligntext"><b>{contact.type}</b></label></Col>
             <Col md={5}><ProfileCardComponent webId={contact.id} key={contact.id} /></Col>
             <Col md={2}>{showContactStatus(contact)}</Col>
@@ -155,7 +167,7 @@ const MarriageViewComponent = (props) => {
                   <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contract.id, props.webId)}> Submit Marriage Proposal </Button> 
                 </Col>
                 <Col md={3}>
-                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal()}> Delete Marriage Proposal </Button>
+                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contract.id, props.webId)}> Delete Marriage Proposal </Button>
                 </Col>
               </Row>
             : <Row>

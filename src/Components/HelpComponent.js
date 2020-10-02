@@ -7,13 +7,12 @@ const HelpComponent = (props) => {
     <div id="HelpComponent" className='container leftaligntext'>
       <h4 className='container centeraligntext'>How to get married with SOLID in 10 simple steps</h4>
 
-      
       <Row>
         <Col md={1}>{availableViews.login.icon}</Col>
         <Col md={11}><h4>Preliminaries</h4></Col>
       </Row>
-
       <Row>
+      
         <Col md={1}></Col>
         <Col md={11}>
           <p>Before starting this demonstration for SOLID, you are expected to have created a SOLID pod.</p>
@@ -21,15 +20,12 @@ const HelpComponent = (props) => {
           <p>(or using login button - choose provider - register account. But this should be explained with pictures)</p>
         </Col>
       </Row>
-     
       <br />
-      
-      
+        
       <Row>
         <Col md={1}>{availableViews.profile.icon}</Col>
         <Col md={11}><h4>Step 1 - Complete user profile</h4></Col>
       </Row>
-
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
@@ -41,14 +37,12 @@ const HelpComponent = (props) => {
           <p>All fields are mandatory!</p>
         </Col>
       </Row>
-     
       <br />
 
       <Row>
         <Col md={1}>{availableViews.requests.icon}</Col>
         <Col md={11}><h4>Step 2 - Planning a Wedding</h4></Col>
       </Row>
-
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
@@ -64,14 +58,12 @@ const HelpComponent = (props) => {
           <p>Now, you can submit the marriage proposal using <Button>Submit</Button></p>
         </Col>
       </Row>
-     
       <br />
 
       <Row>
         <Col md={1}>{availableViews.running.icon}</Col>
         <Col md={11}><h4>Step 3 - Confirming requests</h4></Col>
       </Row>
-
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
@@ -82,21 +74,18 @@ const HelpComponent = (props) => {
 
 
           <p>Now, you can see the marriage proposal, and all people involved in the proposal.</p>
-          <p>In this form, you will see two action buttons next to your name: <button type="button" class="marriageview_accept__3V0c_ centeraligntext btn btn-primary" style={{width: '120px'}}> Accept </button> and <button type="button" class="marriageview_refuse__2lqar centeraligntext btn btn-primary" style={{width: '120px'}}> Refuse </button>.</p>
+          <p>In this form, you will see two action buttons next to your name: <button type="button" className="marriageview_accept__3V0c_ centeraligntext btn btn-primary" style={{width: '120px'}}> Accept </button> and <button type="button" className="marriageview_refuse__2lqar centeraligntext btn btn-primary" style={{width: '120px'}}> Refuse </button>.</p>
           <p>With these, you can accept or refuse the invitation.</p>
           <p>For the creator of a proposal, a button is available to resend an invitation. This will trigger another notification to be sent to the person.</p>
-          <p>When everybody has accepted the proposal, a button <button type="button" class="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '220px'}}> Submit Marriage Proposal </button> is available for the creator of the proposal to submit the proposal for validation.</p>
+          <p>When everybody has accepted the proposal, a button <button type="button" className="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '220px'}}> Submit Marriage Proposal </button> is available for the creator of the proposal to submit the proposal for validation.</p>
         </Col>
-      </Row>
-    
+      </Row>    
       <br />
-
 
       <Row>
         <Col md={1}>{availableViews.official.icon}</Col>
         <Col md={11}><h4>Step 4 - Validation by an official</h4></Col>
       </Row>
-
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
@@ -106,61 +95,56 @@ const HelpComponent = (props) => {
           <p>In this tab, all proposal submissions that are made to the state pod (your pod in this case) are listed.</p>
           <p>A proposal can be evaluated by clicking <Button className='centeraligntext' style={{width: '100px'}}>Evaluate</Button></p>
           <p>In the evaluation screen, the people involved in the proposal are listed with their information and their status if they confirmed or rejected the wedding proposal.</p>
-          <p>In case all information can be retrieved, and all people have confirmed their part in the marriage, the official (you) can approve the marriage proposal with <button type="button" class="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '160px'}}> Approve Proposal </button>, or choose to reject it with <button type="button" class="marriageview_delete__1FaK6 valuebutton btn btn-primary" style={{width: '160px'}}> Reject Proposal </button>.</p>
+          <p>In case all information can be retrieved, and all people have confirmed their part in the marriage, the official (you) can approve the marriage proposal with <button type="button" className="marriageview_accept__3V0c_ valuebutton btn btn-primary" style={{width: '160px'}}> Approve Proposal </button>, or choose to reject it with <button type="button" className="marriageview_delete__1FaK6 valuebutton btn btn-primary" style={{width: '160px'}}> Reject Proposal </button>.</p>
           <p>Depending on your choice, a notification will be sent to the people involved that the marriage proposal has been approved or rejected</p>
         </Col>
-      </Row>
-    
+      </Row>    
       <br />
-
-
 
       <Row>
         <Col md={1}>{availableViews.certificates.icon}</Col>
         <Col md={11}><h4>Step 5 - Retrieving the certificate</h4></Col>
       </Row>
-
       <Row>
         <Col md={1}></Col>
         <Col md={11}>
           <p>In the case that your marriage proposal is accepted, you are now officially married, and you can now retrieve your marriage certificate.</p>
           <p>This can be found in the Certificates tab.</p>
-          <p>You can view the ceritificate using  <button type="button" class="btn btn-primary" style={{width: '150px'}}>View certificate</button>.</p>
+          <p>You can view the ceritificate using  <button type="button" className="btn btn-primary" style={{width: '150px'}}>View certificate</button>.</p>
           <p>In this view, all the information about the marriage and the certificate is listed.</p>
-          <p>A pdf version of the certificate can be retrieved using <button type="button" class="btn btn-primary" style={{width: '60px'}}>Get PDF</button>.</p>
+          <p>A pdf version of the certificate can be retrieved using <button type="button" className="btn btn-primary" style={{width: '100px'}}>Get PDF</button>.</p>
         </Col>
       </Row>
-    
       <br />
-
-
 
       <div >
         <p><b>TODOS</b></p>
-        <p>Complete help component</p>
-        <p>Button to resend notification on pending</p>
         <p>Delete (read) notifications</p>
         <p>Have notification actions fire on receive and not on looking at specific view</p>
-        <p>Highlight active component left bar</p>
-        <p>Make left bar subtractable</p>
-        <p>Finish implementation delete mariage proposal</p>
         <p>Mark notifications as read</p>
         <p>Highlight hovered notification</p>
-        <p>Encryption and signing for accepting invitation and for certificate</p>
-        <p>What to do with the official? Allow it to be anyone and give input field?</p>
-        <p>Update civil status on certification (of both spouses, possibly via a notification)</p>
-        <p>Make all contracts visible for all actors involved</p>
         <p>Only load notifications that were not load last time</p>
+
+        <p>Update civil status on certification (of both spouses, possibly via a notification)</p>
+
+
+        <p>Encryption and signing for accepting invitation and for certificate</p>
+        
+        <p>Check if login is to a valid pod (profile file exists and inbox exists</p>
+        <p>Finish implementation delete mariage proposal</p>
+        <p>Make all contracts visible for all actors involved</p>
+        <p>What to do with the official? Allow it to be anyone and give input field?</p>
+        <p>More error handling for missing data fields in files</p>
+        <p>Unify internal naming scheme: proposal and certificate</p>
+        <p>Provide delete proposal for intermediary steps</p>
+        <p>Propagate deletion to all notified people who have already accepted / ... Maybe not remove but jsut flag as dead?</p>
+
         <p>Is it okay to use this demo vocabulary?</p>
         <p>What to do with default storage locations?</p>
         <p>Use Solid file clients to recursively create folders if a specified storage location does not yet exist?</p>
-        <p>More error handling for missing data fields in files</p>
-        <p><b>If data not yet retrieved, dont show pending!</b></p>
-        <p>Unify internal naming scheme: proposal and certificate</p>
-        <p>Provide delete proposal for intermediary steps</p>
         <p>JSDoc all functions</p>
         <p>convert components to have logic for data retrieval somewhere else?</p>
-        <p>make profile edit screen more clear</p>
+        
       </div>
       
       

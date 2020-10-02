@@ -103,10 +103,7 @@ const MiniDrawer = withWebId((props) => {
   const notifications = useNotifications(props.webId)
 
 
-  const isActive = (item) => {
-    console.log('active', activeDrawerItemMapping.item)
-    console.log('isActive?', item, selectedView)
-  }
+  const isActive = (item) => item.id === activeDrawerItemMapping[selectedView.id]
 
   const getSidebarComponent = (itemName) => { 
     if (itemName === 'divider') return (<Divider />)
@@ -137,7 +134,7 @@ const MiniDrawer = withWebId((props) => {
     )
   }
 
-  const sideBarItems = props.sideBarItems || ['profile', 'requests', 'running', 'certificates', 'divider', 'br', 'divider', 'official']
+  const sideBarItems = props.sideBarItems || ['profile', 'requests', 'running', 'certificates', 'divider', 'br', 'divider', 'official', 'divider']
   const sidebarComponents = sideBarItems.map(e => getSidebarComponent(e))
 
   const topBarItems = props.topBarItems || ['notifications', 'help']
@@ -218,7 +215,7 @@ const MiniDrawer = withWebId((props) => {
       >
         <Toolbar className={`${classes.toolbar} toolbarcolor`}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? <ChevronRightIcon style={{fill: "white"}}/> : <ChevronLeftIcon style={{fill: "white"}}/>}
           </IconButton>
         </Toolbar>
         <Divider />
@@ -226,7 +223,6 @@ const MiniDrawer = withWebId((props) => {
           <List>
             {sidebarComponents}
           </List>
-          <Divider />
         </div>
       </Drawer>
       <main className={classes.content}>

@@ -4,7 +4,7 @@ import styles from '../css/components/marriageview.module.css'
 
 import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
-import { acceptProposal, refuseProposal, deleteMarriageProposal, createMarriageContractSubmissionNotification, submitProposal, certifyProposal, rejectProposal } from '../util/MarriageController'
+import { certifyProposal, rejectProposal } from '../util/MarriageController'
 import { availableViews } from '../util/Util'
 import { parseURL } from 'url-toolkit'
 const { default: data } = require('@solid/query-ldflex');
@@ -22,7 +22,7 @@ const INVITATIONREFUSED = ns.demo('refused')
 const SubmissionViewComponent = (props) => {
   let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
   allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
-  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'pending' ; return e})
+  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
   const [contacts, setContacts] = useState(allcontacts)
 
   const parsedURI = parseURL(props.webId)
@@ -62,14 +62,19 @@ const SubmissionViewComponent = (props) => {
     return contacts
   }
 
+
   function showContactStatus(contact){
     switch (contact.status) {
       case 'accepted':
         return "Accepted"
       case 'refused':
         return "Refused"
+      case 'loading':
+        return "Loading"
+      case 'pending':
+        return "Pending"
     }
-    return "Pending"
+    return "Loading"
   }
 
 
@@ -100,9 +105,9 @@ const SubmissionViewComponent = (props) => {
         <Col md={6}><label className="leftaligntext">Person webId</label></Col>
         <Col md={2}><label className="centeraligntext">Status</label></Col>
       </Row>
-      {contacts.map(contact => {
+      {contacts.map((contact, index) => {
         return (
-          <Row className='propertyview' key={contact.id}>
+          <Row className='propertyview' key={contact.id + '-' + index}>
             <Col md={2}><label className="leftaligntext"><b>{contact.type}</b></label></Col>
             <Col md={6}><ProfileCardComponent webId={contact.id} key={contact.id} /></Col>
             <Col md={2}>{showContactStatus(contact)}</Col>

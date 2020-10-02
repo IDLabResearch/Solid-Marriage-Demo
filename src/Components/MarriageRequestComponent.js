@@ -20,19 +20,16 @@ const MarriageRequestComponent = (props) => {
       label: "Spouse",
       type: "spouse",
       webId: props.webId,
-      id: 0,
     },
     {
       label: "Spouse",
       type: "spouse",
       webId: "",
-      id: 1,
     },
     {
       label: "Witness",
       type: "witness",
       webId: "",
-      id: 2,
     }
   ])
 
@@ -42,13 +39,9 @@ const MarriageRequestComponent = (props) => {
     props.setview(availableViews.running)
   }
 
-  const setvalue = (id, value) => {
+  const setvalue = (index, value) => {
     const stateCopy = state.slice()
-    for (let obj of stateCopy) {
-      if (obj.id === id) {
-        obj.webId = value
-      }
-    }
+    stateCopy[index].webId = value
     setState(stateCopy)
   }
 
@@ -58,11 +51,22 @@ const MarriageRequestComponent = (props) => {
         label: "Witness",
         type: "witness",
         webId: null,
-        id: state.length + 1,
       })
     setState(stateCopy)
   } 
 
+  const deleteWitness = (index) => {
+    console.log('deleting', index)
+    const stateCopy = state.slice()
+    const entry = stateCopy.splice(index, 1)[0]
+    console.log('deleting', index, entry, stateCopy)
+    console.log('deleting', entry.type === 'witness', entry.type)
+    if (entry.type === 'witness'){
+      console.log('setting state', stateCopy)
+      setState(stateCopy)
+    }
+      
+  }
 
   const validateSubmission = async () => {
     for (let person of state){
@@ -88,6 +92,7 @@ const MarriageRequestComponent = (props) => {
     setStorageLocation(e.target.value)
   }
 
+
   return (
     <div id='MarriageRequestComponent' className='container'>
       <h4>Construct Marriage Proposal</h4>
@@ -97,8 +102,8 @@ const MarriageRequestComponent = (props) => {
         <Col md={9}><label className="leftaligntext">Person webId</label></Col>
       </Row>
       <form>
-        {state.map(person => {
-          return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(person.id, value)} person={person} key={person.id}></ProfileCardSelectorComponent> )
+        {state.map((person, index) => {
+          return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(index, value)} person={person} key={'cardselector' + index} delete={deleteWitness} index={index}></ProfileCardSelectorComponent> )
         })}
         <Button onClick={() => addWitness()}> Add Witness </Button>
         <br/>
