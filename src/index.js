@@ -4,12 +4,12 @@ import './index.css';
 import App from './App';
 import HelpContainerComponent from './Components/HelpContainerComponent'
 import * as serviceWorker from './serviceWorker';
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Route, Link, HashRouter as Router, Switch } from 'react-router-dom'
 
 ReactDOM.render(
   
   <React.StrictMode>
-    <Router>
+    <Router basename='/'>
       <Switch>
         <Route path="/help">
           <HelpContainerComponent />
