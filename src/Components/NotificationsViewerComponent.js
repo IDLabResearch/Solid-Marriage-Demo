@@ -20,10 +20,10 @@ const NotificationsViewerComponent = (props) => {
       <h4> Notifications </h4>
       <br />
       <Row className='propertyview pageheader' key={'header'}>
-        <Col md={1}><label className="leftaligntext"><b>Type</b></label></Col>
+        <Col md={2}><label className="leftaligntext"><b>Type</b></label></Col>
         <Col md={2}><label className="leftaligntext">Sender</label></Col>
         <Col md={2}><label className="leftaligntext">Time received</label></Col>
-        <Col md={5}><label className="leftaligntext">Summary</label></Col>
+        <Col md={4}><label className="leftaligntext">Summary</label></Col>
         <Col md={2}><label className="centeraligntext">Action</label></Col>
       </Row>
       {notifications.map(notification => {
@@ -57,10 +57,10 @@ const NotificationCard = (props) => {
   return (
     <div className={`NotificationCard`}>
       <Row className='propertyview' key={notification.metadata.id}>
-        <Col md={1}><label className='leftaligntext'><b>{notification.type && notification.type.split('#')[1]}</b></label></Col>
+        <Col md={2}><label className='leftaligntext'><b>{notification.type && notification.type.split('#')[1]}</b></label></Col>
         <Col md={2}><label className='leftaligntext'><a href={notification.actor}><Value src={`[${notification.actor}].name`}/></a></label></Col>
         <Col md={2}><label className='leftaligntext'><b>{notification.metadata.modified && notification.metadata.modified.toLocaleString()}</b></label></Col>
-        <Col md={5}><label className='leftaligntext'>{notification.summary}</label></Col>
+        <Col md={4}><label className='leftaligntext'>{notification.summary}</label></Col>
         <Col md={2}>{getButton()}</Col>
       </Row>
     </div>

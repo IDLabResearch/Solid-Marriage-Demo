@@ -1,8 +1,8 @@
 {
-  "name": "profile-viewer",
+  "name": "solid-mariage-demo",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dexagod.github.io/SEMIC-solid-demo/",
+  "homepage": "https://idlabresearch.github.io/Solid-Marriage-Demo/",
   "dependencies": {
     "@inrupt/solid-react-components": "^0.5.5",
     "@material-ui/core": "^4.11.0",
@@ -25,6 +25,7 @@
     "react-flexbox-grid": "^2.1.2",
     "react-hook-form": "^6.8.2",
     "react-loading": "^2.0.3",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "solid-auth-client": "^2.5.1",
     "solid-file-client": "^1.1.0",

@@ -29,8 +29,9 @@ import '../css/Drawer.css'
 
 import solidlogo from '../assets/solid-emblem.svg';
 import idlablogo from '../assets/idlab.png';
+import { Link } from 'react-router-dom';
 
-const drawerWidth = 240;
+var drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,11 +96,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MiniDrawer = withWebId((props) => {
-  const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
-  const [selectedView, setSelectedView] = useState(availableViews[props.defaultview] || availableViews.help)
+  const [selectedView, setSelectedView] = useState(availableViews[props.defaultview] || availableViews.profile)
   const notifications = useNotifications(props.webId)
 
 
@@ -117,9 +116,42 @@ const MiniDrawer = withWebId((props) => {
     )
   }
 
+  // const openApp = () => { if(window.location.endsWith('help')) window.open(window.location)
+  // const openHelp = () => window.open(window.location + 'help')
+
   const getTopBarComponent = (itemName, index) => {
     const item = availableViews[itemName]
     const className = index === 0 ? 'topmenuitem topmenuitemleft' : 'topmenuitem'
+    switch (itemName) {
+      case 'notifications':
+        return (
+          <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
+            <IconButton aria-label={item.label} color="inherit">
+                <Badge badgeContent={notifications.length} color="secondary">
+                  {item.icon}
+                </Badge>
+            </IconButton>
+          </MenuItem>
+        )
+      case 'help':
+        return (
+          <Link to="/help" target="_blank">
+            <MenuItem className={className} key={index}>
+              <IconButton aria-label={item.label} style={{color: "white"}}>
+                  {item.icon}
+              </IconButton>
+            </MenuItem>
+          </Link>
+        )
+      default:
+        return (
+          <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
+            <IconButton aria-label={item.label} color="inherit">
+              {item.icon}
+            </IconButton>
+          </MenuItem>
+        )
+    }
     return (
       <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
         <IconButton aria-label={item.label} color="inherit">
@@ -149,6 +181,12 @@ const MiniDrawer = withWebId((props) => {
   };
 
 
+  drawerWidth = sidebarComponents.length ? drawerWidth : 0;
+  console.log('drawerWidth', drawerWidth, sidebarComponents.length)
+
+  const classes = useStyles();
+  const theme = useTheme();
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -170,11 +208,12 @@ const MiniDrawer = withWebId((props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            SEMIC - solid demo
-          </Typography>
 
-
+          <Link to="/" target="_blank">
+            <Typography variant="h6" style={{color: "white"}} noWrap>
+              SEMIC - solid demo
+            </Typography>
+          </Link>
           <Navbar.Brand href="https://solidproject.org/">
             <img
               alt=""
@@ -200,31 +239,35 @@ const MiniDrawer = withWebId((props) => {
 
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        className={`${clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })} sidebar`}
-        classes={{
-          paper: clsx({
+      {sidebarComponents.length
+      ?
+        <Drawer
+          variant="permanent"
+          className={`${clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <Toolbar className={`${classes.toolbar} toolbarcolor`}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon style={{fill: "white"}}/> : <ChevronLeftIcon style={{fill: "white"}}/>}
-          </IconButton>
-        </Toolbar>
-        <Divider />
-        <div className='sidebarcontent'>
-          <List>
-            {sidebarComponents}
-          </List>
-        </div>
-      </Drawer>
+          })} sidebar`}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}
+        >
+          <Toolbar className={`${classes.toolbar} toolbarcolor`}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon style={{fill: "white"}}/> : <ChevronLeftIcon style={{fill: "white"}}/>}
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <div className='sidebarcontent'>
+            <List>
+              {sidebarComponents}
+            </List>
+          </div>
+        </Drawer>
+      : <div />}
+      
       <main className={classes.content}>
         <Toolbar />
         <MainScreenComponent webId={props.webId} selectedView={selectedView} setSelectedView ={setSelectedView} ></MainScreenComponent>
