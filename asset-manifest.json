@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/Solid-Marriage-Demo/static/css/main.8d4624c9.chunk.css",
+    "main.js": "/Solid-Marriage-Demo/static/js/main.e4bb9c22.chunk.js",
+    "main.js.map": "/Solid-Marriage-Demo/static/js/main.e4bb9c22.chunk.js.map",
+    "runtime-main.js": "/Solid-Marriage-Demo/static/js/runtime-main.352da204.js",
+    "runtime-main.js.map": "/Solid-Marriage-Demo/static/js/runtime-main.352da204.js.map",
+    "static/css/2.d9ad5f5c.chunk.css": "/Solid-Marriage-Demo/static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.a8257022.chunk.js": "/Solid-Marriage-Demo/static/js/2.a8257022.chunk.js",
+    "static/js/2.a8257022.chunk.js.map": "/Solid-Marriage-Demo/static/js/2.a8257022.chunk.js.map",
+    "static/js/3.ce9bf6c5.chunk.js": "/Solid-Marriage-Demo/static/js/3.ce9bf6c5.chunk.js",
+    "static/js/3.ce9bf6c5.chunk.js.map": "/Solid-Marriage-Demo/static/js/3.ce9bf6c5.chunk.js.map",
+    "static/js/4.340aac34.chunk.js": "/Solid-Marriage-Demo/static/js/4.340aac34.chunk.js",
+    "static/js/4.340aac34.chunk.js.map": "/Solid-Marriage-Demo/static/js/4.340aac34.chunk.js.map",
+    "static/js/5.5dbd2335.chunk.js": "/Solid-Marriage-Demo/static/js/5.5dbd2335.chunk.js",
+    "static/js/5.5dbd2335.chunk.js.map": "/Solid-Marriage-Demo/static/js/5.5dbd2335.chunk.js.map",
+    "index.html": "/Solid-Marriage-Demo/index.html",
+    "precache-manifest.dfe8592eaa58e41a2efb4d818de89a5b.js": "/Solid-Marriage-Demo/precache-manifest.dfe8592eaa58e41a2efb4d818de89a5b.js",
+    "service-worker.js": "/Solid-Marriage-Demo/service-worker.js",
+    "static/css/2.d9ad5f5c.chunk.css.map": "/Solid-Marriage-Demo/static/css/2.d9ad5f5c.chunk.css.map",
+    "static/css/main.8d4624c9.chunk.css.map": "/Solid-Marriage-Demo/static/css/main.8d4624c9.chunk.css.map",
+    "static/js/2.a8257022.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/2.a8257022.chunk.js.LICENSE.txt",
+    "static/js/4.340aac34.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/4.340aac34.chunk.js.LICENSE.txt",
+    "static/js/5.5dbd2335.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/5.5dbd2335.chunk.js.LICENSE.txt",
+    "static/media/background2.png": "/Solid-Marriage-Demo/static/media/background2.98e5ed6a.png",
+    "static/media/solid-emblem.svg": "/Solid-Marriage-Demo/static/media/solid-emblem.52659242.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.352da204.js",
+    "static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.a8257022.chunk.js",
+    "static/css/main.8d4624c9.chunk.css",
+    "static/js/main.e4bb9c22.chunk.js"
+  ]
+}
