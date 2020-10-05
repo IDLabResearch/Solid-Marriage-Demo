@@ -8,8 +8,7 @@ import { availableViews } from '../util/Util'
 
 const InProgressViewerComponent = (props) => {
 
-  const userContracts = useContracts(props.webId)
-  console.log('userContracts', userContracts)
+  const userContracts = useContracts(props.webId) || []
   const contracts = userContracts.filter(e => !e.status || e.status === ns.demo('proposal'))
 
   const viewMarriage = function(contract){

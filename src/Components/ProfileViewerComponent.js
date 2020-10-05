@@ -52,7 +52,7 @@ const profileProps = {
   name: "Name",
   bdate: "BirthDate",
   location: "Country",
-  cstatus: "Civil Status",
+  // cstatus: "Civil Status",
 }
 
 export default ProfileViewerComponent

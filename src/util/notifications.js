@@ -5,7 +5,6 @@ const { default: data } = require('@solid/query-ldflex');
 
 export default async function notify(notificationBody, subjects) {
   const distinct = (value, index, self) => self.indexOf(value) === index;
-  console.log('subjects', subjects, subjects.filter(distinct))
   for (let subject of subjects.filter(distinct)) {
     const inbox = await getInbox(subject);
     if (inbox) postFile(inbox, notificationBody)

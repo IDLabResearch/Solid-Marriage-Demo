@@ -49,22 +49,22 @@ const ProfileEditorComponent = (props) => {
     label: 'Country',
     name: 'location',
     type: 'text',
-  }, {
-    label: 'Civil Status',
-    name: 'cstatus',
-    controller: <Controller as={
-        <Select>
-          <MenuItem value={"Single"}>Single</MenuItem>
-          <MenuItem value={"Cohabiting"}>Cohabiting</MenuItem>
-          <MenuItem value={"Married"}>Married</MenuItem>
-          <MenuItem value={"Divorced"}>Divorced</MenuItem>
-          <MenuItem value={"Widowed"}>Widowed</MenuItem>
-        </Select>
-      }
-      control={control}
-      name="cstatus"
-      defaultValue={"Single"}
-    />
+  // }, {
+  //   label: 'Civil Status',
+  //   name: 'cstatus',
+  //   controller: <Controller as={
+  //       <Select>
+  //         <MenuItem value={"Single"}>Single</MenuItem>
+  //         <MenuItem value={"Cohabiting"}>Cohabiting</MenuItem>
+  //         <MenuItem value={"Married"}>Married</MenuItem>
+  //         <MenuItem value={"Divorced"}>Divorced</MenuItem>
+  //         <MenuItem value={"Widowed"}>Widowed</MenuItem>
+  //       </Select>
+  //     }
+  //     control={control}
+  //     name="cstatus"
+  //     defaultValue={"Single"}
+  //   />
   }]
 
   return (

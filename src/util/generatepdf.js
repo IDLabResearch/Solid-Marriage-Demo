@@ -13,23 +13,13 @@ export async function generateCertificatePDF (proposal, certificate) {
 
   const getPersonData = async (id) => { return({ id, name: `${await data[id].name}` }) }
 
-  console.log('proposal', proposal)
-  console.log(proposal.spouse)
-  console.log(proposal.witness)
-  console.log('certificate', certificate)
-  console.log(certificate.certified_by)
 
   let spouses = await Promise.all(proposal.spouse.map(async (e) => await getPersonData(e.id)))
   if(spouses.length === 1) spouses = [spouses[0], spouses[0]]
-  console.log(spouses)
   const witnesses = await Promise.all(proposal.witness.map(async (e) => await getPersonData(e.id)))
-  console.log(witnesses)
   if(spouses.length !== 2 && spouses.length !== 1) throw new Error('incorrect number of spouses')
-  console.log("test")
   const official = await getPersonData(certificate.certified_by)
-  console.log(official)
   const weddingDate = new Date(certificate.certification_date)
-  console.log(weddingDate)
 
   
 

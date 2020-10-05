@@ -54,7 +54,6 @@ export async function deleteProposal(proposalId, webId) {
 export async function acceptProposal(webId, proposalId, authorId) {
   const patchbody = 'INSERT {' + await quadListToTTL([quad(namedNode(webId), namedNode(ns.demo('accepted')), namedNode(proposalId))]) + ' }';
   const patch = await patchFile(webId, patchbody)
-  console.log('PATCH', patch)
   const notification = await createAcceptanceNotification(webId, proposalId, authorId)
   notify(notification, [authorId])
 }
@@ -111,20 +110,21 @@ export async function certifyProposal(webId, proposalId, storageLocation){
  * @param {string} proposalId - URI of the marriage certification proposal
  * @param {string} storageLocation - Location where the certification needs to be stored
  */
-export async function rejectProposal(webId, proposalId, storageLocation){
-  // Create rejection notification
-  createCertificateProposalRejectionNotification()
-  // send notification to witnesses + spouses
-
-  // TODO:: Store that has been rejected so no repeat requests can be done?
-
+export async function rejectProposal(webId, proposalId){
+  const patchbody = await createCertifiedProposalPatch(webId, proposalId)
+  const patch = await patchFile(webId, patchbody)
+  
+  const contract = await getContractData(proposalId)
+  const notificationTargets = contract.spouse.map(e => e.id).concat(contract.witness.map(e => e.id))
+  const notification = await createCertificateProposalRejectionNotification(webId, proposalId, notificationTargets)
+  notify(notification, notificationTargets)
 }
 
 /**
  * Update the status of the marriage contract proposal.
  * @param {'pending' | 'sumitted' | 'accepted' | 'refused'} newStatus 
  */
-async function updateMarriageContractStatus(contractId, newStatus) {
+export async function updateMarriageContractStatus(contractId, newStatus) {
   const status = ns.demo(newStatus)
   const patchbody = await createContractStatusPatch(contractId, status);
   const patch = await patchFile(contractId, patchbody)
@@ -159,7 +159,7 @@ export function createAcceptanceNotification(webId, proposalId, authorId){
         as:target <${proposalId}> ;
       ] ;
       as:target <${proposalId}> ;
-      as:summary "Acceptance of the offer to participate in the marriage contract" .
+      as:summary "Accepted the offer to participate in the marriage contract" .
   `
 }
 

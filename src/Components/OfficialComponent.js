@@ -3,7 +3,7 @@ import { Value } from '@solid/react';
 import useNotifications from '../hooks/useNotifications'
 import ns from '../util/NameSpaces'
 import { Col, Row, Button } from 'react-bootstrap'
-import { getContractData, availableViews } from '../util/Util'
+import { getContractData, availableViews, getProfileCertified } from '../util/Util'
 
 const { default: data } = require('@solid/query-ldflex');
 
@@ -12,10 +12,17 @@ const OfficialComponent = (props) => {
   const notifications = useNotifications(props.webId)
   const [submissions, setSubmissions] = useState([])
 
+  const [certifiedContracts, setCertified] = useState([])
+  const filteredSubmissions = submissions.filter(submission => submission.object && submission.object.object && certifiedContracts.indexOf(submission.object.object) === -1)
+
+  useEffect(() => {
+    const getCertifications = async() => setCertified(await getProfileCertified(props.webId))
+    getCertifications()
+  }, [])
+
   useEffect(() => {
     let mounted = true;
     async function filterSubmissions() {
-      console.log("Notifications", notifications)
       const submissions = notifications.filter(notification => 
         notification.type === ns.as('Announce')
         && notification.object 
@@ -60,8 +67,7 @@ const OfficialComponent = (props) => {
       <Col md={3}><label className="leftaligntext">Submitted by</label></Col>
       <Col md={2}><label className="centeraligntext">Action</label></Col>
     </Row>
-    {submissions.map(submission => {
-      console.log(submission)
+    {filteredSubmissions.map(submission => {
       return (
         <Row className='propertyview ' key={submission.object}>
           <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>
@@ -78,3 +84,21 @@ const OfficialComponent = (props) => {
 }
 
 export default OfficialComponent
+
+
+/*
+
+
+  const userContracts = useContracts(props.webId) || []
+  const [certified, setCertified] = useState([])
+  const allContracts = userContracts.filter(e => e.status && e.status === ns.demo('submitted'))
+  const submissions = allContracts.filter(contract => certified.indexOf(contract.id) == -1)
+  console.log('officialContracts', allContracts.map(e => e.id), certified, submissions.map(e => e.id))
+
+  useEffect(() => {
+    async function getCertifications() {
+      setCertified(await getProfileCertified(props.webId) || [])
+    }
+    getCertifications()
+  }, [])
+*/

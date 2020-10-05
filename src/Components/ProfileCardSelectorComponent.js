@@ -20,7 +20,7 @@ const ProfileCardSelectorComponent = (props) => {
   //   if (profile && isProfile(profile)) props.setvalue(profile.webId); 
   // }, [profile])
 
-  const isComplete = (profile) => profile.name && profile.bdate && profile.location && profile.cstatus
+  const isComplete = (profile) => profile.name && profile.bdate && profile.location //&& profile.cstatus
   const isProfile = (profile) => profile.name
   const isOfAge = (profile) => profile.bdate && new Date(profile.bdate) && getAge(new Date(profile.bdate)) >= 18
 

@@ -23,8 +23,6 @@ const CertificateViewComponent = (props) => {
     }
   }, [])
 
-  console.log('STATE', state)
-
   if (!state.proposal || !state.certificate) {
     return (
       <div id="marriageViewContainer" className='container' />

@@ -72,9 +72,7 @@ const MarriageViewComponent = (props) => {
       window.alert('Please fill in the webId of an official to submit the request to (this can be your own webId for demo purposes).');
       return false
     }
-    console.log('getting profile')
     const profile = await getProfileData(official)
-    console.log('PROFILE', profile)
     if (!profile || !profile.name) 
         window.alert('The webId of the official: ' + official + ', is not a valid webId');
     return true
@@ -83,7 +81,7 @@ const MarriageViewComponent = (props) => {
     // For demo purposes outside of the workshop also, we will have the user function as the official also
     if (! await validateOfficial()) return;
     const submission = await submitProposal(props.webId, props.contract.id, official)
-    props.setview(availableViews.official)
+    props.setview(availableViews.certificates)
   }
 
   async function deleteMarriageProposal() {
@@ -110,7 +108,6 @@ const MarriageViewComponent = (props) => {
 
   async function accept(contactId, contractId) {
     const response = await acceptProposal(props.webId, props.contract.id, props.contract.creator)
-    console.log('ACCEPTED', response)
     setContactStatus(contactId, 'accepted')
   }
 
@@ -124,7 +121,6 @@ const MarriageViewComponent = (props) => {
   }
 
   function getContactButton(contact){
-    console.log(contact, props.contract)
     if(contact.status === 'pending') {
       if (contact.id === props.webId) return (
           <div>

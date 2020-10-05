@@ -87,13 +87,13 @@ const SubmissionViewComponent = (props) => {
 
   function accept() {
     certifyProposal(props.webId, props.contract.id, storageLocation)
-    props.setview(availableViews.certificates)
+    props.setview(availableViews.official)
   }
 
   function reject() {
     // Todo:: set as certified so additional requests are not shown as needed to be validated
-    rejectProposal(props.webId, props.contract.id, storageLocation)
-    props.setview(availableViews.certificates)
+    rejectProposal(props.webId, props.contract.id)
+    props.setview(availableViews.official)
   }
 
   return (
@@ -116,24 +116,22 @@ const SubmissionViewComponent = (props) => {
         <br />
         <br />
         <br />
-        { props.contract.creator === props.webId
-          ? isComplete()
-            ? <Row>
-                <Col md={2} />
-                <Col md={3}>
-                  <Button className={`${styles.accept} valuebutton`} onClick={() => accept()}> Approve Proposal </Button> 
-                </Col>
-                <Col md={4}>
-                  <Button className={`${styles.delete} valuebutton`} onClick={() => reject()}> Reject Proposal </Button>
-                </Col>
-              </Row>
-            : <Row>
-                <Col md={5} />
-                <Col md={4}>
-                  <Button className={`${styles.delete} valuebutton`} onClick={() => reject()}> Reject Proposal </Button>
-                </Col>
-              </Row>
-          : <Row />
+        { isComplete()
+          ? <Row>
+              <Col md={2} />
+              <Col md={3}>
+                <Button className={`${styles.accept} valuebutton`} onClick={() => accept()}> Approve Proposal </Button> 
+              </Col>
+              <Col md={4}>
+                <Button className={`${styles.delete} valuebutton`} onClick={() => reject()}> Reject Proposal </Button>
+              </Col>
+            </Row>
+          : <Row>
+              <Col md={5} />
+              <Col md={4}>
+                <Button className={`${styles.delete} valuebutton`} onClick={() => reject()}> Reject Proposal </Button>
+              </Col>
+            </Row>
         }
     </div>
   )

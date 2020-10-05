@@ -32,8 +32,7 @@ const MarriageRequestComponent = (props) => {
       webId: "",
     }
   ])
-
-  console.log('PROFILES', state)
+  
   const handleSubmit = async event => {
     if (!await validateSubmission(state)) return;
     const proposal = await createMarriageProposal(state, storageLocation, props.webId)
@@ -43,7 +42,6 @@ const MarriageRequestComponent = (props) => {
   const setvalue = (index, value) => {
     const stateCopy = state.slice()
     stateCopy[index].webId = value
-    console.log('setting value', index, value)
     setState(stateCopy)
   }
 
@@ -58,13 +56,9 @@ const MarriageRequestComponent = (props) => {
   } 
 
   const deleteWitness = (index) => {
-    console.log('deleting', index)
     const stateCopy = state.slice()
     const entry = stateCopy.splice(index, 1)[0]
-    console.log('deleting', index, entry, stateCopy)
-    console.log('deleting', entry.type === 'witness', entry.type)
     if (entry.type === 'witness'){
-      console.log('setting state', stateCopy)
       setState(stateCopy)
     }
       
@@ -83,21 +77,19 @@ const MarriageRequestComponent = (props) => {
         return false
       }
 
-      console.log('GETTING PROFILE')
       const profile = await getProfileData(person.webId)
-      console.log('PROFILE', profile)
       if (!profile || !profile.name) {
         window.alert(person.webId + ' is not a valid webId');
         return false
-      } else if (!profile.bdate || !profile.location || !profile.cstatus) {
+      } else if (!profile.bdate || !profile.location /*|| !profile.cstatus*/) {
         window.alert(person.webId + ' does not have a valid profile');
         return false
       } 
 
-      if (person.type === 'spouse' && profile.cstatus === "Married"){
-        window.alert('spouse ' + person.webId + ' is already married.');
-        return false
-      }
+      // if (person.type === 'spouse' && profile.cstatus === "Married"){
+      //   window.alert('spouse ' + person.webId + ' is already married.');
+      //   return false
+      // }
     }
     return true
   }

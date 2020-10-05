@@ -13,7 +13,7 @@ export async function createDeleteInsertProfileDataQuery(webId, oldprofile, newp
     quad(namedNode(webId), namedNode(ns.foaf('name')), literal(newprofile.name)),
     quad(namedNode(webId), namedNode(ns.dbo('birthDate')), literal(newprofile.bdate, namedNode(ns.xsd('date')))),
     quad(namedNode(webId), namedNode(ns.dbo('location')), literal(newprofile.location)),
-    quad(namedNode(webId), namedNode(ns.demo('civilstatus')), literal(newprofile.cstatus)),
+    // quad(namedNode(webId), namedNode(ns.demo('civilstatus')), literal(newprofile.cstatus)),
   ]
 
   if (oldprofile.name) {
@@ -22,8 +22,8 @@ export async function createDeleteInsertProfileDataQuery(webId, oldprofile, newp
     deleteClause.push(quad(namedNode(webId), namedNode(ns.dbo('birthDate')), literal(oldprofile.bdate, namedNode(ns.xsd('date')))))
   } if (oldprofile.location) {
     deleteClause.push(quad(namedNode(webId), namedNode(ns.dbo('location')), literal(oldprofile.location)))
-  } if (oldprofile.cstatus) {
-    deleteClause.push(quad(namedNode(webId), namedNode(ns.demo('civilstatus')), literal(oldprofile.cstatus)))
+  // } if (oldprofile.cstatus) {
+  //   deleteClause.push(quad(namedNode(webId), namedNode(ns.demo('civilstatus')), literal(oldprofile.cstatus)))
   }
 
   const deleteClauseString = deleteClause.length ? `DELETE { ${await quadListToTTL(deleteClause)} }` : ''

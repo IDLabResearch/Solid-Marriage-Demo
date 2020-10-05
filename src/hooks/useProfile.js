@@ -31,9 +31,9 @@ export async function getProfile(webId) {
   const name = await getPromiseValueOrUndefined(profiledata[ns.foaf('name')]);
   const bdate = await getPromiseValueOrUndefined(profiledata[ns.dbo('birthDate')]);
   const location = await getPromiseValueOrUndefined(profiledata[ns.dbo('location')]);
-  const cstatus = await getPromiseValueOrUndefined(profiledata[ns.demo('civilstatus')]);
+  // const cstatus = await getPromiseValueOrUndefined(profiledata[ns.demo('civilstatus')]);
   
-  return { name, bdate, location, cstatus }
+  return { name, bdate, location } // , cstatus }
 }
 
 export default useProfile

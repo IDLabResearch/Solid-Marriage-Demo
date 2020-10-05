@@ -76,7 +76,7 @@ export async function getStore(URI){
     store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))
     return store
   } catch (e) {
-    console.log(e)
+    console.error(e)
     return null
   }
   
@@ -111,7 +111,7 @@ export async function getProfileData(id) {
     name: getQuadObjVal(await datastore.getQuads(id, ns.foaf('name'))),
     bdate: getQuadObjVal(await datastore.getQuads(id, ns.dbo('birthDate'))),
     location: getQuadObjVal(await datastore.getQuads(id, ns.dbo('location'))),
-    cstatus: getQuadObjVal(await datastore.getQuads(id, ns.demo('civilstatus'))),
+    // cstatus: getQuadObjVal(await datastore.getQuads(id, ns.demo('civilstatus'))),
   }
 }
 
@@ -122,10 +122,18 @@ export async function getProfileContracts(id) {
   return datastore && getQuadObjList(await datastore.getQuads(id, ns.demo('hasContract')))
 }
 
+export async function getProfileCertified(id) {
+  id = await id;
+  if(!id) return null
+  const datastore = await getStore(id);
+  return datastore && getQuadObjList(await datastore.getQuads(id, ns.demo('certified')))
+}
+
 export async function getCertificateData(id) {
   const datastore = await getStore(id);
   return datastore && {
     id: id,
+    type: getQuadObjVal(await datastore.getQuads(id, ns.rdf('type'))),
     certifies: getQuadObjVal(await datastore.getQuads(id, ns.demo('certifies'))),
     certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
     certification_date: getQuadObjVal(await datastore.getQuads(id, ns.demo('certification_date'))),
