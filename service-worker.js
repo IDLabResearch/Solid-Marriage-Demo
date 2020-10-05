@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Solid-Marriage-Demo/precache-manifest.e91477f95599811f3def3d82bc86b9e1.js"
+  "/Solid-Marriage-Demo/precache-manifest.2df8c8c460ca296fca4c245ce91dac6b.js"
 );
 
 self.addEventListener('message', (event) => {
