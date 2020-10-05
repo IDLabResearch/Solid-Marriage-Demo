@@ -14,7 +14,7 @@ const CertificatesViewerComponent = (props) => {
 
   const userContracts = useContracts(props.webId) || []
   const contracts = userContracts.filter(e => e.status && e.status === ns.demo('accepted') || e.status === ns.demo('rejected'))
-
+  console.log(contracts)
   // useEffect(() => {
   //   let mounted = true;
 
@@ -82,11 +82,17 @@ const CertificatesViewerComponent = (props) => {
       { contracts.length // certifiedContacts.length
         ? 
           contracts.map((contract, index) => { //certifiedContacts.map((contract, index) => {
-            return (
+            if(contract.status === ns.demo('accepted')) return (
               <Row className='propertyview' key={contract.id}>
                 {index === 0 ? <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col> : <Col md={3} /> }
                 <Col md={5}><label className="leftaligntext">Certificate available</label></Col>
                 <Col md={3}><Button onClick={(() => showCertificateViewer(contract.id))}>View certificate</Button></Col>
+              </Row>
+            )
+            if (contract.status === ns.demo('rejected')) return (
+              <Row className='propertyview' key={contract.id}>
+                {index === 0 ? <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col> : <Col md={3} /> }
+                <Col md={5}><label className="leftaligntext">Proposal rejected</label></Col>
               </Row>
             )
           })
