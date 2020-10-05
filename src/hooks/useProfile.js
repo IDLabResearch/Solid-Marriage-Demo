@@ -22,18 +22,18 @@ const useProfile = function(webId) {
   return profile
 }
 
-export async function getProfile(webId) {
-  webId = await webId;
-  if(!webId) return null
-  data.clearCache() // data.clearCache(webId)
-  let profiledata = data[webId];
+// export async function getProfile(webId) {
+//   webId = await webId;
+//   if(!webId) return null
+//   data.clearCache() // data.clearCache(webId)
+//   let profiledata = data[webId];
   
-  const name = await getPromiseValueOrUndefined(profiledata[ns.foaf('name')]);
-  const bdate = await getPromiseValueOrUndefined(profiledata[ns.dbo('birthDate')]);
-  const location = await getPromiseValueOrUndefined(profiledata[ns.dbo('location')]);
-  // const cstatus = await getPromiseValueOrUndefined(profiledata[ns.demo('civilstatus')]);
+//   const name = await getPromiseValueOrUndefined(profiledata[ns.foaf('name')]);
+//   const bdate = await getPromiseValueOrUndefined(profiledata[ns.dbo('birthDate')]);
+//   const location = await getPromiseValueOrUndefined(profiledata[ns.dbo('location')]);
+//   // const cstatus = await getPromiseValueOrUndefined(profiledata[ns.demo('civilstatus')]);
   
-  return { name, bdate, location } // , cstatus }
-}
+//   return { name, bdate, location } // , cstatus }
+// }
 
 export default useProfile

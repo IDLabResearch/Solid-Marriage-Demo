@@ -14,7 +14,6 @@ const CertificatesViewerComponent = (props) => {
 
   const userContracts = useContracts(props.webId) || []
   const contracts = userContracts.filter(e => e.status && e.status === ns.demo('accepted') || e.status === ns.demo('rejected'))
-  console.log(contracts)
   // useEffect(() => {
   //   let mounted = true;
 
