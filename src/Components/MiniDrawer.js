@@ -105,15 +105,30 @@ const MiniDrawer = withWebId((props) => {
   const isActive = (item) => item.id === activeDrawerItemMapping[selectedView.id]
 
   const getSidebarComponent = (itemName, index) => { 
-    if (itemName === 'divider') return (<Divider key={index}/>)
-    if (itemName === 'br') return (<br key={index}/>)
     const item = availableViews[itemName]
-    return (
-      <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={index} onClick={ () => setSelectedView(item)}>
-        <ListItemIcon>{item.icon}</ListItemIcon>
-        <ListItemText primary={item.label} />
-      </ListItem>
-    )
+    switch (itemName) {
+      case 'divider':
+        return (<Divider key={index}/>)
+      case 'br':
+        return (<br key={index}/>)
+      case 'help':
+        return (
+          <Link to="/help" target="_blank" style={{ textDecoration: 'none', color: "black" }}>
+            <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={index}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          </Link>
+        )
+      default:
+        if (!item) return <div />
+        return (
+          <ListItem button={true} className={isActive(item) ? 'active' : 'nonactive'} button key={index} onClick={() => setSelectedView(item)}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItem>
+        )
+    }
   }
 
   // const openApp = () => { if(window.location.endsWith('help')) window.open(window.location)
@@ -152,18 +167,6 @@ const MiniDrawer = withWebId((props) => {
           </MenuItem>
         )
     }
-    return (
-      <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
-        <IconButton aria-label={item.label} color="inherit">
-          {itemName === 'notifications' 
-            ? <Badge badgeContent={notifications.length} color="secondary">
-                {item.icon}
-              </Badge>
-            : item.icon 
-          }
-        </IconButton>
-      </MenuItem>
-    )
   }
 
   const sideBarItems = props.sideBarItems || ['profile', 'requests', 'running', 'certificates', 'divider', 'br', 'divider', 'official', 'divider']
