@@ -99,7 +99,6 @@ const MiniDrawer = withWebId((props) => {
   const [open, setOpen] = React.useState(true);
 
   const [selectedView, setSelectedView] = useState(availableViews[props.defaultview] || availableViews.profile)
-  const notifications = useNotifications(props.webId)
 
 
   const isActive = (item) => item.id === activeDrawerItemMapping[selectedView.id]
@@ -140,13 +139,14 @@ const MiniDrawer = withWebId((props) => {
     switch (itemName) {
       case 'notifications':
         return (
-          <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
-            <IconButton aria-label={item.label} color="inherit">
-                <Badge badgeContent={notifications.length} color="secondary">
-                  {item.icon}
-                </Badge>
-            </IconButton>
-          </MenuItem>
+          <NotificationsMenuItem item={item} className={className} webId={props.webId} setSelectedView={setSelectedView} index={index}/>
+          // <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
+          //   <IconButton aria-label={item.label} color="inherit">
+          //       <Badge badgeContent={notifications.length} color="secondary">
+          //         {item.icon}
+          //       </Badge>
+          //   </IconButton>
+          // </MenuItem>
         )
       case 'help':
         return (
@@ -279,3 +279,16 @@ const MiniDrawer = withWebId((props) => {
 })
 
 export default MiniDrawer
+
+const NotificationsMenuItem = (props) => {
+  const notifications = useNotifications(props.webId)
+  return (
+    <MenuItem className={props.className} onClick={() => props.setSelectedView(props.item)} key={props.index}>
+      <IconButton aria-label={props.item.label} color="inherit">
+          <Badge badgeContent={notifications.length} color="secondary">
+            {props.item.icon}
+          </Badge>
+      </IconButton>
+    </MenuItem>
+  )
+}

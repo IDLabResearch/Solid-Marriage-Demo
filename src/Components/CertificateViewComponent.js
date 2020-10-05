@@ -15,7 +15,10 @@ const CertificateViewComponent = (props) => {
     async function fetchData(){
       const proposal = await getContractData(props.proposalId);
       const certificate = await getCertificateData(proposal.certified_by);
-      setstate({ proposal, certificate })
+      if (proposal && certificate) {
+        setstate({ proposal, certificate })
+      } 
+      
     }
     fetchData()
     return () => {
@@ -25,7 +28,9 @@ const CertificateViewComponent = (props) => {
 
   if (!state.proposal || !state.certificate) {
     return (
-      <div id="marriageViewContainer" className='container' />
+      <div id="marriageViewContainer" className='container'> 
+        "Proposal or certificate is not available at this moment"
+      </div>
     )
   }
   return (

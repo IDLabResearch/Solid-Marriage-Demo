@@ -1,63 +1,52 @@
+import { validStatusCodes } from './Util'
 const auth = require('solid-auth-client')
-const ORIGIN = 'http://localhost:3000'
-
-export async function getFile(URI) {
-  // console.log("getting", URI)
-  return await auth.fetch(URI, {
-    method: "GET",
-    headers: {
-      Origin: ORIGIN,
-      "Content-Type": "text/turtle"
-    },
-  });
-}
-
-export async function patchFile(URI, body) {
-  // console.log("patching", URI, "with", body)
-  return await auth.fetch(URI, {
-    method: "PATCH",
-    headers: {
-      Origin: ORIGIN,
-      "Content-Type": "application/sparql-update"
-    },
-    body: body
-  });
-}
+const { default: data } = require('@solid/query-ldflex');
+const DEFAULTSHOWPOPUPS = true;
 
 // TODO: automatically create directories using solid-file-client
-export async function putFile(URI, body) {
-  // console.log("putting to", URI, "with", body)
-  return await auth.fetch(URI, {
-    method: "PUT",
-    headers: {
-      Origin: ORIGIN,
-      "Content-Type": "text/turtle"
-    },
-    body: body
-  });
+
+export async function getFile(URI, showPopups = DEFAULTSHOWPOPUPS) {
+  return doRequest('GET', URI, null, null, showPopups)
 }
 
-
-// TODO: automatically create directories using solid-file-client
-export async function postFile(URI, body) {
-  // console.log("posting to", URI, "with", body)
-  return await auth.fetch(URI, {
-    method: "POST",
-    headers: {
-      Origin: ORIGIN,
-      "Content-Type": "text/turtle"
-    },
-    body: body
-  });
+export async function patchFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
+  data.clearCache(URI);
+  return doRequest('PATCH', URI, body, { "Content-Type": "application/sparql-update" }, showPopups)
 }
 
-// TODO: automatically create directories using solid-file-client
-export async function deleteFile(URI) {
-  // console.log("deleting ", URI)
-  return await auth.fetch(URI, {
-    method: "DELETE",
-    headers: {
-      Origin: ORIGIN,
-    },
-  });
+export async function putFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
+  data.clearCache(URI);
+  return doRequest('PUT', URI, body, { "Content-Type": "text/turtle" }, showPopups)
+}
+
+export async function postFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
+  data.clearCache(URI);
+  return doRequest('POST', URI, body, { "Content-Type": "text/turtle" }, showPopups)
+}
+
+export async function deleteFile(URI, showPopups = DEFAULTSHOWPOPUPS) {
+  data.clearCache(URI);
+  return doRequest('DELETE', URI, null, null, showPopups)
+}
+
+async function doRequest(requestType, URI, body, headers, showPopups) {
+  const options = {method: requestType}
+  if (body) options.body = body
+  if (headers) options.headers = headers
+  const response = await auth.fetch(URI, options);
+  const code = (await response).status
+  if (showPopups && validStatusCodes.indexOf(code) === -1) {
+    showErrorPopup(URI, code, requestType)
+  }
+  return response;
+}
+
+function showErrorPopup(URI, statusCode, requestType) {
+  if ([401, 403].indexOf(statusCode) !== -1) {
+    window.alert(`Incorrect authorization during ${requestType} request to resource on ${URI}. Please double check the permissions set in your solid pod!`)
+  } else if ([404].indexOf(statusCode) !== -1) {
+    window.alert(`Could not do ${requestType} request to resource at ${URI}, as it has been removed or does not exist.`)
+  } else {
+    window.alert(`Could not do ${requestType} request to resource at ${URI}. Please double check the permissions set in your solid pod!`)
+  }
 }

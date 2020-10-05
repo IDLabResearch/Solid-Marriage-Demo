@@ -27,7 +27,7 @@ import SubmissionViewComponent from '../Components/SubmissionViewComponent'
 import CertificateViewComponent from '../Components/CertificateViewComponent'
 const { default: data } = require('@solid/query-ldflex');
 
-
+export const validStatusCodes = [200, 201, 202]
 
 export async function getPromiseValueOrUndefined (promise){
   try { return await promise.value }
@@ -69,8 +69,9 @@ export async function getStore(URI){
   try {
     const response = await getFile(URI)
     const code = (await response).status
-    if ([200, 201, 202, 300, 301, 302, 303, 304, 305, 306, 307, 308].indexOf(code) === -1)
+    if (validStatusCodes.indexOf(code) === -1){
       return null;
+    }
     const responseData = await response.text()
     const store = new N3.Store()
     store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))

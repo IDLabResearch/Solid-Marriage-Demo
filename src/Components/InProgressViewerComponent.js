@@ -9,7 +9,7 @@ import { availableViews } from '../util/Util'
 const InProgressViewerComponent = (props) => {
 
   const userContracts = useContracts(props.webId) || []
-  const contracts = userContracts.filter(e => !e.status || e.status === ns.demo('proposal'))
+  const contracts = userContracts.filter(e => !e.status || e.status === ns.demo('proposal') || e.status === ns.demo('submitted'))
 
   const viewMarriage = function(contract){
     const view = availableViews.marriageview
@@ -17,6 +17,11 @@ const InProgressViewerComponent = (props) => {
     props.setview(view)
   }
 
+  const getContractStatus = (status) => {
+    if(!status) return('pending')
+    const split = status.split('/')
+    return split[split.length - 1]
+  }
   return (
     <div id="InProgressViewerComponent" className='container'>
       <h4>Running Procedures</h4>
@@ -31,7 +36,7 @@ const InProgressViewerComponent = (props) => {
         return (  
           <Row className='propertyview ' key={contract.id}>
             <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>
-            <Col md={2}><label className="leftaligntext">in progress</label></Col>
+            <Col md={2}><label className="leftaligntext">{getContractStatus(contract.status)}</label></Col>
             <Col md={3}><label className="leftaligntext"><a href={contract.creator}><Value src={`[${contract.creator}].name`}/></a></label></Col>
             <Col md={2}><Button onClick={() => viewMarriage(contract)} className='centeraligntext'>see progress</Button></Col>
           </Row>

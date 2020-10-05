@@ -23,17 +23,19 @@ const useNotifications = function(webId) {
   // TODO:: dont fetch notifications that have already been fetched
 
   async function updateNotifications(webId, currentNotifications){
-    if(webId && await checkNewNotifications(webId, currentNotifications)) {
-      const updatedNotifications = await fetchNotifications(webId)
-      fireUpdateEvents(currentNotifications, updatedNotifications)
-      if (updatedNotifications.map(n => n.metadata.id) !== currentNotifications.map(n => n.metadata.id)) {
-        setNotifications(updatedNotifications)
+    if(webId){
+      const newNotificationsMetadata = await checkNewNotifications(webId, currentNotifications)
+      console.log('NEWNOTIFS', newNotificationsMetadata)
+      if(newNotificationsMetadata && newNotificationsMetadata.length) {
+        const newNotifications = await fetchNotifications(newNotificationsMetadata)
+        fireUpdateEvents(newNotifications)
+        setNotifications(notifications.concat(newNotifications))
       }
     }
   }
 
-  async function fetchNotifications(webId){ 
-    const notificationsMetadata = await getNotificationMetadata(webId)
+
+  async function fetchNotifications(notificationsMetadata){ 
     if(!notificationsMetadata) return []
     const notifications = await Promise.all(notificationsMetadata.map(async function(metadata){
       const notification = await getNotification(metadata.id);
@@ -45,31 +47,30 @@ const useNotifications = function(webId) {
     return notifications
   }
 
+
   /**
    * This function is responsible to update the contracts status of the current user based on the incoming notifications.
    * This should be placed somewhere else in the future
    */
-  async function fireUpdateEvents(currentNotifications, updatedNotifications){
+  async function fireUpdateEvents(updatedNotifications){
     const currentContracts = await getProfileContracts(webId)
     for (const notification of updatedNotifications) {
-      if (currentNotifications.map(n=>n.metadata.id).indexOf(notification.metadata.id) === -1){
-        const itemId = notification.type === ns.as('Announce') ? notification.object && notification.object.object : notification.target
-        const proposal = await checkMarriageProposal(itemId)
-        const certificate = await checkCertificate(itemId)
-        if(proposal && proposal.creator===webId && notification.object && notification.object.type && notification.object.type === ns.as('Reject')) {
-          // set proposal status to rejected
-          if (await checkContractSubmittedStatus(proposal.id)){
-            const result = await updateMarriageContractStatus(proposal.id, "rejected") 
-          }
-          
-        } else if(proposal && currentContracts.indexOf(itemId) === -1) {
-          // patch profile with contract
-          await patchProfileWithContract(webId, itemId)
-        } else if(certificate) {
-          // set proposal status to accepted
-          if (await checkContractSubmittedStatus(certificate.certifies)) {
-            await updateProposalStatus(webId, itemId, certificate.certifies, 'accepted')
-          }
+      const itemId = notification.type === ns.as('Announce') ? notification.object && notification.object.object : notification.target
+      const proposal = await checkMarriageProposal(itemId)
+      const certificate = await checkCertificate(itemId)
+      if(proposal && proposal.creator===webId && notification.object && notification.object.type && notification.object.type === ns.as('Reject')) {
+        // set proposal status to rejected
+        if (await checkContractSubmittedStatus(proposal.id)){
+          const result = await updateMarriageContractStatus(proposal.id, "rejected") 
+        }
+        
+      } else if(proposal && currentContracts.indexOf(itemId) === -1) {
+        // patch profile with contract
+        await patchProfileWithContract(webId, itemId)
+      } else if(certificate) {
+        // set proposal status to accepted
+        if (await checkContractSubmittedStatus(certificate.certifies)) {
+          await updateProposalStatus(webId, itemId, certificate.certifies, 'accepted')
         }
       }
     }

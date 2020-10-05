@@ -39,6 +39,7 @@ const NotificationCard = (props) => {
   const notification = props.notification
   // TODO;; this will fail if you have no view access to the contract
   function getButton() {
+    console.log('notificaitonbutton', notification)
     switch (notification.type) {
       case ns.as('Accept'):
         return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See progress</Button>)
@@ -47,7 +48,17 @@ const NotificationCard = (props) => {
       case ns.as('Offer'):
         return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See offer</Button>)
       case ns.as('Announce'):
-        return (<Button className={'centeraligntext'} onClick={() => viewsubmission(notification.object.object)}>See submission</Button>)
+        if (notification.object.type && notification.object.type === ns.as('Create') && notification.metadata.types.object.object === ns.demo('MarriageProposal')) {
+          // Filter announcement of the creation of a marriage Proposal
+          return (<Button className={'centeraligntext'} onClick={() => viewsubmission(notification.object.object)}>See submission</Button>)
+        } else if (notification.object.type && notification.object.type === ns.as('Create') && notification.metadata.types.object.object === ns.demo('Certificate')) {
+          // Filter announcement of the creation of a certificate
+          return (<Button className={'centeraligntext'} onClick={() => viewCertificate(notification.object.target)}>See certificate</Button>)
+        }  else {
+          // Filter announcement of the rejection of a certificate
+          return (<Button className={'centeraligntext'} onClick={() => viewCertificatesView()}>view</Button>)
+        }
+        
       default:
         return (<div />)
     }
@@ -77,5 +88,15 @@ const NotificationCard = (props) => {
     const view = availableViews.submissionview
     view.args = {contract: contract}
     props.setview(view)
+  }
+
+  async function viewCertificate(submissionId) {
+    const view = availableViews.certificateview
+    view.args = {proposalId: submissionId}
+    props.setview(view)
+  }
+
+  async function viewCertificatesView() {
+    props.setview(availableViews.certificates)
   }
 }

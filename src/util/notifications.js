@@ -18,26 +18,27 @@ async function getInbox(subject){
 }
 
 export async function checkNewNotifications(webId, currentNotifications) {
-  if(!currentNotifications) return true
-  const inbox = await getInbox(webId)
-  if(!inbox) return false
-  const store = await getStore(inbox)
-  let notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
-  if (notificationsMetadata.length === currentNotifications.length) return false;
-  return true
+  const notificationMetadata = await getNotificationMetadata(webId)
+  const currentNotificationIds = currentNotifications.map(n => n.metadata.id)
+  return notificationMetadata.filter(metadata => currentNotificationIds.indexOf(metadata.id) === -1)
 }
 
+/**
+ * Get the notification metadata from the inbox folder
+ * @param {string} webId 
+ */
 export async function getNotificationMetadata(webId) {
   const inbox = await getInbox(webId)
   if(!inbox) return []
   const store = await getStore(inbox)
-  let notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
-  notificationsMetadata = notificationsMetadata.map(quad => { return ( {id: quad.object.value})})
-  for (let metadata of notificationsMetadata ) {
+  if (!store) return [];
+  const notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
+  const metadataObjects = notificationsMetadata.map(quad => { return ( {id: quad.object.value})})
+  for (let metadata of metadataObjects) {
     const modified = await store.getQuads(metadata.id, ns.dct('modified'), null)
     metadata['modified'] = modified && modified[0].object.value
   }
-  return notificationsMetadata
+  return metadataObjects
 }
 
 export async function getNotification(notificationId) {
