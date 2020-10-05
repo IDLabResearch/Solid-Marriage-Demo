@@ -213,7 +213,7 @@ const MiniDrawer = withWebId((props) => {
 
           <Link to="/" target="_blank">
             <Typography variant="h6" style={{color: "white"}} noWrap>
-              SEMIC - solid demo
+              Solid Marriage Demo
             </Typography>
           </Link>
           <Navbar.Brand href="https://solidproject.org/">
