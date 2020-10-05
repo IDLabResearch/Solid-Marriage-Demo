@@ -1,11 +1,12 @@
 import React from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, Badge } from 'react-bootstrap'
 import { availableViews } from '../util/Util';
+import { IconButton } from '@material-ui/core';
 
 const HelpComponent = (props) => {
   return (
     <div id="HelpComponent" className='container leftaligntext'>
-      <h4 className='container centeraligntext'>How to get married with SOLID in 10 simple steps</h4>
+      <h4 className='container centeraligntext'>How to get married with SOLID in 5 simple steps</h4>
 
       <Row>
         <Col md={1}>{availableViews.login.icon}</Col>
@@ -47,14 +48,14 @@ const HelpComponent = (props) => {
         <Col md={1}></Col>
         <Col md={11}>
           <p>Now that your profile information is filled in, you can start planning your wedding.</p>
-          <p>Tho initiate the marriage procedure, go to the Requests tab.</p>
-          <p>Here, the procedure can be initiated by clicking <Button>Initiate procedure</Button> for the Marriage certificate type</p>
+          <p>Tho initiate the marriage procedure, go to the <b>Procedures</b> tab.</p>
+          <p>Here, the procedure can be initiated by clicking <Button>Initiate procedure</Button> for the Marriage certificate type.</p>
           <p>Now, you will find your information already filled out as one of the spouses.</p>
           <p>A marriage requires two spouses to be given, as well as one or more witnesses.</p>
-          <p>If a valid webId is filled in, the profile of that person will be filled in automatically.</p>
-          <p>In case the given profile is incomplete, an error message will be shown. Please choose a different webId, or wait for the person to complete their profile.</p>
+          <p>If a valid webId is entered, the associated profile will be shown automatically.</p>
+          <p>In case this profile is incomplete, an error message will be shown. Please choose a different webId, or wait for the person to complete their profile.</p>
           <p>If all necessary information is filled in, the proposal is ready to be submitted.</p>
-          <p>You can use the default storage location to store the created marriage proposal, or select a custom location (please make sure the selected location is valid).</p>
+          <p>You can use the default storage location to store the created marriage proposal on your pod, or select a custom location (please make sure the selected location is valid, and read permissions are public. If this is not the case, the people you invite will not be able to see the marriage proposal).</p>
           <p>Now, you can submit the marriage proposal using <Button>Submit</Button></p>
         </Col>
       </Row>
@@ -68,11 +69,13 @@ const HelpComponent = (props) => {
         <Col md={1}></Col>
         <Col md={11}>
           <p>On creation of a marriage proposal, all parties (spouses and witnesses) are notified of the created proposal.</p>
-          <p>These notifications can be found in the inbox of your data pod (the default location is at /inbox).</p>
-          TODO :: proposals folder - check notifications and add running proposal for marriage if notification of that.
-          TODO :: on accept / rejection - add to hasContracts !
-
-
+          <p>These notifications can be found by clicking the notification icon 
+          <IconButton aria-label={'notifications'} color="inherit">
+            <Badge badgeContent={1} color="secondary">
+              {availableViews.notifications.icon}
+            </Badge>
+          </IconButton>
+          at the top of your screen.</p>
           <p>Now, you can see the marriage proposal, and all people involved in the proposal.</p>
           <p>In this form, you will see two action buttons next to your name: <button type="button" className="marriageview_accept__3V0c_ centeraligntext btn btn-primary" style={{width: '120px'}}> Accept </button> and <button type="button" className="marriageview_refuse__2lqar centeraligntext btn btn-primary" style={{width: '120px'}}> Refuse </button>.</p>
           <p>With these, you can accept or refuse the invitation.</p>

@@ -6,6 +6,7 @@ import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
 import { acceptProposal, refuseProposal, deleteProposal, createMarriageContractSubmissionNotification, submitProposal, sendContactInvitation } from '../util/MarriageController'
 import { availableViews } from '../util/Util'
+import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
 const { default: data } = require('@solid/query-ldflex');
 
 const INVITATIONACCEPTED = ns.demo('accepted')
@@ -162,6 +163,7 @@ const MarriageViewComponent = (props) => {
           ? isComplete()
             ? <Row>
                 <Col md={6}>
+                <ProfileCardSelectorComponent />
                 </Col>
                 <Col md={3}>
                   <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contract.id, props.webId)}> Submit Marriage Proposal </Button> 
