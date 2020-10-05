@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react'
-
-import Input from '@material-ui/core/Input';
-
+import React from 'react'
 import useProfile from '../hooks/useProfile'
 import styles from '../css/components/profilecard.module.css'
 import { Col, Row } from 'react-bootstrap';
+import { formatDate } from '../util/Util';
 
 const ProfileCardComponent = (props) => {
 
@@ -13,12 +11,15 @@ const ProfileCardComponent = (props) => {
   return (
     <div id="ProfileCardComponent" className={styles.container}>
       {profile && Object.keys(profileProps).map(property => {
+        const value = profile[property] && (property === 'bdate' ? formatDate(profile[property]) : profile[property])
         return (
           <Row className={`propertyview ${styles.profilecardrow}`} key={property}>
             <Col sm={12} md={4}><label className="leftaligntext"><b>{profileProps[property]}</b></label></Col>
-            {property === 'name'
-            ?<Col sm={12} md={8}><label className="leftaligntext"><a href={props.webId}>{profile[property]}</a></label></Col>
-            :<Col sm={12} md={8}><label className="leftaligntext">{profile[property]}</label></Col>}
+            <Col sm={12} md={8}>
+              <label className="leftaligntext">
+                {property === 'name' ? <a href={props.webId}>{value}</a> : <div>{value}</div>}
+              </label>
+            </Col>
           </Row>
         )
       })}

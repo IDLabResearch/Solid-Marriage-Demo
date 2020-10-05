@@ -88,7 +88,7 @@ const CertificatesViewerComponent = (props) => {
             return (
               <Row className='propertyview' key={contract.id}>
                 {index === 0 ? <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col> : <Col md={3} /> }
-                <Col md={5}><label className="leftaligntext">Certificate availablee</label></Col>
+                <Col md={5}><label className="leftaligntext">Certificate available</label></Col>
                 <Col md={3}><Button onClick={(() => showCertificateViewer(contract.id))}>View certificate</Button></Col>
               </Row>
             )

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Value } from '@solid/react';
 import useNotifications from '../hooks/useNotifications'
 import ns from '../util/NameSpaces'
 import { Col, Row, Button } from 'react-bootstrap'
@@ -55,14 +56,17 @@ const OfficialComponent = (props) => {
     <br />
     <Row className='propertyview pageheader' key={'header'}>
       <Col md={3}><label className="leftaligntext"><b>Submission type</b></label></Col>
-      <Col md={5}><label className="leftaligntext">Current status</label></Col>
+      <Col md={2}><label className="leftaligntext">Current status</label></Col>
+      <Col md={3}><label className="leftaligntext">Submitted by</label></Col>
       <Col md={2}><label className="centeraligntext">Action</label></Col>
     </Row>
     {submissions.map(submission => {
+      console.log(submission)
       return (
         <Row className='propertyview ' key={submission.object}>
           <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>
-          <Col md={5}><label className="leftaligntext">submitted for review</label></Col>
+          <Col md={2}><label className="leftaligntext">submitted for review</label></Col>
+          <Col md={3}><label className="leftaligntext"><a href={submission.actor}><Value src={`[${submission.actor}].name`}/></a></label></Col>
           <Col md={2}><Button onClick={() => viewsubmission(submission.object.object)} className='centeraligntext'>Evaluate</Button></Col>
         </Row>
       )

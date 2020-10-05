@@ -33,6 +33,7 @@ const MarriageRequestComponent = (props) => {
     }
   ])
 
+  console.log('PROFILES', state)
   const handleSubmit = async event => {
     if (!await validateSubmission(state)) return;
     const proposal = await createMarriageProposal(state, storageLocation, props.webId)
@@ -42,6 +43,7 @@ const MarriageRequestComponent = (props) => {
   const setvalue = (index, value) => {
     const stateCopy = state.slice()
     stateCopy[index].webId = value
+    console.log('setting value', index, value)
     setState(stateCopy)
   }
 
@@ -69,14 +71,23 @@ const MarriageRequestComponent = (props) => {
   }
 
   const validateSubmission = async () => {
+
+    if (state.filter(person => person.type === 'witness').length === 0){
+      window.alert('At least one witness must be present to create a marriage proposal');
+      return false
+    }
+
     for (let person of state){
       if (!person.webId) {
-        window.alert(person.webId + 'is not a valid webId');
+        window.alert(person.label + ' field does not have a valid webId');
         return false
       }
       const profile = await getProfile(person.webId)
-      if (!profile.name || !profile.bdate || !profile.location || !profile.cstatus) {
-        window.alert(person.webId + 'does not have a valid profile');
+      if (!profile.name) {
+        window.alert(person.webId + ' is not a valid webId');
+        return false
+      } else if (!profile.bdate || !profile.location || !profile.cstatus) {
+        window.alert(person.webId + ' does not have a valid profile');
         return false
       } 
 

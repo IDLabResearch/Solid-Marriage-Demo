@@ -14,10 +14,11 @@ const ProfileCardSelectorComponent = (props) => {
 
   const webIdChangeHandler = (event) => {
     setWebIdInput(event.target.value)
+    props.setvalue(event.target.value); 
   }
-  useEffect(() => {
-    if (profile && isProfile(profile)) props.setvalue(profile.webId); 
-  }, [profile])
+  // useEffect(() => {
+  //   if (profile && isProfile(profile)) props.setvalue(profile.webId); 
+  // }, [profile])
 
   const isComplete = (profile) => profile.name && profile.bdate && profile.location && profile.cstatus
   const isProfile = (profile) => profile.name

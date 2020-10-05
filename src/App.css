@@ -53,6 +53,11 @@
   background-color: white;
   padding-top: 3px;
   padding-bottom: 10px;
+  margin-top: 25px;
+}
+
+li{
+  list-style-type: none;
 }
 
 .pageheader {

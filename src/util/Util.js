@@ -35,19 +35,19 @@ export async function getPromiseValueOrUndefined (promise){
 }
 
 export const availableViews = {
-  login:          {id:"login",            label:'Login',            generation:(props) => <LoginComponent {...props} ></LoginComponent>, icon: <ExitToAppIcon />},
-  profile:        {id:"profile",          label:'Profile',          generation:(props) => <ProfileViewerComponent {...props} ></ProfileViewerComponent>, icon: <PersonIcon />},
-  profileeditor:  {id:"profileedit",      label:'Profile Editor',   generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>, icon: <HelpIcon />},
-  requests:       {id:"requests",         label:'Requests',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>, icon: <InsertDriveFileIcon />},
-  marriagerequest: {id:"marriagerequest", label:'Marriage request', generation:(props) => <MarriageRequestComponent {...props}></MarriageRequestComponent>, icon: <HelpIcon />},
-  marriageview:   {id:"marriageview",     label:'Marriage view',    generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>, icon: <HelpIcon />},
-  running:        {id:"running",          label:'In progress',      generation:(props) => <InProgressViewerComponent {...props}></InProgressViewerComponent>, icon: <ListIcon />},
-  certificates:   {id:"certificates",     label:'Certificates',     generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>, icon: <CardMembershipIcon />},
-  notifications:  {id:"notifications",    label:'Notifications',    generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>, icon: <NotificationsIcon />},
-  help:           {id:"help",             label:'Help',             generation:(props) => <HelpComponent {...props}></HelpComponent>, icon: <HelpIcon />},
-  official:       {id:"official",         label:'Offical',          generation:(props) => <OfficialComponent {...props}></OfficialComponent>, icon: <GavelIcon />},
-  submissionview: {id:"submissionview",   label:'Submission view',  generation:(props) => <SubmissionViewComponent {...props}></SubmissionViewComponent>, icon: <HelpIcon />},
-  certificateview:{id:"certificateview",  label:'Certificate view', generation:(props) => <CertificateViewComponent {...props}></CertificateViewComponent>, icon: <HelpIcon />},
+  login:          {id:"login",            label:'Login',              generation:(props) => <LoginComponent {...props} ></LoginComponent>, icon: <ExitToAppIcon />},
+  profile:        {id:"profile",          label:'Profile',            generation:(props) => <ProfileViewerComponent {...props} ></ProfileViewerComponent>, icon: <PersonIcon />},
+  profileeditor:  {id:"profileedit",      label:'Profile Editor',     generation:(props) => <ProfileEditorComponent {...props} ></ProfileEditorComponent>, icon: <HelpIcon />},
+  requests:       {id:"requests",         label:'Procedures',         generation:(props) => <RequestsViewerComponent {...props}></RequestsViewerComponent>, icon: <InsertDriveFileIcon />},
+  marriagerequest:{id:"marriagerequest",  label:'Marriage request',   generation:(props) => <MarriageRequestComponent {...props}></MarriageRequestComponent>, icon: <HelpIcon />},
+  marriageview:   {id:"marriageview",     label:'Marriage view',      generation:(props) => <MarriageViewComponent {...props}></MarriageViewComponent>, icon: <HelpIcon />},
+  running:        {id:"running",          label:'Running Procedures', generation:(props) => <InProgressViewerComponent {...props}></InProgressViewerComponent>, icon: <ListIcon />},
+  certificates:   {id:"certificates",     label:'Certificates',       generation:(props) => <CertificatesViewerComponent {...props}></CertificatesViewerComponent>, icon: <CardMembershipIcon />},
+  notifications:  {id:"notifications",    label:'Notifications',      generation:(props) => <NotificationsViewerComponent {...props}></NotificationsViewerComponent>, icon: <NotificationsIcon />},
+  help:           {id:"help",             label:'Help',               generation:(props) => <HelpComponent {...props}></HelpComponent>, icon: <HelpIcon />},
+  official:       {id:"official",         label:'Official',           generation:(props) => <OfficialComponent {...props}></OfficialComponent>, icon: <GavelIcon />},
+  submissionview: {id:"submissionview",   label:'Submission view',    generation:(props) => <SubmissionViewComponent {...props}></SubmissionViewComponent>, icon: <HelpIcon />},
+  certificateview:{id:"certificateview",  label:'Certificate view',   generation:(props) => <CertificateViewComponent {...props}></CertificateViewComponent>, icon: <HelpIcon />},
 }
 
 export const activeDrawerItemMapping = {
@@ -138,6 +138,11 @@ export async function getNotificationTypes(activity){
   return types
 }
 
-export async function getProposalActors(proposalId){
-  // return creator, spouse, witness.
+
+export function formatDate(date) {
+  date = new Date(date)
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = date.getFullYear();
+  return (mm + '/' + dd + '/' + yyyy)
 }

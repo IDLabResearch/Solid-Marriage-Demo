@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import ReactLoading from 'react-loading';
 
-import '../css/MainScreenComponent.css'
-
 const viewsWithoutWebId = ['help', 'login']
 
 const MainScreenComponent = (props) => {

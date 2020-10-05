@@ -24,9 +24,6 @@ const MarriageViewComponent = (props) => {
   allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
   const [contacts, setContacts] = useState(allcontacts)
 
-
-  const [resentContacts, setResentContacts] = useState([])
-
   useEffect(() => {
     let mounted = true
     async function refreshContacts() {
@@ -84,27 +81,33 @@ const MarriageViewComponent = (props) => {
     return true 
   }
 
-  async function accept() {
-    await acceptProposal(props.webId, props.contract.id, props.contract.creator)
-    resetView()
-  }
-
-  async function refuse() {
-    await refuseProposal(props.webId, props.contract.id, props.contract.creator)
-    resetView()
-  }
-
-  async function resetView() {
-    const updatedContacts = await updateContacts(contacts)
+  function setContactStatus(contactId, newstatus){
+    let updatedContacts = contacts.slice()
+    for (let contact of updatedContacts) {
+      if (contact.id === contactId) {
+        contact.status = newstatus;
+      }
+    }
     setContacts(updatedContacts)
+  }
+
+  async function accept(contactId, contractId) {
+    const response = await acceptProposal(props.webId, props.contract.id, props.contract.creator)
+    console.log('ACCEPTED', response)
+    setContactStatus(contactId, 'accepted')
+  }
+
+  async function refuse(contactId, contractId) {
+    await refuseProposal(props.webId, props.contract.id, props.contract.creator)
+    setContactStatus(contactId, 'refused')
   }
 
   async function resend(contactId, proposalId) {
     const response = await sendContactInvitation(props.webId, contactId, proposalId)
-    setResentContacts(resentContacts.concat(contactId))
   }
 
   function getContactButton(contact){
+    console.log(contact, props.contract)
     if(contact.status === 'pending') {
       if (contact.id === props.webId) return (
           <div>
@@ -112,12 +115,8 @@ const MarriageViewComponent = (props) => {
             <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse(contact.id, props.contract.id)}> Refuse </Button>
           </div>
         )
-      else  return (
-        <div>
-          {resentContacts.indexOf(contact.id) === -1
-          ? <Button className={`${styles.pending} centeraligntext`} onClick={() => resend(contact.id, props.contract.id)}>Resend notification</Button>
-          : <Button className={`${styles.pending} centeraligntext`} onClick={() => resend(contact.id, props.contract.id)} disabled>Resend notification</Button>}
-        </div>
+      else if(props.webId === props.contract.creator)  return (
+        <ResendButton resend={resend} contactId={contact.id} contractId={props.contract.id}/>
       )
     }
     return(<div />)
@@ -162,7 +161,8 @@ const MarriageViewComponent = (props) => {
         { props.contract.creator === props.webId
           ? isComplete()
             ? <Row>
-                <Col md={6} />
+                <Col md={6}>
+                </Col>
                 <Col md={3}>
                   <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contract.id, props.webId)}> Submit Marriage Proposal </Button> 
                 </Col>
@@ -182,3 +182,9 @@ const MarriageViewComponent = (props) => {
   )
 }
 export default MarriageViewComponent
+
+const ResendButton = (props) => {
+  const [state, setstate] = useState(false)
+  if (state) return (<Button className={`${styles.pending} centeraligntext`} disabled>Reminder sent</Button>)
+  return (<Button className={`${styles.pending} centeraligntext`} onClick={() => { props.resend(props.contactId, props.contractId).then(setstate(true)) }} >Resend notification</Button>)
+}

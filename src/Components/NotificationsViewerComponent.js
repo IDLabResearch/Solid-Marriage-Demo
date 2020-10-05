@@ -2,7 +2,6 @@ import React from 'react'
 import useNotifications from '../hooks/useNotifications'
 
 // import { Col, Row, Grid } from 'react-flexbox-grid'
-import styles from '../css/components/notificationcard.module.css'
 import { Button, Row, Col } from 'react-bootstrap'
 import { Value } from '@solid/react';
 

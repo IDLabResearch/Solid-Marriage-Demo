@@ -54,6 +54,7 @@ export async function deleteProposal(proposalId, webId) {
 export async function acceptProposal(webId, proposalId, authorId) {
   const patchbody = 'INSERT {' + await quadListToTTL([quad(namedNode(webId), namedNode(ns.demo('accepted')), namedNode(proposalId))]) + ' }';
   const patch = await patchFile(webId, patchbody)
+  console.log('PATCH', patch)
   const notification = await createAcceptanceNotification(webId, proposalId, authorId)
   notify(notification, [authorId])
 }
