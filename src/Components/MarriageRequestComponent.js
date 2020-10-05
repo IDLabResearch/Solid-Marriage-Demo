@@ -9,7 +9,7 @@ import { Input } from '@material-ui/core'
 import { createMarriageProposal } from '../util/MarriageController';
 import { parseURL } from 'url-toolkit';
 import { getProfile } from '../hooks/useProfile'
-import { availableViews } from '../util/Util'
+import { availableViews, getProfileData } from '../util/Util'
 
 const MarriageRequestComponent = (props) => {
 
@@ -82,8 +82,11 @@ const MarriageRequestComponent = (props) => {
         window.alert(person.label + ' field does not have a valid webId');
         return false
       }
-      const profile = await getProfile(person.webId)
-      if (!profile.name) {
+
+      console.log('GETTING PROFILE')
+      const profile = await getProfileData(person.webId)
+      console.log('PROFILE', profile)
+      if (!profile || !profile.name) {
         window.alert(person.webId + ' is not a valid webId');
         return false
       } else if (!profile.bdate || !profile.location || !profile.cstatus) {
@@ -114,7 +117,7 @@ const MarriageRequestComponent = (props) => {
       </Row>
       <form>
         {state.map((person, index) => {
-          return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(index, value)} person={person} key={'cardselector' + index} delete={deleteWitness} index={index}></ProfileCardSelectorComponent> )
+          return ( <ProfileCardSelectorComponent setvalue={(value) => setvalue(index, value)} person={person} key={'cardselector' + index} delete={deleteWitness} index={index} /> )
         })}
         <Button onClick={() => addWitness()}> Add Witness </Button>
         <br/>

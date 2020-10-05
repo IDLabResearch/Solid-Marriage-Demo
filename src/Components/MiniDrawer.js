@@ -150,7 +150,7 @@ const MiniDrawer = withWebId((props) => {
         )
       case 'help':
         return (
-          <Link to="/help" target="_blank">
+          <Link to="/help" target="_blank" key={index + 'helplink'}>
             <MenuItem className={className} key={index}>
               <IconButton aria-label={item.label} style={{color: "white"}}>
                   {item.icon}
@@ -185,7 +185,6 @@ const MiniDrawer = withWebId((props) => {
 
 
   drawerWidth = sidebarComponents.length ? drawerWidth : 0;
-  console.log('drawerWidth', drawerWidth, sidebarComponents.length)
 
   const classes = useStyles();
   const theme = useTheme();

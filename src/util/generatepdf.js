@@ -7,9 +7,9 @@ const { default: data } = require('@solid/query-ldflex');
 
 const nameIndent = 60;
 const leftIndent = 30;
-let currentY = 0
 
 export async function generateCertificatePDF (proposal, certificate) {
+  let currentY = 0
 
   const getPersonData = async (id) => { return({ id, name: `${await data[id].name}` }) }
 
@@ -78,25 +78,3 @@ export async function generateCertificatePDF (proposal, certificate) {
 
 }
 
-
-// // // require dependencies
-// // const PDFDocument = require('pdfkit');
- 
-// // // create a document the same way as above
-// // const doc = new PDFDocument();
- 
-// // // pipe the document to a blob
-// // const stream = doc.pipe(blobStream());
- 
-// // // add your content to the document here, as usual
- 
-// // get a blob when you're done
-// doc.end();
-// stream.on('finish', function() {
-//   // get a blob you can do whatever you like with
-//   const blob = stream.toBlob('application/pdf');
- 
-//   // or get a blob URL for display in the browser
-//   const url = stream.toBlobURL('application/pdf');
-//   iframe.src = url;
-// });

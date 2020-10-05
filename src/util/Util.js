@@ -66,12 +66,20 @@ export const activeDrawerItemMapping = {
 }
 
 export async function getStore(URI){
-  const response = await getFile(URI)
-  const code = await response
-  const responseData = await response.text()
-  const store = new N3.Store()
-  store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))
-  return store
+  try {
+    const response = await getFile(URI)
+    const code = (await response).status
+    if ([200, 201, 202, 300, 301, 302, 303, 304, 305, 306, 307, 308].indexOf(code) === -1)
+      return null;
+    const responseData = await response.text()
+    const store = new N3.Store()
+    store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))
+    return store
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+  
 }
 
 const getQuadObjVal = quads => quads[0] && (quads[0].object.value || quads[0].object.id)
@@ -80,26 +88,38 @@ const getQuadObjList = quads => quads && quads.map(quad => quad.object.value || 
 
 
 export async function getContractData(id) {
+  id = await id;
+  if(!id) return null
   const datastore = await getStore(id);
   return datastore && {
     id: id,
+    type: getQuadObjVal(await datastore.getQuads(id, ns.rdf('type'))),
     creator: getQuadObjVal(await datastore.getQuads(id, ns.dct('creator'))),
     certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
     status: getQuadObjVal(await datastore.getQuads(id, ns.demo('status'))),
     spouse: getQuadObjList(await datastore.getQuads(id, ns.dbo('spouse'))).map(e => {return({id: e})}),
     witness: getQuadObjList(await datastore.getQuads(id, ns.demo('witness'))).map(e => {return({id: e})}),
   }
-  // const contract = {id: id, completed: false, spouse: [], witness: []}
-  // contract.creator = `${await data[id][ns.dct('creator')]}`
-  // contract.certifiedBy = `${await data[id][ns.demo('certified_by')]}`
-  // contract.status = `${await data[id][ns.demo('status')]}`
-  // for await (const spouseId of data[id][ns.dbo('spouse')]){
-  //   contract.spouse.push({id: spouseId.value})
-  // }
-  // for await (const witnessId of data[id][ns.demo('witness')]){
-  //   contract.witness.push({id: witnessId.value})
-  // }
-  // return contract
+}
+
+export async function getProfileData(id) {
+  id = await id;
+  if(!id) return null
+  const datastore = await getStore(id);
+  return datastore && {
+    id: id,
+    name: getQuadObjVal(await datastore.getQuads(id, ns.foaf('name'))),
+    bdate: getQuadObjVal(await datastore.getQuads(id, ns.dbo('birthDate'))),
+    location: getQuadObjVal(await datastore.getQuads(id, ns.dbo('location'))),
+    cstatus: getQuadObjVal(await datastore.getQuads(id, ns.demo('civilstatus'))),
+  }
+}
+
+export async function getProfileContracts(id) {
+  id = await id;
+  if(!id) return null
+  const datastore = await getStore(id);
+  return datastore && getQuadObjList(await datastore.getQuads(id, ns.demo('hasContract')))
 }
 
 export async function getCertificateData(id) {
@@ -113,16 +133,6 @@ export async function getCertificateData(id) {
   }
 }
 
-/**
- * 
- * @param 
- * { <> a <http://semicdemo.example/Certificate> ;
-  <http://semicdemo.example/certifies> <https://alice.localhost:8443/public/marriageproposal2020-09-29T10%3A19%3A15.988Z.ttl> ;
-  <http://semicdemo.example/certified_by> <https://alice.localhost:8443/profile/card#me> ;
-  <http://semicdemo.example/certification_date> "2020-09-29T10:19:25.838Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-  <http://www.w3.org/2000/01/rdf-schema#comment> "This is a certificate for the Marriage proposal https://alice.localhost:8443/public/marriageproposal2020-09-29T10%3A19%3A15.988Z.ttl by https://alice.localhost:8443/profile/card#me" .
-} activity 
- */
 
 export async function getNotificationTypes(activity){
   const types = {}

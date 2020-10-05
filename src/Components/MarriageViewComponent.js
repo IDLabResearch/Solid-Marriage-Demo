@@ -5,12 +5,15 @@ import styles from '../css/components/marriageview.module.css'
 import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
 import { acceptProposal, refuseProposal, deleteProposal, createMarriageContractSubmissionNotification, submitProposal, sendContactInvitation } from '../util/MarriageController'
-import { availableViews } from '../util/Util'
+import { availableViews, getProfileData } from '../util/Util'
 import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
+import { Input } from '@material-ui/core'
 const { default: data } = require('@solid/query-ldflex');
 
 const INVITATIONACCEPTED = ns.demo('accepted')
 const INVITATIONREFUSED = ns.demo('refused')
+
+const DEFAULTOFFICIAL = 'https://weddinator.inrupt.net/profile/card#me'
 
 // TODO:: remove marriage button only for creator
 // TODO:: If spouse if 2 times the same person it will only show once (same for witnesses) because of ldflex => update this to use N3 in usecontracts?
@@ -24,6 +27,7 @@ const MarriageViewComponent = (props) => {
   allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
   allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
   const [contacts, setContacts] = useState(allcontacts)
+  const [official, setOfficial] = useState(DEFAULTOFFICIAL)
 
   useEffect(() => {
     let mounted = true
@@ -63,10 +67,22 @@ const MarriageViewComponent = (props) => {
     return contacts
   }
   
+  const validateOfficial = async () => {
+    if (!official) {
+      window.alert('Please fill in the webId of an official to submit the request to (this can be your own webId for demo purposes).');
+      return false
+    }
+    console.log('getting profile')
+    const profile = await getProfileData(official)
+    console.log('PROFILE', profile)
+    if (!profile || !profile.name) 
+        window.alert('The webId of the official: ' + official + ', is not a valid webId');
+    return true
+  }
   async function submitMarriageProposal() {
     // For demo purposes outside of the workshop also, we will have the user function as the official also
-    const officialId = props.webId
-    const submission = await submitProposal(props.webId, props.contract.id, officialId)
+    if (! await validateOfficial()) return;
+    const submission = await submitProposal(props.webId, props.contract.id, official)
     props.setview(availableViews.official)
   }
 
@@ -158,13 +174,19 @@ const MarriageViewComponent = (props) => {
         )})}
         <br />
         <br />
+        { props.contract.creator === props.webId && isComplete() 
+          ? 
+            <Row className='propertyview'>
+              <Col md={2}><label className='leftaligntext'>{"Official"}</label></Col>
+              <Col md={10}><Input className='storageLocation leftaligntext' value={official} onChange={(e) => setOfficial(e.target.value)}/></Col>
+            </Row>
+          : <div />
+        }
         <br />
         { props.contract.creator === props.webId
           ? isComplete()
             ? <Row>
-                <Col md={6}>
-                <ProfileCardSelectorComponent />
-                </Col>
+                <Col md={6} />
                 <Col md={3}>
                   <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contract.id, props.webId)}> Submit Marriage Proposal </Button> 
                 </Col>

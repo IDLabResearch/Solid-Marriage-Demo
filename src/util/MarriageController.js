@@ -22,7 +22,7 @@ export async function createMarriageProposal(proposalContacts, storageLocation, 
   const post = await putFile(proposalId, postbody)
 
   // Patch profile with information on created proposal
-  const patchbody = await createMarriageProfilePatch(webId, proposalId)
+  const patchbody = await addContractPatch(webId, proposalId)
   const patch = await patchFile(webId, patchbody)
 
   // Create and send notifications to all parties involved
@@ -280,7 +280,7 @@ async function createMarriagePropsalBody(proposalData, creatorId){
   return await quadListToTTL(quadList);
 }
 
-export async function createMarriageProfilePatch(webId, proposalId){
+export async function addContractPatch(webId, proposalId){
   return `INSERT { ${await quadListToTTL( [quad(namedNode(webId), namedNode(ns.demo('hasContract')), namedNode(proposalId))])} } `
 }
 
@@ -298,8 +298,9 @@ export async function createMarriagePropsalNotification(creatorWebId, proposalId
   return await quadListToTTL(quadList);
 }
 
-// export async function addCertificationToProposal(proposalId, certificationId){
-//   await updateMarriageContractStatus(proposalId, "certified")
-// }
+export async function patchProfileWithContract(webId, contractId) {
+  const patchbody = await addContractPatch(webId, contractId)
+  const patch = await patchFile(webId, patchbody)
+}
 
 

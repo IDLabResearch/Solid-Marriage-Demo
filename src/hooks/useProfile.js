@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getPromiseValueOrUndefined } from '../util/Util'
+import { getPromiseValueOrUndefined, getProfileData } from '../util/Util'
 
 import ns from "../util/NameSpaces"
 
@@ -9,7 +9,7 @@ const useProfile = function(webId) {
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     let mounted = true
-    getProfile(webId).then(profile => {
+    getProfileData(webId).then(profile => {
       if(profile) profile.webId = webId
       if(mounted) setProfile(profile)
     }).catch(

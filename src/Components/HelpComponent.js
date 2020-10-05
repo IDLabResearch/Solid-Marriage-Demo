@@ -16,7 +16,7 @@ const HelpComponent = (props) => {
       
         <Col md={1}></Col>
         <Col md={11}>
-          <p>Before starting this demonstration for SOLID, you are expected to have created a SOLID pod.</p>
+          <p>Before starting this demonstration for SOLID, you are expected to created a SOLID pod.</p>
           <p>In case you do not do not yet have a SOLID pod available, you can create a pod on <a href={'https://solid.community/register'}>solid community</a>.</p>
           <p>(or using login button - choose provider - register account. But this should be explained with pictures)</p>
         </Col>
@@ -48,7 +48,7 @@ const HelpComponent = (props) => {
         <Col md={1}></Col>
         <Col md={11}>
           <p>Now that your profile information is filled in, you can start planning your wedding.</p>
-          <p>Tho initiate the marriage procedure, go to the <b>Procedures</b> tab.</p>
+          <p>To initiate the marriage procedure, go to the <b>Procedures</b> tab.</p>
           <p>Here, the procedure can be initiated by clicking <Button>Initiate procedure</Button> for the Marriage certificate type.</p>
           <p>Now, you will find your information already filled out as one of the spouses.</p>
           <p>A marriage requires two spouses to be given, as well as one or more witnesses.</p>
@@ -113,9 +113,9 @@ const HelpComponent = (props) => {
         <Col md={11}>
           <p>In the case that your marriage proposal is accepted, you are now officially married, and you can now retrieve your marriage certificate.</p>
           <p>This can be found in the Certificates tab.</p>
-          <p>You can view the ceritificate using  <button type="button" className="btn btn-primary" style={{width: '150px'}}>View certificate</button>.</p>
+          <p>You can view the certificate using  <button type="button" className="btn btn-primary" style={{width: '150px'}}>View certificate</button>.</p>
           <p>In this view, all the information about the marriage and the certificate is listed.</p>
-          <p>A pdf version of the certificate can be retrieved using <button type="button" className="btn btn-primary" style={{width: '100px'}}>Get PDF</button>.</p>
+          <p>A PDF version of the certificate can be retrieved using <button type="button" className="btn btn-primary" style={{width: '100px'}}>Get PDF</button>.</p>
         </Col>
       </Row>
       <br />

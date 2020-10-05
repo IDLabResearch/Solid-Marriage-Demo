@@ -37,7 +37,13 @@ const ProfileViewerComponent = (props) => {
       })}
       <br />
       <br />
-      <Button onClick={() => props.setview(availableViews.profileeditor)}>Edit</Button>
+      <Row>
+        <Col md={2}><Button onClick={() => {navigator.clipboard.writeText(props.webId)}}>copy webId</Button></Col>
+        <Col md={3}></Col>
+        <Col md={2}><Button onClick={() => props.setview(availableViews.profileeditor)}>Edit</Button></Col>
+      </Row>
+      
+      
     </div>
   )
 }

@@ -27,11 +27,11 @@
 
 .delete {
   background-color: #ff0000 !important;
-  border-color: black !important;
+  border-color: #ff0000 !important;
   color: white !important;
 }
 .delete:hover {
   background-color: orangered !important;
-  border-color: black !important;
+  border-color: orangered !important;
   color: white !important;
 }
