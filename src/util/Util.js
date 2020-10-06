@@ -109,6 +109,7 @@ export async function getContractData(id) {
     id: id,
     type: getQuadObjVal(await datastore.getQuads(id, ns.rdf('type'))),
     creator: getQuadObjVal(await datastore.getQuads(id, ns.dct('creator'))),
+    created: getQuadObjVal(await datastore.getQuads(id, ns.dct('created'))),
     certified_by: getQuadObjVal(await datastore.getQuads(id, ns.demo('certified_by'))),
     status: getQuadObjVal(await datastore.getQuads(id, ns.demo('status'))),
     spouse: getQuadObjList(await datastore.getQuads(id, ns.dbo('spouse'))).map(e => {return({id: e})}),

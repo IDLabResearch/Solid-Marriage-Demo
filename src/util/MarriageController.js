@@ -272,7 +272,8 @@ const getCertificateName = () => {
 async function createMarriagePropsalBody(proposalData, creatorId){
   const quadList = [ quad(namedNode(''), namedNode(ns.rdf('type')), namedNode(ns.demo('MarriageProposal'))), 
                       quad(namedNode(''), namedNode(ns.dct('creator')), namedNode(creatorId)), 
-                      quad(namedNode(''), namedNode(ns.demo('status')), namedNode(ns.demo('proposal'))),]
+                      quad(namedNode(''), namedNode(ns.dct('created')), literal(new Date().toISOString(), namedNode(ns.xsd('dateTime')))),
+                      quad(namedNode(''), namedNode(ns.demo('status')), namedNode(ns.demo('proposal'))) ]
   for (let spouse of proposalData.filter(e => e.type === 'spouse')) 
     quadList.push(quad(namedNode(''), namedNode(ns.dbo('spouse')), namedNode(spouse.webId)))
   for (let witness of proposalData.filter(e => e.type === 'witness')) 
