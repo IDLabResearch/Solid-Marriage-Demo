@@ -30,7 +30,6 @@ const InProgressViewerComponent = (props) => {
       return new Date(date).toLocaleString()
     }
   }
-  console.log('contracts', contracts)
 
   const sortedContracts = contracts.sort( (a, b) => { if(!b) { return a } else if (!a) { return b } else { return new Date(a.created) - new Date(b.created) }})
   return (

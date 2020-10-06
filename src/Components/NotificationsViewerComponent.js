@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useNotifications from '../hooks/useNotifications'
+import styles from '../css/components/marriageview.module.css'
 
 // import { Col, Row, Grid } from 'react-flexbox-grid'
 import { Button, Row, Col } from 'react-bootstrap'
@@ -13,8 +14,17 @@ import { deleteFile } from '../util/FileUtil';
 const NotificationsViewerComponent = (props) => {
 
   const notifications = useNotifications(props.webId)
+  const [deleted, setDeleted] = useState([])
   // Sort on notification modified (= created normally) in reverse order to get newest first
-  const sortednotifications = notifications.sort( (a, b) => new Date(b.metadata.modified) - new Date(a.metadata.modified))
+  const nondeletedNotifications = notifications.filter(n => deleted.indexOf(n.metadata.id) === -1)
+  const sortednotifications = nondeletedNotifications.sort( (a, b) => new Date(b.metadata.modified) - new Date(a.metadata.modified))
+
+
+  async function deleteNotification(notificationId) {
+    deleteFile(notificationId);
+    setDeleted(deleted.concat(notificationId))
+  }
+
   return (
     <div id="notificationsviewercomponent" className='container'>
       <h4> Notifications </h4>
@@ -27,13 +37,12 @@ const NotificationsViewerComponent = (props) => {
         <Col md={2}><label className="centeraligntext">Action</label></Col>
       </Row>
       {sortednotifications.map(notification => {
-        return ( <NotificationCard notification={notification} {...props} key={notification.metadata.id}/> )
+        return ( <NotificationCard notification={notification} {...props} key={notification.metadata.id} deleteNotification={deleteNotification}/> )
       })}
       
     </div>
   )
 }
-
 export default NotificationsViewerComponent
 
 const NotificationCard = (props) => {
@@ -67,11 +76,12 @@ const NotificationCard = (props) => {
   return (
     <div className={`NotificationCard`}>
       <Row className='propertyview' key={notification.metadata.id}>
-        <Col md={1}><label className='leftaligntext'><b>{notification.type && notification.type.split('#')[1]}</b></label></Col>
+        <Col md={1}><label className='leftaligntext'>{notification.type && notification.type.split('#')[1]}</label></Col>
         <Col md={2}><label className='leftaligntext'><a href={notification.actor}><Value src={`[${notification.actor}].name`}/></a></label></Col>
-        <Col md={2}><label className='leftaligntext'><b>{notification.metadata.modified && notification.metadata.modified.toLocaleString()}</b></label></Col>
+        <Col md={2}><label className='leftaligntext'>{notification.metadata.modified && notification.metadata.modified.toLocaleString()}</label></Col>
         <Col md={4}><label className='leftaligntext'>{notification.summary}</label></Col>
         <Col md={2}>{getButton()}</Col>
+        <Col md={1}><Button className={`${styles.delete} centeraligntext`} onClick={() => props.deleteNotification(notification.metadata.id)}>X</Button></Col>
       </Row>
     </div>
   )

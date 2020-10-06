@@ -8,7 +8,6 @@ const TIMEOUT = 10 * 1000
 // const { default: data } = require('@solid/query-ldflex');
 
 const useNotifications = function(webId) {
-  console.log('useNotifications')
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     let mounted = true;
@@ -30,15 +29,10 @@ const useNotifications = function(webId) {
   // TODO:: dont fetch notifications that have already been fetched
 
   async function updateNotifications(webId, currentNotifications){
-    console.log('timing')
     if(webId){
-      console.time("fetchnew")
       const newNotificationsMetadata = await checkNewNotifications(webId, currentNotifications.map(n => n.metadata.id))
-      console.timeEnd("fetchnew")
       if(newNotificationsMetadata && newNotificationsMetadata.length) {
-        console.time("fetchNotifs")
         const newNotifications = (await fetchNotifications(newNotificationsMetadata)) || []
-        console.timeEnd("fetchNotifs")
         fireUpdateEvents(newNotifications)
         return newNotifications
       }
@@ -78,7 +72,6 @@ const useNotifications = function(webId) {
    * This should be placed somewhere else in the future
    */
   async function fireUpdateEvents(updatedNotifications){
-    console.time("update")
     const currentContracts = await getProfileContracts(webId)
     for (const notification of updatedNotifications) {
       const itemId = notification.type === ns.as('Announce') ? notification.object && notification.object.object : notification.target
@@ -100,8 +93,6 @@ const useNotifications = function(webId) {
         }
       }
     }
-
-    console.timeEnd("update")
   }
 
   async function checkContractSubmittedStatus(proposalId) {
