@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ReactLoading from 'react-loading';
+import { clearCache } from '../util/Cache';
 
 const viewsWithoutWebId = ['help', 'login']
 
@@ -8,6 +9,7 @@ const MainScreenComponent = (props) => {
   const [view, setview] = useState(props.selectedView)
 
   if (!view || view.id !== props.selectedView.id) {
+    clearCache()
     setview(props.selectedView)
   }
 

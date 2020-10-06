@@ -45,9 +45,15 @@ const useNotifications = function(webId) {
     if(!notificationsMetadata) return []
     const notifications = await Promise.all(notificationsMetadata.map(
       async function(metadata){
-        const notification = await getNotification(metadata.id);
+        let notification = await getNotification(metadata.id);
+        if (!notification) {
+          notification = {}
+          metadata.notLoaded = true;
+          notification.metadata = metadata;
+          return notification
+        }
         try { 
-          metadata.types = await getNotificationTypes(notification) 
+          // metadata.types = await getNotificationTypes(notification) 
           metadata.modified = metadata.modified && new Date(metadata.modified)
           notification.metadata = metadata;
           return notification

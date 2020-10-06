@@ -67,8 +67,9 @@ export const activeDrawerItemMapping = {
   help:             "help",
 }
 
-export async function getStore(URI, ttl){
-  const cached = checkCache(URI)
+export async function getStore(URI, useCache=true, ttl=null){
+  let cached = null
+  if (useCache) cached = checkCache(URI)
   if (cached) return cached;
   try {
     const response = await getFile(URI)
@@ -79,7 +80,7 @@ export async function getStore(URI, ttl){
     const responseData = await response.text()
 
     // If concurrent requests already filled cache
-    const cached = checkCache(URI)
+    if (useCache) cached = checkCache(URI)
     if (cached) return cached;
     
     const store = new N3.Store()
@@ -115,10 +116,10 @@ export async function getContractData(id) {
   }
 }
 
-export async function getProfileData(id) {
+export async function getProfileData(id, cached=true) {
   id = await id;
   if(!id) return null
-  const datastore = await getStore(id);
+  const datastore = await getStore(id, cached);
   return datastore && {
     id: id,
     name: getQuadObjVal(await datastore.getQuads(id, ns.foaf('name'))),

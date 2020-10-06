@@ -26,8 +26,8 @@ const OfficialComponent = (props) => {
       const newsubmissions = notifications.filter(notification => 
         notification.type === ns.as('Announce')
         && notification.object 
-        && notification.object.object
-        && notification.metadata.types.object.object === ns.demo('MarriageProposal'))
+        && notification.object.object)
+        // && notification.metadata.types.object.object === ns.demo('MarriageProposal'))
     
       const certifiedProposals = await filterCertifiedSubmissions()
       let filteredSubmissions = newsubmissions.filter(s => s.object && certifiedProposals.indexOf(s.object.object) === -1 && certifiedProposals.indexOf(s.object.target) === -1)

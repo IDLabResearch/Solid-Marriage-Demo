@@ -212,7 +212,7 @@ export function createCertificateProposalConfirmationNotification(webId, certifi
     <> a as:Announce ;
       as:actor <${webId}> ;
       as:object [ 
-        a as:Create ;
+        a as:Add ;
         as:actor <${webId}>  ;
         as:object <${certificateId}> ;
         as:target <${marriageContractId}> ;

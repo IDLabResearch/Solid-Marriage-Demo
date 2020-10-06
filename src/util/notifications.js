@@ -29,7 +29,7 @@ export async function checkNewNotifications(webId, currentNotificationIds) {
 export async function getNotificationMetadata(webId) {
   const inbox = await getInbox(webId)
   if(!inbox) return []
-  const store = await getStore(inbox, 0)
+  const store = await getStore(inbox, false, 0)
   if (!store) return [];
   const notificationsMetadata = await store.getQuads(inbox, ns.ldp('contains'))
   const metadataObjects = notificationsMetadata.map(quad => { return ( {id: quad.object.value})})
@@ -42,6 +42,7 @@ export async function getNotificationMetadata(webId) {
 
 export async function getNotification(notificationId) {
   const store = await getStore(notificationId)
+  if (!store) return null
   return await getRecursiveActivity(store, notificationId)
 }
 

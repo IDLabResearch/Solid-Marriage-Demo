@@ -47,10 +47,10 @@ const NotificationCard = (props) => {
       case ns.as('Offer'):
         return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See offer</Button>)
       case ns.as('Announce'):
-        if (notification.object.type && notification.object.type === ns.as('Create') && notification.metadata.types.object.object === ns.demo('MarriageProposal')) {
+        if (notification.object.type && notification.object.type === ns.as('Create') ) { // && notification.metadata.types.object.object === ns.demo('MarriageProposal')) {
           // Filter announcement of the creation of a marriage Proposal
           return (<Button className={'centeraligntext'} onClick={() => viewsubmission(notification.object.object)}>See submission</Button>)
-        } else if (notification.object.type && notification.object.type === ns.as('Create') && notification.metadata.types.object.object === ns.demo('Certificate')) {
+        } else if (notification.object.type && notification.object.type === ns.as('Add')) { // && notification.metadata.types.object.object === ns.demo('Certificate')) {
           // Filter announcement of the creation of a certificate
           return (<Button className={'centeraligntext'} onClick={() => viewCertificate(notification.object.target)}>See certificate</Button>)
         }  else {

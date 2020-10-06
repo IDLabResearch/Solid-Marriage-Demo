@@ -1,4 +1,5 @@
 import { validStatusCodes } from './Util'
+import { delCache } from './Cache';
 const auth = require('solid-auth-client')
 const { default: data } = require('@solid/query-ldflex');
 const DEFAULTSHOWPOPUPS = false;
@@ -11,21 +12,25 @@ export async function getFile(URI, showPopups = DEFAULTSHOWPOPUPS) {
 
 export async function patchFile(URI, body, showPopups = true) {
   data.clearCache(URI);
+  delCache(URI);
   return doRequest('PATCH', URI, body, { "Content-Type": "application/sparql-update" }, showPopups)
 }
 
 export async function putFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
   data.clearCache(URI);
+  delCache(URI);
   return doRequest('PUT', URI, body, { "Content-Type": "text/turtle" }, showPopups)
 }
 
 export async function postFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
   data.clearCache(URI);
+  delCache(URI);
   return doRequest('POST', URI, body, { "Content-Type": "text/turtle" }, showPopups)
 }
 
 export async function deleteFile(URI, showPopups = DEFAULTSHOWPOPUPS) {
   data.clearCache(URI);
+  delCache(URI);
   return doRequest('DELETE', URI, null, null, showPopups)
 }
 

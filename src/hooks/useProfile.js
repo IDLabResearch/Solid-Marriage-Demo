@@ -9,7 +9,7 @@ const useProfile = function(webId) {
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     let mounted = true
-    getProfileData(webId).then(profile => {
+    getProfileData(webId, false).then(profile => {
       if(profile) profile.webId = webId
       if(mounted) setProfile(profile)
     }).catch(

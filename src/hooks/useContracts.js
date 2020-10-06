@@ -15,7 +15,7 @@ const useContracts = function(webId) {
       data.clearCache() // data.clearCache(webId)
       let contracts = []
       for await (const contractId of data[webId][ns.demo('hasContract')]){
-        const contract = await getContractData(contractId && contractId.value)
+        const contract = await getContractData(contractId && contractId.value, false)
         if(contract) contracts.push(contract)
       }
       return contracts
