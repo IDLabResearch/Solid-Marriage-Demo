@@ -24,7 +24,7 @@ const DEFAULTOFFICIAL = 'https://weddinator.inrupt.net/profile/card#me'
  */
 const MarriageViewComponent = (props) => {
 
-  const [contract, setcontract] = useState(null);
+  const [contract, setcontract] = useState(undefined);
   let allcontacts = [];
   if (contract){
     allcontacts =  contract.spouse.map(e => { e.type='spouse'; return e})
@@ -38,7 +38,7 @@ const MarriageViewComponent = (props) => {
   useEffect(() => {
     let mounted = true
     getContractData(props.contractId).then(contract => {
-      if (contract && mounted) setcontract(contract)
+      if (mounted) setcontract(contract || null)
     })
     return () => mounted = false;
   }, [props.contractId])
@@ -166,14 +166,23 @@ const MarriageViewComponent = (props) => {
     return "Loading"
   }
 
-  if (!contract) {
+
+  if (contract === undefined) {
+    return (
+      <div id="marriageViewContainer" className='container'>
+        <h4> Marriage Proposal </h4>
+        <br />
+        <h6>Loading Marriage proposal.</h6>
+      </div>
+    )
+  } else if (!contract) {
     return (
       <div id="marriageViewContainer" className='container'>
         <h4> Marriage Proposal </h4>
         <br />
         <h6>The requested proposal could not be retrieved. The resource has been removed or does not exist.</h6>
       </div>
-        )
+    )
   }
   return (
     <div id="marriageViewContainer" className='container'>

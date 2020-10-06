@@ -8,7 +8,7 @@ import { generateCertificatePDF } from '../util/generatepdf'
 // @prefix dbo: <http://dbpedia.org/ontology/>. dbo:birthDate, dbo:birthPlace
 const CertificateViewComponent = (props) => {
 
-  const [state, setstate] = useState({})
+  const [state, setstate] = useState(undefined)
 
   useEffect(() => {
     let mounted = true
@@ -17,7 +17,9 @@ const CertificateViewComponent = (props) => {
       const certificate = await getCertificateData(proposal.certified_by);
       if (proposal && certificate) {
         setstate({ proposal, certificate })
-      } 
+      } else {
+        setstate(null)
+      }
       
     }
     fetchData()
@@ -26,10 +28,20 @@ const CertificateViewComponent = (props) => {
     }
   }, [])
 
-  if (!state.proposal || !state.certificate) {
+  if (state === undefined) {
     return (
       <div id="marriageViewContainer" className='container'> 
-        "Proposal or certificate could not be retrieved. This could be caused by incorrect permissions, or the resource not being available."
+        <h4> Marriage Certificate </h4>
+        <br />
+        <h6>Loading certificate.</h6>
+      </div>
+    )
+  } else if (!state || !state.proposal || !state.certificate) {
+    return (
+      <div id="marriageViewContainer" className='container'> 
+        <h4> Marriage Certificate </h4>
+        <br />
+        <h6>Proposal or certificate could not be retrieved. This could be caused by incorrect permissions, or the resource not being available.</h6>
       </div>
     )
   }
