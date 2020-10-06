@@ -14,6 +14,7 @@ const INVITATIONACCEPTED = ns.demo('accepted')
 const INVITATIONREFUSED = ns.demo('refused')
 
 const DEFAULTOFFICIAL = 'https://weddinator.inrupt.net/profile/card#me'
+const TIMEOUT = 10 * 1000;
 
 // TODO:: remove marriage button only for creator
 // TODO:: If spouse if 2 times the same person it will only show once (same for witnesses) because of ldflex => update this to use N3 in usecontracts?
@@ -55,7 +56,7 @@ const MarriageViewComponent = (props) => {
     refreshContacts()
     var interval = setInterval(() => { 
       refreshContacts()
-    }, 7000);
+    }, TIMEOUT);
     return () => {
       mounted = false;
       clearInterval(interval);

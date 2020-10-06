@@ -3,7 +3,7 @@ import { getNotificationMetadata, getNotification, checkNewNotifications } from 
 import { getNotificationTypes, getProfileContracts, getContractData, getCertificateData } from '../util/Util';
 import ns from '../util/NameSpaces';
 import { addContractPatch, patchProfileWithContract, setProposalValidatedBy, updateMarriageContractStatus } from '../util/MarriageController';
-const POLLINGRATE = 20000
+const TIMEOUT = 10 * 1000
 
 // const { default: data } = require('@solid/query-ldflex');
 
@@ -18,7 +18,7 @@ const useNotifications = function(webId) {
       updateNotifications(webId, notifications).then( newNotifications => { 
         if (mounted && newNotifications && newNotifications.length) setNotifications(notifications.concat(newNotifications)) 
       })
-    }, POLLINGRATE);
+    }, TIMEOUT);
     return () => {
       clearInterval(interval);
       mounted = false;

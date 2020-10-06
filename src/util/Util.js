@@ -25,6 +25,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ns from "../util/NameSpaces"
 import SubmissionViewComponent from '../Components/SubmissionViewComponent'
 import CertificateViewComponent from '../Components/CertificateViewComponent'
+import {checkCache, setCache} from './Cache'
+
 const { default: data } = require('@solid/query-ldflex');
 
 export const validStatusCodes = [200, 201, 202]
@@ -65,7 +67,9 @@ export const activeDrawerItemMapping = {
   help:             "help",
 }
 
-export async function getStore(URI){
+export async function getStore(URI, ttl){
+  const cached = checkCache(URI)
+  if (cached) return cached;
   try {
     const response = await getFile(URI)
     const code = (await response).status
@@ -73,8 +77,16 @@ export async function getStore(URI){
       return null;
     }
     const responseData = await response.text()
+
+    // If concurrent requests already filled cache
+    const cached = checkCache(URI)
+    if (cached) return cached;
+    
     const store = new N3.Store()
     store.addQuads(await new N3.Parser({ baseIRI: URI}).parse(responseData))
+    if (store) {
+      if (!checkCache(URI)) setCache(URI, store, ttl);
+    }
     return store
   } catch (e) {
     console.error(e)

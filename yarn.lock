@@ -4565,6 +4565,13 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
+cache@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/cache/-/cache-2.3.1.tgz#78334a30b2c9daca2d10abbe8f9a0b610ddf91ba"
+  integrity sha512-FR/0U9GMDAq4ERSom2ThoiXz89BlhCSftDOBUgFSBTw0Kh+zBXbDan/DMzh2pP3lDqmOatruG0NqUkeXQqaNKQ==
+  dependencies:
+    ds "^1.4.2"
+
 call-me-maybe@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/call-me-maybe/-/call-me-maybe-1.0.1.tgz#26d208ea89e37b5cbde60250a15f031c16a4d66b"
@@ -5903,6 +5910,11 @@ dotenv@8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
+
+ds@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/ds/-/ds-1.4.2.tgz#0857aa213790a4fb3abb365b9cec0e9ba8569393"
+  integrity sha1-CFeqITeQpPs6uzZbnOwOm6hWk5M=
 
 duplexer@^0.1.1:
   version "0.1.2"
