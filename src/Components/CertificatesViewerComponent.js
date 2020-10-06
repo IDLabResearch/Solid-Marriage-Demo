@@ -1,64 +1,22 @@
 import React, {useState, useEffect} from 'react'
 import useContracts from '../hooks/useContracts'
-import { availableViews, getNotificationTypes } from '../util/Util'
+import { availableViews } from '../util/Util'
 import { Row, Col, Button } from 'react-bootstrap'
 import ns from "../util/NameSpaces"
-import useNotifications from '../hooks/useNotifications'
-import { setProposalValidatedBy } from '../util/MarriageController'
 
 
 
 const CertificatesViewerComponent = (props) => {
 
-  // Retrieve notifications
-
   const userContracts = useContracts(props.webId) || []
-  const contracts = userContracts.filter(e => e.status && e.status === ns.demo('accepted') || e.status === ns.demo('rejected'))
-  // useEffect(() => {
-  //   let mounted = true;
-
-  //   // This function updates the present submissions in case of a notification indicating that a certificate has been created
-  //   const updateProposals = async (submittedContracts) => {
-  //     const certificationNotices = notifications.filter(notification => 
-  //       notification.type === ns.as('Announce')
-  //       && notification.object 
-  //       && notification.object.object
-  //       && notification.metadata.types.object.object === ns.demo('Certificate'))
-        
-  //     // TODO:: inblude if rejected, and move this more elaborate code to a separate controller.
-  //     for (let contract of submittedContracts){
-  //       const contractNotifications = certificationNotices.filter(n => n.object.target === contract.id)
-  //       if (contractNotifications.length > 0) {
-  //         const certificateId = contractNotifications[0].object.object
-  //         const contractId = contractNotifications[0].object.target
-  //         await setProposalValidatedBy(contractId, certificateId, "accepted")
-  //         contract.status = "accepted"
-  //         alreadyCertifiedContracts.push(contract)
-  //       }
-  //     }
-  //     setCertifiedContracts(alreadyCertifiedContracts)
-  //   }
-
-  //   const alreadyCertifiedContracts = contracts.filter(c => c.status === ns.demo('accepted')).concat(contracts.filter(c => c.status === ns.demo('rejected')))
-  //   const submittedContracts = contracts.filter(c => c.status === ns.demo('submitted'))
-  //   if (submittedContracts.length) { // check if submitted contract has been certified
-  //     updateProposals(submittedContracts)
-  //   } else {
-  //     setCertifiedContracts(alreadyCertifiedContracts)
-  //   }
-  //   return () => {
-  //     mounted = false;
-  //   }
-  // }, [contracts])
-
+  console.log('userContracts', userContracts)
+  const contracts = userContracts.filter(e => e.status && e.status === ns.demo('accepted'))
 
   async function showCertificateViewer(contractId) {
     const view = availableViews.certificateview
     view.args = {proposalId: contractId}
     props.setview(view)
   }
-
-
 
   return (
     <div id="certificatesviewercomponent" className='container'>
@@ -106,12 +64,3 @@ const CertificatesViewerComponent = (props) => {
 }
 
 export default CertificatesViewerComponent
-
-// {contracts.map(contract => {
-//   return (  
-//     <Row className='propertyview' key={contract.id}>
-//       <Col md={3}><label className="leftaligntext"><b>Marriage</b></label></Col>
-//       <Col md={5}><label className="leftaligntext">certificate available</label></Col>
-//     </Row>
-//   )
-// })}

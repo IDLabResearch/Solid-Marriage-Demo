@@ -139,14 +139,7 @@ const MiniDrawer = withWebId((props) => {
     switch (itemName) {
       case 'notifications':
         return (
-          <NotificationsMenuItem item={item} className={className} webId={props.webId} setSelectedView={setSelectedView} index={index}/>
-          // <MenuItem className={className} onClick={() => setSelectedView(item)} key={index}>
-          //   <IconButton aria-label={item.label} color="inherit">
-          //       <Badge badgeContent={notifications.length} color="secondary">
-          //         {item.icon}
-          //       </Badge>
-          //   </IconButton>
-          // </MenuItem>
+          <NotificationsMenuItem item={item} className={className} webId={props.webId} setSelectedView={setSelectedView} index={index} key={'topmenuitem' + index}/>
         )
       case 'help':
         return (

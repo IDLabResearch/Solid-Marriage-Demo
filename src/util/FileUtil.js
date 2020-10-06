@@ -1,7 +1,7 @@
 import { validStatusCodes } from './Util'
 const auth = require('solid-auth-client')
 const { default: data } = require('@solid/query-ldflex');
-const DEFAULTSHOWPOPUPS = true;
+const DEFAULTSHOWPOPUPS = false;
 
 // TODO: automatically create directories using solid-file-client
 
@@ -9,7 +9,7 @@ export async function getFile(URI, showPopups = DEFAULTSHOWPOPUPS) {
   return doRequest('GET', URI, null, null, showPopups)
 }
 
-export async function patchFile(URI, body, showPopups = DEFAULTSHOWPOPUPS) {
+export async function patchFile(URI, body, showPopups = true) {
   data.clearCache(URI);
   return doRequest('PATCH', URI, body, { "Content-Type": "application/sparql-update" }, showPopups)
 }
@@ -35,18 +35,21 @@ async function doRequest(requestType, URI, body, headers, showPopups) {
   if (headers) options.headers = headers
   const response = await auth.fetch(URI, options);
   const code = (await response).status
-  if (showPopups && validStatusCodes.indexOf(code) === -1) {
-    showErrorPopup(URI, code, requestType)
+  if (validStatusCodes.indexOf(code) === -1) {
+    showErrorPopup(URI, code, requestType, showPopups)
   }
   return response;
 }
 
-function showErrorPopup(URI, statusCode, requestType) {
+function showErrorPopup(URI, statusCode, requestType, showPopups) {
+  let alert = null
   if ([401, 403].indexOf(statusCode) !== -1) {
-    window.alert(`Incorrect authorization during ${requestType} request to resource on ${URI}. Please double check the permissions set in your solid pod!`)
+    alert =`Incorrect authorization during ${requestType} request to resource on ${URI}. Please double check the permissions set in your solid pod!`
   } else if ([404].indexOf(statusCode) !== -1) {
-    window.alert(`Could not do ${requestType} request to resource at ${URI}, as it has been removed or does not exist.`)
+    alert =`Could not do ${requestType} request to resource at ${URI}, as it has been removed or does not exist.`
   } else {
-    window.alert(`Could not do ${requestType} request to resource at ${URI}. Please double check the permissions set in your solid pod!`)
+    alert =`Could not do ${requestType} request to resource at ${URI}. Please double check the permissions set in your solid pod!`
   }
+  if (alert && showPopups) window.alert(alert)
+  else if (alert) console.error(alert)
 }

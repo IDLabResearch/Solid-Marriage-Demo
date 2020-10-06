@@ -51,9 +51,9 @@ const OfficialComponent = (props) => {
 
 
   const viewsubmission = async (submissionContractId) => {
-    const contract = await getContractData(submissionContractId)
+    // const contract = await getContractData(submissionContractId)
     const view = availableViews.submissionview
-    view.args = {contract: contract}
+    view.args = {contractId: submissionContractId}
     props.setview(view)
   }
 
@@ -93,7 +93,6 @@ export default OfficialComponent
   const [certified, setCertified] = useState([])
   const allContracts = userContracts.filter(e => e.status && e.status === ns.demo('submitted'))
   const submissions = allContracts.filter(contract => certified.indexOf(contract.id) == -1)
-  console.log('officialContracts', allContracts.map(e => e.id), certified, submissions.map(e => e.id))
 
   useEffect(() => {
     async function getCertifications() {

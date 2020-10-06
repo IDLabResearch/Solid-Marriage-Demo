@@ -17,9 +17,8 @@ async function getInbox(subject){
   return inbox && inbox.value
 }
 
-export async function checkNewNotifications(webId, currentNotifications) {
+export async function checkNewNotifications(webId, currentNotificationIds) {
   const notificationMetadata = await getNotificationMetadata(webId)
-  const currentNotificationIds = currentNotifications.map(n => n.metadata.id)
   return notificationMetadata.filter(metadata => currentNotificationIds.indexOf(metadata.id) === -1)
 }
 

@@ -7,7 +7,7 @@ import { Value } from '@solid/react';
 
 import ns from "../util/NameSpaces"
 
-import { availableViews, getContractData, getNotificationTypes } from '../util/Util'
+import { availableViews, getContractData } from '../util/Util'
 
 const NotificationsViewerComponent = (props) => {
 
@@ -25,7 +25,7 @@ const NotificationsViewerComponent = (props) => {
         <Col md={4}><label className="leftaligntext">Summary</label></Col>
         <Col md={2}><label className="centeraligntext">Action</label></Col>
       </Row>
-      {notifications.map(notification => {
+      {sortednotifications.map(notification => {
         return ( <NotificationCard notification={notification} {...props} key={notification.metadata.id}/> )
       })}
       
@@ -39,7 +39,6 @@ const NotificationCard = (props) => {
   const notification = props.notification
   // TODO;; this will fail if you have no view access to the contract
   function getButton() {
-    console.log('notificaitonbutton', notification)
     switch (notification.type) {
       case ns.as('Accept'):
         return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See progress</Button>)
@@ -77,16 +76,16 @@ const NotificationCard = (props) => {
   )
 
   async function viewmarriage(marriageId) {
-    const contract = await getContractData(marriageId) 
+    // const contract = await getContractData(marriageId) 
     const view = availableViews.marriageview
-    view.args = {contract: contract}
+    view.args = {contractId: marriageId}
     props.setview(view)
   }
 
   async function viewsubmission(submissionId) {
-    const contract = await getContractData(submissionId) 
+    // const contract = await getContractData(submissionId) 
     const view = availableViews.submissionview
-    view.args = {contract: contract}
+    view.args = {contractId: submissionId}
     props.setview(view)
   }
 

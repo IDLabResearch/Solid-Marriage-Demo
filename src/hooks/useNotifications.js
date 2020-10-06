@@ -3,33 +3,42 @@ import { getNotificationMetadata, getNotification, checkNewNotifications } from 
 import { getNotificationTypes, getProfileContracts, getContractData, getCertificateData } from '../util/Util';
 import ns from '../util/NameSpaces';
 import { addContractPatch, patchProfileWithContract, setProposalValidatedBy, updateMarriageContractStatus } from '../util/MarriageController';
-const POLLINGRATE = 8000
+const POLLINGRATE = 20000
+
+// const { default: data } = require('@solid/query-ldflex');
 
 const useNotifications = function(webId) {
   const [notifications, setNotifications] = useState([]);
 
+  console.log('notifications', notifications)
+
   useEffect(() => {
-    updateNotifications(webId, notifications)
+    let mounted = true;
+    updateNotifications(webId, notifications).then( newNotifications => { 
+      if (mounted && newNotifications && newNotifications.length) setNotifications(notifications.concat(newNotifications)) 
+    })
     const interval = setInterval(() => { 
-      updateNotifications(webId, notifications)
+      updateNotifications(webId, notifications).then( newNotifications => { 
+        if (mounted && newNotifications && newNotifications.length) setNotifications(notifications.concat(newNotifications)) 
+      })
     }, POLLINGRATE);
     return () => {
       clearInterval(interval);
+      mounted = false;
     }
-  }, [webId, notifications])  
+  }, [webId])  
 
-  return notifications
+  return notifications.filter(n => !n.metadata.notLoaded)
 
   // TODO:: dont fetch notifications that have already been fetched
 
   async function updateNotifications(webId, currentNotifications){
     if(webId){
-      const newNotificationsMetadata = await checkNewNotifications(webId, currentNotifications)
-      console.log('NEWNOTIFS', newNotificationsMetadata)
+      const newNotificationsMetadata = await checkNewNotifications(webId, currentNotifications.map(n => n.metadata.id))
       if(newNotificationsMetadata && newNotificationsMetadata.length) {
-        const newNotifications = await fetchNotifications(newNotificationsMetadata)
+        const newNotifications = await fetchNotifications(newNotificationsMetadata) || []
         fireUpdateEvents(newNotifications)
-        setNotifications(notifications.concat(newNotifications))
+        return newNotifications
       }
     }
   }
@@ -37,12 +46,20 @@ const useNotifications = function(webId) {
 
   async function fetchNotifications(notificationsMetadata){ 
     if(!notificationsMetadata) return []
-    const notifications = await Promise.all(notificationsMetadata.map(async function(metadata){
-      const notification = await getNotification(metadata.id);
-      metadata.types = await getNotificationTypes(notification) 
-      metadata.modified = metadata.modified && new Date(metadata.modified)
-      notification.metadata = metadata;
-      return notification
+    const notifications = await Promise.all(notificationsMetadata.map(
+      async function(metadata){
+        const notification = await getNotification(metadata.id);
+        try { 
+          metadata.types = await getNotificationTypes(notification) 
+          metadata.modified = metadata.modified && new Date(metadata.modified)
+          notification.metadata = metadata;
+          return notification
+        } catch (e) { 
+          console.log('skipping', metadata.id, e)
+          metadata.notLoaded = true;
+          notification.metadata = metadata;
+          return notification
+        }
     }))
     return notifications
   }

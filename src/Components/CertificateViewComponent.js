@@ -29,7 +29,7 @@ const CertificateViewComponent = (props) => {
   if (!state.proposal || !state.certificate) {
     return (
       <div id="marriageViewContainer" className='container'> 
-        "Proposal or certificate is not available at this moment"
+        "Proposal or certificate could not be retrieved. This could be caused by incorrect permissions, or the resource not being available."
       </div>
     )
   }

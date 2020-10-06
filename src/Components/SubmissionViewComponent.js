@@ -5,7 +5,7 @@ import styles from '../css/components/marriageview.module.css'
 import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
 import { certifyProposal, rejectProposal } from '../util/MarriageController'
-import { availableViews } from '../util/Util'
+import { availableViews, getContractData } from '../util/Util'
 import { parseURL } from 'url-toolkit'
 const { default: data } = require('@solid/query-ldflex');
 
@@ -20,15 +20,34 @@ const INVITATIONREFUSED = ns.demo('refused')
  * @param {spouse: {id: string}[], witness: {id: string}[]} props.contacts 
  */
 const SubmissionViewComponent = (props) => {
-  let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
-  allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
-  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
+  
+  const [contract, setcontract] = useState(null);
+  let allcontacts = [];
+  if (contract){
+    allcontacts =  contract.spouse.map(e => { e.type='spouse'; return e})
+    allcontacts = allcontacts.concat(contract.witness.map(e => { e.type='witness'; return e}))
+    allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
+  }
   const [contacts, setContacts] = useState(allcontacts)
 
   const parsedURI = parseURL(props.webId)
   const storageLocation = parsedURI.scheme + parsedURI.netLoc + '/public/'
 
+  console.log(contract, contacts, props.contractId)
+
+  // Load in contract data
   useEffect(() => {
+    let mounted = true
+    getContractData(props.contractId).then(contract => {
+      console.log('fetched contract data', contract)
+      if (contract && mounted) setcontract(contract)
+    })
+    return () => mounted = false;
+  }, [props.contractId])
+
+  // Set contacts status
+  useEffect(() => {
+    if (!contract) return;
     let mounted = true
     async function refreshContacts() {
       updateContacts(allcontacts).then(updatedContacts => {
@@ -39,16 +58,16 @@ const SubmissionViewComponent = (props) => {
     return () => {
       mounted = false;
     }
-  }, [props.contract])
+  }, [contract])
 
   async function getContactStatus(contactWebId){
     let accepted, refused; 
     data.clearCache() // data.clearCache(contactWebId)
     for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
-      if (`${await acceptedEvent}` === props.contract.id) accepted = true;
+      if (`${await acceptedEvent}` === props.contractId) accepted = true;
     }
     for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
-      if (`${await refusedEvent}` === props.contract.id) refused = true;
+      if (`${await refusedEvent}` === props.contractId) refused = true;
     }
     return accepted ? 'accepted' : (refused ? 'refused' : 'pending')
   }
@@ -86,13 +105,13 @@ const SubmissionViewComponent = (props) => {
   }
 
   function accept() {
-    certifyProposal(props.webId, props.contract.id, storageLocation)
+    certifyProposal(props.webId, props.contractId, storageLocation)
     props.setview(availableViews.official)
   }
 
   function reject() {
     // Todo:: set as certified so additional requests are not shown as needed to be validated
-    rejectProposal(props.webId, props.contract.id)
+    rejectProposal(props.webId, props.contractId)
     props.setview(availableViews.official)
   }
 

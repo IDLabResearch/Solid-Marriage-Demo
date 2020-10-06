@@ -5,7 +5,7 @@ import styles from '../css/components/marriageview.module.css'
 import ns from "../util/NameSpaces"
 import ProfileCardComponent from './ProfileCardComponent'
 import { acceptProposal, refuseProposal, deleteProposal, createMarriageContractSubmissionNotification, submitProposal, sendContactInvitation } from '../util/MarriageController'
-import { availableViews, getProfileData } from '../util/Util'
+import { availableViews, getProfileData, getContractData } from '../util/Util'
 import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
 import { Input } from '@material-ui/core'
 const { default: data } = require('@solid/query-ldflex');
@@ -23,13 +23,29 @@ const DEFAULTOFFICIAL = 'https://weddinator.inrupt.net/profile/card#me'
  * @param {spouse: {id: string}[], witness: {id: string}[]} props.contacts 
  */
 const MarriageViewComponent = (props) => {
-  let allcontacts = props.contract.spouse.map(e => { e.type='spouse'; return e})
-  allcontacts = allcontacts.concat(props.contract.witness.map(e => { e.type='witness'; return e}))
-  allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
+
+  const [contract, setcontract] = useState(null);
+  let allcontacts = [];
+  if (contract){
+    allcontacts =  contract.spouse.map(e => { e.type='spouse'; return e})
+    allcontacts = allcontacts.concat(contract.witness.map(e => { e.type='witness'; return e}))
+    allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
+  }
   const [contacts, setContacts] = useState(allcontacts)
   const [official, setOfficial] = useState(DEFAULTOFFICIAL)
 
+  // Load in contract data
   useEffect(() => {
+    let mounted = true
+    getContractData(props.contractId).then(contract => {
+      if (contract && mounted) setcontract(contract)
+    })
+    return () => mounted = false;
+  }, [props.contractId])
+
+  // Set contacts status
+  useEffect(() => {
+    if (!contract) return;
     let mounted = true
     async function refreshContacts() {
       updateContacts(allcontacts).then(updatedContacts => {
@@ -44,16 +60,16 @@ const MarriageViewComponent = (props) => {
       mounted = false;
       clearInterval(interval);
     }
-  }, [props.contract])
+  }, [contract])
 
   async function getContactStatus(contactWebId){
     let accepted, refused; 
     data.clearCache() // data.clearCache(contactWebId)
     for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
-      if (`${await acceptedEvent}` === props.contract.id) accepted = true;
+      if (`${await acceptedEvent}` === props.contractId) accepted = true;
     }
     for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
-      if (`${await refusedEvent}` === props.contract.id) refused = true;
+      if (`${await refusedEvent}` === props.contractId) refused = true;
     }
     return accepted ? 'accepted' : (refused ? 'refused' : 'pending')
   }
@@ -80,12 +96,12 @@ const MarriageViewComponent = (props) => {
   async function submitMarriageProposal() {
     // For demo purposes outside of the workshop also, we will have the user function as the official also
     if (! await validateOfficial()) return;
-    const submission = await submitProposal(props.webId, props.contract.id, official)
+    const submission = await submitProposal(props.webId, props.contractId, official)
     props.setview(availableViews.certificates)
   }
 
   async function deleteMarriageProposal() {
-    const deletion = await deleteProposal(props.contract.id, props.webId)
+    const deletion = await deleteProposal(props.contractId, props.webId)
     props.setview(availableViews.running)
   }
 
@@ -93,6 +109,7 @@ const MarriageViewComponent = (props) => {
     for (let contact of contacts) {
       if (contact.status !== "accepted") return false
     }
+    if (contract.status === ns.demo('rejected')) return false
     return true 
   }
 
@@ -107,12 +124,12 @@ const MarriageViewComponent = (props) => {
   }
 
   async function accept(contactId, contractId) {
-    const response = await acceptProposal(props.webId, props.contract.id, props.contract.creator)
+    const response = await acceptProposal(props.webId, props.contractId, contract.creator)
     setContactStatus(contactId, 'accepted')
   }
 
   async function refuse(contactId, contractId) {
-    await refuseProposal(props.webId, props.contract.id, props.contract.creator)
+    await refuseProposal(props.webId, props.contractId, contract.creator)
     setContactStatus(contactId, 'refused')
   }
 
@@ -124,12 +141,12 @@ const MarriageViewComponent = (props) => {
     if(contact.status === 'pending') {
       if (contact.id === props.webId) return (
           <div>
-            <Button className={`${styles.accept} centeraligntext`} onClick={() => accept(contact.id, props.contract.id)}> Accept </Button>
-            <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse(contact.id, props.contract.id)}> Refuse </Button>
+            <Button className={`${styles.accept} centeraligntext`} onClick={() => accept(contact.id, props.contractId)}> Accept </Button>
+            <Button className={`${styles.refuse} centeraligntext`} onClick={() => refuse(contact.id, props.contractId)}> Refuse </Button>
           </div>
         )
-      else if(props.webId === props.contract.creator)  return (
-        <ResendButton resend={resend} contactId={contact.id} contractId={props.contract.id}/>
+      else if(props.webId === contract.creator)  return (
+        <ResendButton resend={resend} contactId={contact.id} contractId={props.contractId}/>
       )
     }
     return(<div />)
@@ -149,6 +166,15 @@ const MarriageViewComponent = (props) => {
     return "Loading"
   }
 
+  if (!contract) {
+    return (
+      <div id="marriageViewContainer" className='container'>
+        <h4> Marriage Proposal </h4>
+        <br />
+        <h6>The requested proposal could not be retrieved. The resource has been removed or does not exist.</h6>
+      </div>
+        )
+  }
   return (
     <div id="marriageViewContainer" className='container'>
       <h4> Marriage Proposal </h4>
@@ -170,7 +196,7 @@ const MarriageViewComponent = (props) => {
         )})}
         <br />
         <br />
-        { props.contract.creator === props.webId && isComplete() 
+        { contract.creator === props.webId && isComplete() 
           ? 
             <Row className='propertyview'>
               <Col md={2}><label className='leftaligntext'>{"Official"}</label></Col>
@@ -179,21 +205,21 @@ const MarriageViewComponent = (props) => {
           : <div />
         }
         <br />
-        { props.contract.creator === props.webId
+        { contract.creator === props.webId
           ? isComplete()
             ? <Row>
                 <Col md={6} />
                 <Col md={3}>
-                  <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contract.id, props.webId)}> Submit Marriage Proposal </Button> 
+                  <Button className={`${styles.accept} valuebutton`} onClick={() => submitMarriageProposal(props.contractId, props.webId)}> Submit Marriage Proposal </Button> 
                 </Col>
                 <Col md={3}>
-                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contract.id, props.webId)}> Delete Marriage Proposal </Button>
+                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contractId, props.webId)}> Delete Marriage Proposal </Button>
                 </Col>
               </Row>
             : <Row>
                 <Col md={9} />
                 <Col md={3}>
-                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contract.id, props.webId)}> Delete Marriage Proposal </Button>
+                  <Button className={`${styles.delete} valuebutton`} onClick={() => deleteMarriageProposal(props.contractId, props.webId)}> Delete Marriage Proposal </Button>
                 </Col>
               </Row>
           : <Row />

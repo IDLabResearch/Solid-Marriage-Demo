@@ -145,10 +145,12 @@ export async function getCertificateData(id) {
 
 export async function getNotificationTypes(activity){
   const types = {}
+  let count = 0
   for (const property of ['actor', 'object', 'target']){
     if(activity[property]){
       if (typeof(activity[property]) === 'string') {
-        types[property] = `${await data[activity[property]].type}`
+        try { types[property] = await getItemType(activity[property]) } // `${await data[activity[property]].type}`}
+        catch {types[property] = null}
       } else if (typeof(activity[property]) === 'object') {
         types[property] = await getNotificationTypes(activity[property])
       }
@@ -157,6 +159,13 @@ export async function getNotificationTypes(activity){
   return types
 }
 
+export async function getItemType(itemId){
+  if (!itemId) return false;
+  const store = await getStore(itemId)
+  if (!store) throw new Error('Could not retrieve notification type for ' + itemId)
+  return store && getQuadObjVal( await store.getQuads(itemId, ns.rdf('type')))
+  
+}
 
 export function formatDate(date) {
   date = new Date(date)
