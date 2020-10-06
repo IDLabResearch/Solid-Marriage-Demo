@@ -9,9 +9,6 @@ const POLLINGRATE = 20000
 
 const useNotifications = function(webId) {
   const [notifications, setNotifications] = useState([]);
-
-  console.log('notifications', notifications)
-
   useEffect(() => {
     let mounted = true;
     updateNotifications(webId, notifications).then( newNotifications => { 
@@ -26,8 +23,7 @@ const useNotifications = function(webId) {
       clearInterval(interval);
       mounted = false;
     }
-  }, [webId])  
-
+  }, [webId, notifications])  
   return notifications.filter(n => !n.metadata.notLoaded)
 
   // TODO:: dont fetch notifications that have already been fetched
@@ -36,11 +32,12 @@ const useNotifications = function(webId) {
     if(webId){
       const newNotificationsMetadata = await checkNewNotifications(webId, currentNotifications.map(n => n.metadata.id))
       if(newNotificationsMetadata && newNotificationsMetadata.length) {
-        const newNotifications = await fetchNotifications(newNotificationsMetadata) || []
+        const newNotifications = (await fetchNotifications(newNotificationsMetadata)) || []
         fireUpdateEvents(newNotifications)
         return newNotifications
       }
     }
+    return []
   }
 
 
@@ -55,7 +52,6 @@ const useNotifications = function(webId) {
           notification.metadata = metadata;
           return notification
         } catch (e) { 
-          console.log('skipping', metadata.id, e)
           metadata.notLoaded = true;
           notification.metadata = metadata;
           return notification

@@ -9,7 +9,6 @@ import ns from "../util/NameSpaces"
 const CertificatesViewerComponent = (props) => {
 
   const userContracts = useContracts(props.webId) || []
-  console.log('userContracts', userContracts)
   const contracts = userContracts.filter(e => e.status && e.status === ns.demo('accepted'))
 
   async function showCertificateViewer(contractId) {

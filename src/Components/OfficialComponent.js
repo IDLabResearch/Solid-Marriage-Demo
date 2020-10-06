@@ -18,19 +18,23 @@ const OfficialComponent = (props) => {
   useEffect(() => {
     const getCertifications = async() => setCertified(await getProfileCertified(props.webId))
     getCertifications()
-  }, [])
+  }, [props.webId])
 
   useEffect(() => {
     let mounted = true;
     async function filterSubmissions() {
-      const submissions = notifications.filter(notification => 
+      const newsubmissions = notifications.filter(notification => 
         notification.type === ns.as('Announce')
         && notification.object 
         && notification.object.object
         && notification.metadata.types.object.object === ns.demo('MarriageProposal'))
     
-      const certifiedProposals = await filterCertifiedSubmissions(submissions)
-      if (mounted) setSubmissions(submissions.filter(s => s.object && certifiedProposals.indexOf(s.object.object) === -1 && certifiedProposals.indexOf(s.object.target) === -1))
+      const certifiedProposals = await filterCertifiedSubmissions()
+      let filteredSubmissions = newsubmissions.filter(s => s.object && certifiedProposals.indexOf(s.object.object) === -1 && certifiedProposals.indexOf(s.object.target) === -1)
+      filteredSubmissions = filteredSubmissions.filter(news => submissions.map(s=>s.metadata.id).indexOf(news.metadata.id) === -1)
+      if (filteredSubmissions && filteredSubmissions.length) {
+        if (mounted) setSubmissions(submissions.concat(filteredSubmissions))
+      }
     }
 
     async function filterCertifiedSubmissions(submissions) {
@@ -47,7 +51,7 @@ const OfficialComponent = (props) => {
       mounted = false;
     }
     
-  }, [notifications])
+  }, [notifications, submissions])
 
 
   const viewsubmission = async (submissionContractId) => {
@@ -69,7 +73,7 @@ const OfficialComponent = (props) => {
     </Row>
     {filteredSubmissions.map(submission => {
       return (
-        <Row className='propertyview ' key={submission.object}>
+        <Row className='propertyview ' key={submission.metadata.id || submission.object}>
           <Col md={3}><label className="leftaligntext"><b>marriage proposal</b></label></Col>
           <Col md={2}><label className="leftaligntext">submitted for review</label></Col>
           <Col md={3}><label className="leftaligntext"><a href={submission.actor}><Value src={`[${submission.actor}].name`}/></a></label></Col>
@@ -79,7 +83,8 @@ const OfficialComponent = (props) => {
     })}
 
     </div>
-    )
+  )
+  
  
 }
 

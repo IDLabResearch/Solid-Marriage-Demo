@@ -33,13 +33,10 @@ const SubmissionViewComponent = (props) => {
   const parsedURI = parseURL(props.webId)
   const storageLocation = parsedURI.scheme + parsedURI.netLoc + '/public/'
 
-  console.log(contract, contacts, props.contractId)
-
   // Load in contract data
   useEffect(() => {
     let mounted = true
     getContractData(props.contractId).then(contract => {
-      console.log('fetched contract data', contract)
       if (contract && mounted) setcontract(contract)
     })
     return () => mounted = false;

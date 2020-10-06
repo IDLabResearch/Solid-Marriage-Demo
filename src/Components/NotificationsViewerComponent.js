@@ -55,7 +55,7 @@ const NotificationCard = (props) => {
           return (<Button className={'centeraligntext'} onClick={() => viewCertificate(notification.object.target)}>See certificate</Button>)
         }  else {
           // Filter announcement of the rejection of a certificate
-          return (<Button className={'centeraligntext'} onClick={() => viewCertificatesView()}>view</Button>)
+          return (<Button className={'centeraligntext'} onClick={() => viewRejections()}>view</Button>)
         }
         
       default:
@@ -95,7 +95,7 @@ const NotificationCard = (props) => {
     props.setview(view)
   }
 
-  async function viewCertificatesView() {
-    props.setview(availableViews.certificates)
+  async function viewRejections() {
+    props.setview(availableViews.running)
   }
 }

@@ -97,7 +97,7 @@ const MarriageViewComponent = (props) => {
     // For demo purposes outside of the workshop also, we will have the user function as the official also
     if (! await validateOfficial()) return;
     const submission = await submitProposal(props.webId, props.contractId, official)
-    props.setview(availableViews.certificates)
+    props.setview(availableViews.running)
   }
 
   async function deleteMarriageProposal() {
