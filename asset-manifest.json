@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Solid-Marriage-Demo/static/css/main.4b842742.chunk.css",
-    "main.js": "/Solid-Marriage-Demo/static/js/main.d18cbe36.chunk.js",
-    "main.js.map": "/Solid-Marriage-Demo/static/js/main.d18cbe36.chunk.js.map",
+    "main.js": "/Solid-Marriage-Demo/static/js/main.be0af669.chunk.js",
+    "main.js.map": "/Solid-Marriage-Demo/static/js/main.be0af669.chunk.js.map",
     "runtime-main.js": "/Solid-Marriage-Demo/static/js/runtime-main.ebf45a47.js",
     "runtime-main.js.map": "/Solid-Marriage-Demo/static/js/runtime-main.ebf45a47.js.map",
     "static/css/2.d9ad5f5c.chunk.css": "/Solid-Marriage-Demo/static/css/2.d9ad5f5c.chunk.css",
-    "static/js/2.6dae1a32.chunk.js": "/Solid-Marriage-Demo/static/js/2.6dae1a32.chunk.js",
-    "static/js/2.6dae1a32.chunk.js.map": "/Solid-Marriage-Demo/static/js/2.6dae1a32.chunk.js.map",
+    "static/js/2.bd4e8da5.chunk.js": "/Solid-Marriage-Demo/static/js/2.bd4e8da5.chunk.js",
+    "static/js/2.bd4e8da5.chunk.js.map": "/Solid-Marriage-Demo/static/js/2.bd4e8da5.chunk.js.map",
     "static/js/3.261d8bfc.chunk.js": "/Solid-Marriage-Demo/static/js/3.261d8bfc.chunk.js",
     "static/js/3.261d8bfc.chunk.js.map": "/Solid-Marriage-Demo/static/js/3.261d8bfc.chunk.js.map",
     "static/js/4.27c1b9ba.chunk.js": "/Solid-Marriage-Demo/static/js/4.27c1b9ba.chunk.js",
@@ -15,11 +15,11 @@
     "static/js/5.e6891c5c.chunk.js": "/Solid-Marriage-Demo/static/js/5.e6891c5c.chunk.js",
     "static/js/5.e6891c5c.chunk.js.map": "/Solid-Marriage-Demo/static/js/5.e6891c5c.chunk.js.map",
     "index.html": "/Solid-Marriage-Demo/index.html",
-    "precache-manifest.c544ce95fe4894805e0b08aed62ea9d9.js": "/Solid-Marriage-Demo/precache-manifest.c544ce95fe4894805e0b08aed62ea9d9.js",
+    "precache-manifest.95ef6ff8283cfdf686d583ca1aa1686f.js": "/Solid-Marriage-Demo/precache-manifest.95ef6ff8283cfdf686d583ca1aa1686f.js",
     "service-worker.js": "/Solid-Marriage-Demo/service-worker.js",
     "static/css/2.d9ad5f5c.chunk.css.map": "/Solid-Marriage-Demo/static/css/2.d9ad5f5c.chunk.css.map",
     "static/css/main.4b842742.chunk.css.map": "/Solid-Marriage-Demo/static/css/main.4b842742.chunk.css.map",
-    "static/js/2.6dae1a32.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/2.6dae1a32.chunk.js.LICENSE.txt",
+    "static/js/2.bd4e8da5.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/2.bd4e8da5.chunk.js.LICENSE.txt",
     "static/js/4.27c1b9ba.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/4.27c1b9ba.chunk.js.LICENSE.txt",
     "static/js/5.e6891c5c.chunk.js.LICENSE.txt": "/Solid-Marriage-Demo/static/js/5.e6891c5c.chunk.js.LICENSE.txt",
     "static/media/background2.png": "/Solid-Marriage-Demo/static/media/background2.98e5ed6a.png",
@@ -28,8 +28,8 @@
   "entrypoints": [
     "static/js/runtime-main.ebf45a47.js",
     "static/css/2.d9ad5f5c.chunk.css",
-    "static/js/2.6dae1a32.chunk.js",
+    "static/js/2.bd4e8da5.chunk.js",
     "static/css/main.4b842742.chunk.css",
-    "static/js/main.d18cbe36.chunk.js"
+    "static/js/main.be0af669.chunk.js"
   ]
 }
