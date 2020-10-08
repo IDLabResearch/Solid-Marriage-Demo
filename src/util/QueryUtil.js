@@ -1,8 +1,6 @@
 import { DataFactory, Writer, Quad } from "n3";
 import ns from "../util/NameSpaces"
 
-const { default: data } = require('@solid/query-ldflex');
-
 const { namedNode, literal, quad, variable } = DataFactory;
 
 export async function createDeleteInsertProfileDataQuery(webId, oldprofile, newprofile) {

@@ -51,18 +51,18 @@ const NotificationCard = (props) => {
   function getButton() {
     switch (notification.type) {
       case ns.as('Accept'):
-        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See progress</Button>)
+        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target.id)}>See progress</Button>)
       case ns.as('Reject'):
-        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See progress</Button>)
+        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target.id)}>See progress</Button>)
       case ns.as('Offer'):
-        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target)}>See offer</Button>)
+        return (<Button className={'centeraligntext'} onClick={() => viewmarriage(notification.target.id)}>See offer</Button>)
       case ns.as('Announce'):
         if (notification.object.type && notification.object.type === ns.as('Create') ) { // && notification.metadata.types.object.object === ns.demo('MarriageProposal')) {
           // Filter announcement of the creation of a marriage Proposal
-          return (<Button className={'centeraligntext'} onClick={() => viewsubmission(notification.object.object)}>See submission</Button>)
+          return (<Button className={'centeraligntext'} onClick={() => viewsubmission(notification.object.object.id)}>See submission</Button>)
         } else if (notification.object.type && notification.object.type === ns.as('Add')) { // && notification.metadata.types.object.object === ns.demo('Certificate')) {
           // Filter announcement of the creation of a certificate
-          return (<Button className={'centeraligntext'} onClick={() => viewCertificate(notification.object.target)}>See certificate</Button>)
+          return (<Button className={'centeraligntext'} onClick={() => viewCertificate(notification.object.target.id)}>See certificate</Button>)
         }  else {
           // Filter announcement of the rejection of a certificate
           return (<Button className={'centeraligntext'} onClick={() => viewRejections()}>view</Button>)
@@ -77,7 +77,7 @@ const NotificationCard = (props) => {
     <div className={`NotificationCard`}>
       <Row className='propertyview' key={notification.metadata.id}>
         <Col md={1}><label className='leftaligntext'>{notification.type && notification.type.split('#')[1]}</label></Col>
-        <Col md={2}><label className='leftaligntext'><a href={notification.actor}><Value src={`[${notification.actor}].name`}/></a></label></Col>
+        <Col md={2}><label className='leftaligntext'><a href={notification.actor.id}><Value src={`[${notification.actor.id}].name`}/></a></label></Col>
         <Col md={2}><label className='leftaligntext'>{notification.metadata.modified && notification.metadata.modified.toLocaleString()}</label></Col>
         <Col md={4}><label className='leftaligntext'>{notification.summary}</label></Col>
         <Col md={2}>{getButton()}</Col>

@@ -27,8 +27,8 @@ import { LogoutButton } from '@solid/react';
 import '../css/Drawer.css'
 
 
-import solidlogo from '../assets/solid-emblem.svg';
-import idlablogo from '../assets/idlab.png';
+// import solidlogo from '../assets/solid-emblem.svg';
+// import idlablogo from '../assets/idlab.png';
 import { Link } from 'react-router-dom';
 
 var drawerWidth = 240;
@@ -182,6 +182,21 @@ const MiniDrawer = withWebId((props) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  // <Navbar.Brand href="https://solidproject.org/">
+  //   <img
+  //     alt=""
+  //     width='50px'
+  //     src={solidlogo}
+  //   />{' '}
+  // </Navbar.Brand>
+
+  // <Navbar.Brand href="https://www.ugent.be/ea/idlab/en">
+  //   <img
+  //     alt=""
+  //     src={idlablogo}
+  //     height="40px"
+  //   />{' '}
+  // </Navbar.Brand>
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -209,21 +224,6 @@ const MiniDrawer = withWebId((props) => {
               Solid Marriage Demo
             </Typography>
           </Link>
-          <Navbar.Brand href="https://solidproject.org/">
-            <img
-              alt=""
-              width='50px'
-              src={solidlogo}
-            />{' '}
-          </Navbar.Brand>
-
-          <Navbar.Brand href="https://www.ugent.be/ea/idlab/en">
-            <img
-              alt=""
-              src={idlablogo}
-              height="40px"
-            />{' '}
-          </Navbar.Brand>
 
           {topbarComponents}
           {props.hidelogout 

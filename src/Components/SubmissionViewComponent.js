@@ -7,7 +7,7 @@ import ProfileCardComponent from './ProfileCardComponent'
 import { certifyProposal, rejectProposal } from '../util/MarriageController'
 import { availableViews, getContractData } from '../util/Util'
 import { parseURL } from 'url-toolkit'
-const { default: data } = require('@solid/query-ldflex');
+import { getValArray } from '../singletons/QueryEngine'
 
 const INVITATIONACCEPTED = ns.demo('accepted')
 const INVITATIONREFUSED = ns.demo('refused')
@@ -59,11 +59,10 @@ const SubmissionViewComponent = (props) => {
 
   async function getContactStatus(contactWebId){
     let accepted, refused; 
-    data.clearCache() // data.clearCache(contactWebId)
-    for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
+    for await (const acceptedEvent of await getValArray(contactWebId, INVITATIONACCEPTED) ) {
       if (`${await acceptedEvent}` === props.contractId) accepted = true;
     }
-    for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
+    for await (const refusedEvent of await getValArray(contactWebId, INVITATIONREFUSED) ){
       if (`${await refusedEvent}` === props.contractId) refused = true;
     }
     return accepted ? 'accepted' : (refused ? 'refused' : 'pending')

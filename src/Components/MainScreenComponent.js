@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactLoading from 'react-loading';
-import { clearCache } from '../util/Cache';
+import { clearCache } from '../singletons/Cache';
 
 const viewsWithoutWebId = ['help', 'login']
 

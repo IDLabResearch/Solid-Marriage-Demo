@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 
 import ns from "../util/NameSpaces"
 import { getContractData } from '../util/Util';
+import { getValArray } from '../singletons/QueryEngine';
 
-const { default: data } = require('@solid/query-ldflex');
+
 
 const useContracts = function(webId) {
   const [contracts, setContracts] = useState([]);
@@ -12,9 +13,8 @@ const useContracts = function(webId) {
     let mounted = true
     async function fetchInProgress(webId){ 
       webId = await webId;
-      data.clearCache() // data.clearCache(webId)
       let contracts = []
-      for await (const contractId of data[webId][ns.demo('hasContract')]){
+      for await (const contractId of await getValArray(webId, ns.demo('hasContract'))) {
         const contract = await getContractData(contractId && contractId.value, false)
         if(contract) contracts.push(contract)
       }

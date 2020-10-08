@@ -1,9 +1,9 @@
 import { jsPDF } from "jspdf";
 import background from "../assets/background2.png"
 import "../assets/PalatinoBold-bold"
+import { getVal } from "../singletons/QueryEngine";
 
 const blobStream = require('blob-stream');
-const { default: data } = require('@solid/query-ldflex');
 
 const nameIndent = 60;
 const leftIndent = 30;
@@ -11,7 +11,7 @@ const leftIndent = 30;
 export async function generateCertificatePDF (proposal, certificate) {
   let currentY = 0
 
-  const getPersonData = async (id) => { return({ id, name: `${await data[id].name}` }) }
+  const getPersonData = async (id) => { return({ id, name: await getVal(id, 'name') }) }
 
 
   let spouses = await Promise.all(proposal.spouse.map(async (e) => await getPersonData(e.id)))

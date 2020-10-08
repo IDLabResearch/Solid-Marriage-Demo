@@ -1,20 +1,22 @@
 import { postFile } from "./FileUtil";
 import { getStore } from "../util/Util"
 import ns from "../util/NameSpaces"
-const { default: data } = require('@solid/query-ldflex');
+import { getVal } from "../singletons/QueryEngine";
 
 export default async function notify(notificationBody, subjects) {
   const distinct = (value, index, self) => self.indexOf(value) === index;
   for (let subject of subjects.filter(distinct)) {
     const inbox = await getInbox(subject);
+    console.log('notifying', inbox, subject, notificationBody)
     if (inbox) postFile(inbox, notificationBody)
   }
 }
 
 async function getInbox(subject){
-  const inbox = await data[subject][ns.ldp('inbox')]
-  if(!inbox) console.error(subject + ' does not profide an inbox.')
-  return inbox && inbox.value
+  const inbox = await getVal(subject, ns.ldp('inbox'))
+  console.log('getting inbox', inbox)
+  if(!inbox) console.error(subject + ' does not provide an inbox.')
+  return inbox
 }
 
 export async function checkNewNotifications(webId, currentNotificationIds) {

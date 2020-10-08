@@ -8,7 +8,7 @@ import { acceptProposal, refuseProposal, deleteProposal, createMarriageContractS
 import { availableViews, getProfileData, getContractData } from '../util/Util'
 import ProfileCardSelectorComponent from './ProfileCardSelectorComponent'
 import { Input } from '@material-ui/core'
-const { default: data } = require('@solid/query-ldflex');
+import { getValArray } from '../singletons/QueryEngine'
 
 const INVITATIONACCEPTED = ns.demo('accepted')
 const INVITATIONREFUSED = ns.demo('refused')
@@ -28,8 +28,8 @@ const MarriageViewComponent = (props) => {
   const [contract, setcontract] = useState(undefined);
   let allcontacts = [];
   if (contract){
-    allcontacts =  contract.spouse.map(e => { e.type='spouse'; return e})
-    allcontacts = allcontacts.concat(contract.witness.map(e => { e.type='witness'; return e}))
+    allcontacts =  contract.spouse.map(e => { return ({id: e, type:'spouse'}) })
+    allcontacts = allcontacts.concat(contract.witness.map(e => { return ({id: e, type:'witness'}) }))
     allcontacts = allcontacts.map(e => { e['status'] = e['status'] || 'loading' ; return e})
   }
   const [contacts, setContacts] = useState(allcontacts)
@@ -65,12 +65,11 @@ const MarriageViewComponent = (props) => {
 
   async function getContactStatus(contactWebId){
     let accepted, refused; 
-    data.clearCache() // data.clearCache(contactWebId)
-    for await (const acceptedEvent of data[contactWebId][INVITATIONACCEPTED]){
-      if (`${await acceptedEvent}` === props.contractId) accepted = true;
+    for (const acceptedEvent of await getValArray(contactWebId, INVITATIONACCEPTED)) {
+      if (acceptedEvent === props.contractId) accepted = true;
     }
-    for await (const refusedEvent of data[contactWebId][INVITATIONREFUSED]){
-      if (`${await refusedEvent}` === props.contractId) refused = true;
+    for (const refusedEvent of await getValArray(contactWebId, INVITATIONREFUSED)) {
+      if (refusedEvent === props.contractId) refused = true;
     }
     return accepted ? 'accepted' : (refused ? 'refused' : 'pending')
   }

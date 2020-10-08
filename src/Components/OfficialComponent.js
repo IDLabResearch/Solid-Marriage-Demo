@@ -4,8 +4,7 @@ import useNotifications from '../hooks/useNotifications'
 import ns from '../util/NameSpaces'
 import { Col, Row, Button } from 'react-bootstrap'
 import { getContractData, availableViews, getProfileCertified } from '../util/Util'
-
-const { default: data } = require('@solid/query-ldflex');
+import { getValArray } from '../singletons/QueryEngine';
 
 const OfficialComponent = (props) => {
 
@@ -39,8 +38,8 @@ const OfficialComponent = (props) => {
 
     async function filterCertifiedSubmissions(submissions) {
       const certifiedProposals = []
-      for await (const certifiedProposalId of data[props.webId][ns.demo('certified')]) {
-        if (mounted && `${certifiedProposalId}`) certifiedProposals.push(`${certifiedProposalId}`)
+      for (const certifiedProposalId of await getValArray(props.webId, ns.demo('certified'))) {
+        if (mounted && certifiedProposalId) certifiedProposals.push(`${certifiedProposalId}`)
       }
       return certifiedProposals
     }
